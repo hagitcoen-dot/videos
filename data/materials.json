@@ -1,7 +1,20 @@
 {
   "_הסבר": "חומרים נלווים. תחת videos: מזהה הסרטון (11 התווים שאחרי watch?v= בקישור) ורשימת חומרים. תחת topics: שם נושא מתוך topics.json, והחומר יופיע בכל הסרטונים של אותו נושא. url יכול להיות קישור חיצוני (Google Drive, אתר) או קובץ בתיקייה materials, למשל materials/daf-avoda.pdf. type ו-note לא חובה.",
   "videos": {
+    "9nAyDvdMkyQ": [
+      {
+        "title": "חומר נלווה לשיר",
+        "url": "https://canva.link/3eyulj2tyibw64k",
+        "type": "Canva"
+      }
+    ],
+    "vAioKNXU1yw": [
+      {
+        "title": "חומר נלווה לשיר",
+        "url": "https://canva.link/3eyulj2tyibw64k",
+        "type": "Canva"
+      }
+    ]
   },
-  "topics": {
-  }
+  "topics": {}
 }
