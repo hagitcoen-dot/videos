@@ -1,0 +1,19 @@
+{
+  "_הסבר": "משחקים. לכל משחק: title (שם), url (קישור), desc (תיאור קצר), age (גיל מתאים, לא חובה), topics (נושאים מתוך topics.json), videos (מזהי סרטונים מתאימים), image (תמונה בתיקייה games/, לא חובה).",
+  "games": [
+    {
+      "id": "body-quest",
+      "title": "Body Quest · בלשי התחושות",
+      "url": "https://claude.ai/artifact/6U1PFQjnpyd6BWy2saccsL",
+      "desc": "מסע הרפתקאות באי התעלומות: הגוף שולח רמזים, ומגלים אם זו תחושה גופנית, רגש או שניהם.",
+      "age": "",
+      "topics": [
+        "ויסות רגשי"
+      ],
+      "videos": [
+        "mq8yjAqGiMw"
+      ],
+      "image": "games/body-quest.jpg"
+    }
+  ]
+}

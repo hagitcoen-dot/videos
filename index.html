@@ -52,7 +52,12 @@
 </header>
 
 <main class="wrap">
+  <nav class="tabs" aria-label="סוג תוכן">
+    <button type="button" class="tab" id="tabVideos" aria-pressed="true">סרטונים <span class="n" id="nVideos"></span></button>
+    <button type="button" class="tab" id="tabGames" aria-pressed="false">משחקים <span class="n" id="nGames"></span></button>
+  </nav>
   <p class="status" id="status" aria-live="polite">טוען את רשימת הסרטונים…</p>
+  <section class="games" id="games" hidden></section>
   <section class="grid" id="grid"></section>
   <section class="empty" id="empty" hidden></section>
   <aside class="wish" id="wish" hidden>
@@ -79,6 +84,7 @@
       <p class="meta" id="pMeta"></p>
       <div class="tags" id="pTags"></div>
       <div id="pMaterials"></div>
+      <div id="pGames"></div>
       <details id="pDescWrap"><summary>תיאור הסרטון</summary><p class="desc" id="pDesc"></p></details>
       <p class="actions"><a id="pYT" target="_blank" rel="noopener">לצפייה ביוטיוב</a> <button type="button" id="pCopy">העתקת קישור לסרטון</button></p>
     </div>

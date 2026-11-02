@@ -13,12 +13,13 @@
   async function load(path, fallback) {
     try { const r = await fetch(path, { cache: "no-cache" }); if (!r.ok) throw 0; return await r.json(); } catch { return fallback; }
   }
-  const [vd, td, md, sel, cfg] = await Promise.all([
+  const [vd, td, md, sel, cfg, gd] = await Promise.all([
     load("data/videos.json", { videos: [] }),
     load("data/topics.json", { topics: [] }),
     load("data/materials.json", { videos: {}, topics: {} }),
     load("data/selection.json", {}),
     load("data/config.json", {}),
+    load("data/games.json", { games: [] }),
   ]);
   state.topics = td.topics || [];
   state.materials = { videos: md.videos || {}, topics: md.topics || {} };
@@ -119,7 +120,55 @@
   const fmtDate = (d) => d ? new Date(d).toLocaleDateString("he-IL", { day: "numeric", month: "short", year: "numeric" }) : "";
   const fmtDur = (s) => { if (!s) return ""; s = Math.round(s); const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = String(s % 60).padStart(2, "0"); return h ? `${h}:${String(m).padStart(2, "0")}:${x}` : `${m}:${x}`; };
 
+  // משחקים
+  const games = (gd.games || []).map((g) => ({ ...g, n: norm([g.title, g.desc, (g.topics || []).join(" "), g.age].join(" ")) }));
+  const gamesFor = (id) => games.filter((g) => (g.videos || []).includes(id));
+  state.view = "videos";
+  function setView(v, push = true) {
+    state.view = v;
+    $("tabVideos").setAttribute("aria-pressed", String(v === "videos"));
+    $("tabGames").setAttribute("aria-pressed", String(v === "games"));
+    document.body.classList.toggle("view-games", v === "games");
+    if (push) history.replaceState(null, "", v === "games" ? "#games" : location.pathname + location.search);
+    render();
+  }
+  $("tabVideos").onclick = () => setView("videos");
+  $("tabGames").onclick = () => setView("games");
+  $("nGames").textContent = games.length || "";
+  $("tabGames").hidden = !games.length;
+  function gameCard(g, small) {
+    const a = document.createElement("a"); a.className = small ? "gcard small" : "gcard"; a.href = g.url; a.target = "_blank"; a.rel = "noopener";
+    if (g.image) { const img = document.createElement("img"); img.src = g.image; img.alt = ""; img.loading = "lazy"; a.append(img); }
+    else { const art = document.createElement("div"); art.className = "gart"; art.innerHTML = '<svg viewBox="0 0 48 32" aria-hidden="true"><rect x="2" y="6" width="44" height="22" rx="11" fill="currentColor" opacity=".9"/><rect x="11" y="15" width="10" height="3" rx="1.5" fill="#fff"/><rect x="14.5" y="11.5" width="3" height="10" rx="1.5" fill="#fff"/><circle cx="33" cy="14" r="2.6" fill="#fff"/><circle cx="38" cy="19" r="2.6" fill="#fff"/></svg>'; a.append(art); }
+    const b = document.createElement("div"); b.className = "gbody";
+    const h = document.createElement("h3"); h.textContent = g.title; b.append(h);
+    if (g.desc) { const p = document.createElement("p"); p.textContent = g.desc; b.append(p); }
+    const meta = [g.age ? "גיל " + g.age : "", ...(g.topics || [])].filter(Boolean);
+    if (meta.length) { const tg = document.createElement("div"); tg.className = "tags"; meta.forEach((m) => { const s = document.createElement("span"); s.className = "tag"; s.textContent = m; tg.append(s); }); b.append(tg); }
+    const go = document.createElement("span"); go.className = "gplay"; go.textContent = "לשחק ←"; b.append(go);
+    a.append(b); return a;
+  }
+  function renderGames(words) {
+    const box = $("games"); box.textContent = "";
+    const list = games.filter((g) => words.every((w) => g.n.includes(w) || g.n.includes(stripPrefix(w))));
+    list.forEach((g) => {
+      const card = gameCard(g);
+      const vids = (g.videos || []).map((id) => state.videos.find((v) => v.id === id)).filter(Boolean);
+      if (vids.length) {
+        const rel = document.createElement("div"); rel.className = "grel";
+        rel.append("סרטון מתאים: ");
+        vids.forEach((v) => { const b = document.createElement("button"); b.type = "button"; b.className = "linkish"; b.textContent = v.title.split("|")[0].trim(); b.onclick = () => openVideo(v.id); rel.append(b); });
+        const wrap = document.createElement("div"); wrap.className = "gwrap"; wrap.append(card, rel); box.append(wrap);
+      } else box.append(card);
+    });
+    $("status").textContent = words.length ? `נמצאו ${list.length} משחקים` : `${games.length} משחקים`;
+    $("empty").hidden = true;
+  }
+
   function render() {
+    const gview = state.view === "games";
+    $("games").hidden = !gview; $("grid").hidden = gview;
+    if (gview) { $("wish").hidden = true; renderGames(norm(state.q).split(" ").filter(Boolean)); return; }
     const words = norm(state.q).split(" ").filter(Boolean);
     let list = state.videos
       .filter((v) => !state.topic || v.topics.includes(state.topic))
@@ -143,6 +192,7 @@
       const body = document.createElement("div"); body.className = "cbody";
       const h = document.createElement("h3"); highlight(h, v.title, words);
       const meta = document.createElement("p"); meta.className = "meta"; meta.textContent = fmtDate(v.published);
+      if (gamesFor(v.id).length) { const g = document.createElement("span"); g.className = "mat"; g.textContent = " · משחק"; meta.append(g); }
       if (v.mats.length) { const m = document.createElement("span"); m.className = "mat"; m.textContent = ` · חומרים (${v.mats.length})`; meta.append(m); }
       const tags = document.createElement("div"); tags.className = "tags";
       v.topics.slice(0, 4).forEach((t) => { const s = document.createElement("span"); s.className = "tag"; s.textContent = t; tags.append(s); });
@@ -204,6 +254,9 @@
       });
       box.append(ul); mw.append(box);
     }
+    const gw = $("pGames"); gw.textContent = "";
+    const gs = gamesFor(id);
+    if (gs.length) { const box = document.createElement("div"); box.className = "materials"; const h = document.createElement("h3"); h.textContent = "משחק מתאים"; box.append(h); gs.forEach((g) => box.append(gameCard(g, true))); gw.append(box); }
     $("pDesc").textContent = v.description || ""; $("pDescWrap").hidden = !v.description;
     $("pYT").href = `https://www.youtube.com/watch?v=${id}`;
     if (push && location.hash !== "#v-" + id) history.pushState(null, "", "#v-" + id);
@@ -227,5 +280,8 @@
   $("onlyMaterials").onchange = (e) => { state.onlyMat = e.target.checked; render(); };
   const qp = new URLSearchParams(location.search).get("q"); if (qp) { $("q").value = qp; state.q = qp; }
 
-  renderTopics(); render(); fromHash();
+  $("nVideos").textContent = state.videos.length;
+  renderTopics();
+  if (location.hash === "#games" && games.length) setView("games", false); else render();
+  fromHash();
 })();
