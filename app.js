@@ -38,11 +38,13 @@
   const plId = (p) => { const m = String(p).match(/list=([\w-]+)/); return m ? m[1] : String(p).trim(); };
   const selPl = (sel.playlists || []).map(plId).filter(Boolean);
   const selKw = (sel.include_keywords || []).map(norm).filter(Boolean);
+  const excKw = (sel.exclude_keywords || []).map(norm).filter(Boolean);
   const inc = new Set(sel.include_ids || []), exc = new Set(sel.exclude_ids || []);
   const fv = sel.from_video ? state.videos.find((v) => v.id === String(sel.from_video).replace(/.*(?:v=|youtu\.be\/|shorts\/)/, "").slice(0, 11)) : null;
   const fromOrder = fv && fv.order != null ? fv.order : null;
   state.videos = state.videos.filter((v) => {
     if (exc.has(v.id)) return false;
+    if (excKw.some((k) => v.nTitle.includes(k))) return false;
     if (inc.has(v.id)) return true;
     if (sel.from_date && v.published && v.published.slice(0, 10) < sel.from_date) return false;
     if (fromOrder !== null && (v.order ?? 0) > fromOrder) return false;
