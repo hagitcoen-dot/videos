@@ -2,7 +2,7 @@
 // data/topics.json (נושאים ומילות מפתח) ו-data/materials.json (חומרים נלווים).
 (async function () {
   const $ = (id) => document.getElementById(id);
-  const state = { videos: [], topics: [], materials: { videos: {}, topics: {} }, topic: null, q: "", sort: "relevance", onlyMat: false };
+  const state = { videos: [], topics: [], materials: { videos: {}, topics: {} }, topic: null, lang: "all", q: "", sort: "relevance", onlyMat: false };
 
   // נרמול עברית: בלי ניקוד, אותיות סופיות כרגילות, אותיות קטנות
   const FINALS = { "ך": "כ", "ם": "מ", "ן": "נ", "ף": "פ", "ץ": "צ" };
@@ -24,11 +24,12 @@
 
   state.videos = (vd.videos || []).map((v) => {
     const mats = (state.materials.videos[v.id] || []).slice();
-    const base = norm([v.title, v.description, (v.tags || []).join(" ")].join(" "));
+    // נושאים לפי כותרת ותגיות בלבד: התיאורים כוללים לרוב האשטגים כלליים שהיו משייכים כל סרטון לכל נושא
+    const base = norm([v.title, (v.tags || []).join(" ")].join(" "));
     const topics = state.topics.filter((t) => (t.keywords || [t.name]).some((k) => base.includes(norm(k)))).map((t) => t.name);
     topics.forEach((t) => (state.materials.topics[t] || []).forEach((m) => mats.push({ ...m, fromTopic: t })));
     return {
-      ...v, topics, mats,
+      ...v, topics, mats, lang: /[\u0590-\u05FF]/.test(v.title) ? "he" : "en",
       nTitle: norm(v.title), nTags: norm((v.tags || []).concat(topics).join(" ")),
       nDesc: norm(v.description), nMats: norm(mats.map((m) => m.title + " " + (m.note || "")).join(" ")),
     };
@@ -113,6 +114,7 @@
     let list = state.videos
       .filter((v) => !state.topic || v.topics.includes(state.topic))
       .filter((v) => !state.onlyMat || v.mats.length)
+      .filter((v) => state.lang === "all" || v.lang === state.lang)
       .map((v) => ({ v, s: words.length ? score(v, words) : 1 }))
       .filter((x) => x.s > 0);
     const byDate = (a, b) => (b.v.published || "").localeCompare(a.v.published || "") || ((a.v.order ?? 0) - (b.v.order ?? 0));
@@ -148,7 +150,7 @@
       empty.innerHTML = "<h2>לא נמצאו סרטונים</h2><p>נסו מילה אחרת או קצרה יותר, או בטלו את סינון הנושא.</p>";
     } else {
       empty.hidden = true;
-      $("status").textContent = words.length || state.topic || state.onlyMat ? `נמצאו ${list.length} סרטונים מתוך ${state.videos.length}` : `${state.videos.length} סרטונים בספרייה`;
+      $("status").textContent = words.length || state.topic || state.onlyMat || state.lang !== "all" ? `נמצאו ${list.length} סרטונים מתוך ${state.videos.length}` : `${state.videos.length} סרטונים בספרייה`;
     }
   }
 
@@ -192,6 +194,7 @@
   let t;
   $("q").addEventListener("input", (e) => { clearTimeout(t); t = setTimeout(() => { state.q = e.target.value; render(); }, 120); });
   $("searchForm").addEventListener("submit", (e) => e.preventDefault());
+  $("lang").onchange = (e) => { state.lang = e.target.value; render(); };
   $("sort").onchange = (e) => { state.sort = e.target.value; render(); };
   $("onlyMaterials").onchange = (e) => { state.onlyMat = e.target.checked; render(); };
   const qp = new URLSearchParams(location.search).get("q"); if (qp) { $("q").value = qp; state.q = qp; }

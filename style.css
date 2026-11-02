@@ -22,7 +22,7 @@ h1{font-family:var(--display);font-weight:400;font-size:clamp(1.9rem,4.5vw,2.9re
 .search{display:flex;gap:10px;flex-wrap:wrap}
 .search input{flex:1 1 320px;min-width:0;font:inherit;font-size:1.1rem;padding:14px 16px;border:2px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink)}
 .search input:focus,.search select:focus{outline:none;border-color:var(--accent)}
-.search select{font:inherit;padding:0 12px;border:2px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);min-height:52px}
+.search select{flex:0 0 auto;font:inherit;padding:0 12px;border:2px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);min-height:52px}
 .filters{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-top:16px}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{font:inherit;font-size:.95rem;border:1px solid transparent;background:var(--chip);color:var(--ink);padding:5px 14px;border-radius:999px;cursor:pointer}
