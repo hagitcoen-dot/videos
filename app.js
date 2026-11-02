@@ -13,11 +13,12 @@
   async function load(path, fallback) {
     try { const r = await fetch(path, { cache: "no-cache" }); if (!r.ok) throw 0; return await r.json(); } catch { return fallback; }
   }
-  const [vd, td, md, sel] = await Promise.all([
+  const [vd, td, md, sel, cfg] = await Promise.all([
     load("data/videos.json", { videos: [] }),
     load("data/topics.json", { topics: [] }),
     load("data/materials.json", { videos: {}, topics: {} }),
     load("data/selection.json", {}),
+    load("data/config.json", {}),
   ]);
   state.topics = td.topics || [];
   state.materials = { videos: md.videos || {}, topics: md.topics || {} };
@@ -149,6 +150,7 @@
     });
     grid.append(frag);
 
+    renderWish(words.length ? state.q.trim() : "", !list.length);
     const empty = $("empty");
     if (!state.videos.length) {
       $("status").textContent = "";
@@ -162,6 +164,21 @@
       empty.hidden = true;
       $("status").textContent = words.length || state.topic || state.onlyMat || state.lang !== "all" || state.kind !== "all" ? `נמצאו ${list.length} סרטונים מתוך ${state.videos.length}` : `${state.videos.length} סרטונים בספרייה`;
     }
+  }
+
+  // משאלת דג הזהב: קישור לטופס, עם מה שחיפשו כבר ממולא
+  function wishUrl(q) {
+    if (q && cfg.wish_prefill && cfg.wish_prefill.includes("QUERY")) return cfg.wish_prefill.replace("QUERY", encodeURIComponent(q));
+    return cfg.wish_form_url;
+  }
+  function renderWish(q, noResults) {
+    const box = $("wish");
+    if (!cfg.wish_form_url || !state.videos.length) { box.hidden = true; return; }
+    box.hidden = false;
+    box.classList.toggle("strong", noResults);
+    $("wishTitle").textContent = noResults ? "לא מצאתם את מה שחיפשתם?" : "חיפשתם נושא ולא מצאתם?";
+    $("wishBtn").href = wishUrl(q);
+    $("wishBtn").textContent = q ? `לבקש סרטון על "${q.length > 30 ? q.slice(0, 30) + "…" : q}"` : "לבקש סרטון על נושא חדש";
   }
 
   // נגן
