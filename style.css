@@ -65,3 +65,21 @@ dialog::backdrop{background:rgba(8,20,18,.65)}
 .actions{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:0}
 .actions button{font:inherit;background:var(--chip);color:var(--ink);border:none;border-radius:8px;padding:6px 12px;cursor:pointer}
 @media (prefers-reduced-motion:reduce){.card{transition:none}}
+html,body{overflow-x:hidden}
+.search input{max-width:100%}
+.selects{display:contents}
+@media (max-width:640px){
+  .top{padding-block:18px 14px}
+  .logo{padding:6px 8px;border-radius:14px;margin-bottom:6px}
+  .logo img{width:84px}
+  .eyebrow{font-size:.9rem}
+  h1{font-size:1.9rem;margin:.1em 0 .25em}
+  .lede{display:none}
+  .search{gap:8px}
+  .search input{flex-basis:100%;font-size:1rem;padding:12px 14px}
+  .selects{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%}
+  .search select{min-height:44px;font-size:.92rem;padding:0 6px;min-width:0;width:100%}
+  .chips{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;max-width:100%;padding-bottom:4px;scrollbar-width:none}
+  .chip{white-space:nowrap;flex:0 0 auto}
+  .filters{margin-top:12px;gap:8px}
+}
