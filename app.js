@@ -39,10 +39,13 @@
   const selPl = (sel.playlists || []).map(plId).filter(Boolean);
   const selKw = (sel.include_keywords || []).map(norm).filter(Boolean);
   const inc = new Set(sel.include_ids || []), exc = new Set(sel.exclude_ids || []);
+  const fv = sel.from_video ? state.videos.find((v) => v.id === String(sel.from_video).replace(/.*(?:v=|youtu\.be\/|shorts\/)/, "").slice(0, 11)) : null;
+  const fromOrder = fv && fv.order != null ? fv.order : null;
   state.videos = state.videos.filter((v) => {
     if (exc.has(v.id)) return false;
     if (inc.has(v.id)) return true;
-    if (sel.from_date && (v.published || "").slice(0, 10) < sel.from_date) return false;
+    if (sel.from_date && v.published && v.published.slice(0, 10) < sel.from_date) return false;
+    if (fromOrder !== null && (v.order ?? 0) > fromOrder) return false;
     if (selPl.length && !(v.playlists || []).some((p) => selPl.includes(p))) return false;
     if (sel.match_topics && !v.topics.length) return false;
     if (selKw.length && !selKw.some((k) => (v.nTitle + " " + v.nTags + " " + v.nDesc).includes(k))) return false;
@@ -110,7 +113,7 @@
       .filter((v) => !state.onlyMat || v.mats.length)
       .map((v) => ({ v, s: words.length ? score(v, words) : 1 }))
       .filter((x) => x.s > 0);
-    const byDate = (a, b) => (b.v.published || "").localeCompare(a.v.published || "");
+    const byDate = (a, b) => (b.v.published || "").localeCompare(a.v.published || "") || ((a.v.order ?? 0) - (b.v.order ?? 0));
     if (state.sort === "new" || (state.sort === "relevance" && !words.length)) list.sort(byDate);
     else if (state.sort === "old") list.sort((a, b) => -byDate(a, b));
     else list.sort((a, b) => b.s - a.s || byDate(a, b));

@@ -149,7 +149,9 @@ def main():
             membership.setdefault(vid, []).append(pl)
     for v in videos:
         v["playlists"] = membership.get(v["id"], [])
-    videos.sort(key=lambda v: v.get("published") or "", reverse=True)
+    # order: 0 = newest, by the channel's upload order (works even when dates are unavailable)
+    for i, v in enumerate(videos):
+        v["order"] = i
     out = {
         "updated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "channel": "https://www.youtube.com/@HagitC_SEL_CBT",
