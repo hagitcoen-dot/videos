@@ -7,6 +7,10 @@ on:
   push:
     paths: ["scripts/fetch_videos.py", ".github/workflows/update-videos.yml", "data/selection.json"]
 
+concurrency:
+  group: update-videos
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -28,4 +32,4 @@ jobs:
           git config user.name "video-bot"
           git config user.email "actions@users.noreply.github.com"
           git add data/videos.json
-          git diff --cached --quiet || (git commit -m "עדכון רשימת הסרטונים" && git push)
+          git diff --cached --quiet || (git commit -m "עדכון רשימת הסרטונים" && git pull --rebase origin main && git push)

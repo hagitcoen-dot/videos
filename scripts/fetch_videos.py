@@ -84,6 +84,7 @@ def fetch_with_ytdlp(existing):
         raise RuntimeError("yt-dlp did not return any videos")
     videos = []
     detail_opts = {"quiet": True, "skip_download": True, "ignoreerrors": True}
+    fails = 0  # YouTube often blocks per-video details from CI servers; stop asking after a few failures
     with yt_dlp.YoutubeDL(detail_opts) as ydl:
         for e in entries:
             vid = e["id"]
@@ -92,7 +93,10 @@ def fetch_with_ytdlp(existing):
                 old["title"] = e.get("title") or old["title"]
                 videos.append(old)
                 continue
-            info = ydl.extract_info(f"https://www.youtube.com/watch?v={vid}", download=False) or {}
+            info = {}
+            if fails < 3:
+                info = ydl.extract_info(f"https://www.youtube.com/watch?v={vid}", download=False) or {}
+                fails = 0 if info else fails + 1
             ud = info.get("upload_date")
             videos.append({
                 "id": vid,
