@@ -19,6 +19,12 @@
     <form class="search" role="search" id="searchForm">
       <label class="sr-only" for="q">חיפוש סרטונים</label>
       <input id="q" type="search" placeholder="למשל: כעס, ויסות רגשי, חברות, מחשבות אוטומטיות" autocomplete="off">
+      <select id="kind" aria-label="סוג">
+        <option value="all">כל הסוגים</option>
+        <option value="song">שירים</option>
+        <option value="story">סיפורים</option>
+        <option value="video">סרטונים</option>
+      </select>
       <select id="lang" aria-label="שפה">
         <option value="all">כל השפות</option>
         <option value="he">עברית</option>
