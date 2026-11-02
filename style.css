@@ -15,16 +15,18 @@ body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 var(--body)}
 .wrap{max-width:1180px;margin:0 auto;padding-inline:max(16px,4vw)}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 a{color:var(--accent)}
-.top{background:var(--surface);border-bottom:1px solid var(--line);padding-block:40px 20px}
-.eyebrow{margin:0;color:var(--accent);font-weight:700;letter-spacing:.04em;font-size:.9rem}
-h1{font-family:var(--display);font-weight:400;font-size:clamp(1.9rem,4.5vw,2.9rem);line-height:1.15;margin:.2em 0 .3em;text-wrap:balance}
-.lede{margin:0 0 20px;color:var(--muted);max-width:60ch}
-.search{display:flex;gap:10px;flex-wrap:wrap}
+.top{background:var(--surface);border-bottom:1px solid var(--line);padding-block:28px 20px;text-align:center}
+.logo{display:inline-block;background:#fff;border-radius:20px;padding:8px 12px;margin-bottom:10px}
+.logo img{display:block;width:135px;height:auto}
+.eyebrow{margin:0;color:var(--accent);font-weight:700;letter-spacing:.04em;font-size:1.05rem}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(2.2rem,6vw,3.8rem);line-height:1.1;margin:.15em 0 .3em;text-wrap:balance}
+.lede{margin:0 auto 22px;color:var(--muted);max-width:60ch;font-size:1.1rem}
+.search{display:flex;gap:10px;flex-wrap:wrap;max-width:900px;margin:0 auto;text-align:start}
 .search input{flex:1 1 320px;min-width:0;font:inherit;font-size:1.1rem;padding:14px 16px;border:2px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink)}
 .search input:focus,.search select:focus{outline:none;border-color:var(--accent)}
 .search select{flex:0 0 auto;font:inherit;padding:0 12px;border:2px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);min-height:52px}
-.filters{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-top:16px}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
+.filters{display:flex;flex-direction:column;gap:12px;align-items:center;margin-top:18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:1000px}
 .chip{font:inherit;font-size:.95rem;border:1px solid transparent;background:var(--chip);color:var(--ink);padding:5px 14px;border-radius:999px;cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
 .chip .n{opacity:.65;font-size:.85em;margin-inline-start:4px;font-variant-numeric:tabular-nums}
