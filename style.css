@@ -1,4 +1,5 @@
 /* Layout: a calm library — search on top, topic chips, a grid of video cards, a player sheet. */
+[hidden]{display:none !important}
 :root{
   --bg:#F3F6F5; --surface:#FFFFFF; --ink:#18302E; --muted:#5B6F6C;
   --accent:#23665F; --accent-ink:#FFFFFF; --chip:#E3EDEA; --line:#D5E0DD;
