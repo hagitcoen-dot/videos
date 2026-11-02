@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ספריית הסרטונים של חגית כהן</title>
+<meta name="description" content="כל הסרטונים של חגית כהן, CBT וחינוך חברתי־רגשי, במקום אחד, עם חיפוש לפי נושאים וחומרים נלווים.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&family=Secular+One&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <p class="eyebrow">CBT · למידה חברתית־רגשית</p>
+    <h1>ספריית הסרטונים של חגית כהן</h1>
+    <p class="lede">כל הסרטונים מהערוץ במקום אחד. חפשו לפי מילה, נושא או מצב, ומצאו גם את החומרים שמתאימים לכל סרטון.</p>
+    <form class="search" role="search" id="searchForm">
+      <label class="sr-only" for="q">חיפוש סרטונים</label>
+      <input id="q" type="search" placeholder="למשל: כעס, ויסות רגשי, חברות, מחשבות אוטומטיות" autocomplete="off">
+      <select id="sort" aria-label="סדר התוצאות">
+        <option value="relevance">הכי רלוונטי</option>
+        <option value="new">החדשים קודם</option>
+        <option value="old">הישנים קודם</option>
+      </select>
+    </form>
+    <div class="filters">
+      <div class="chips" id="topics" aria-label="נושאים"></div>
+      <label class="toggle"><input type="checkbox" id="onlyMaterials"> רק סרטונים עם חומרים</label>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <p class="status" id="status" aria-live="polite">טוען את רשימת הסרטונים…</p>
+  <section class="grid" id="grid"></section>
+  <section class="empty" id="empty" hidden></section>
+</main>
+
+<footer class="wrap foot">
+  <p id="updated"></p>
+  <p><a href="https://www.youtube.com/@HagitC_SEL_CBT" target="_blank" rel="noopener">לערוץ ביוטיוב</a> · <a href="https://www.hagit-cbt.com/" target="_blank" rel="noopener">לאתר של חגית</a></p>
+</footer>
+
+<dialog id="player" aria-labelledby="pTitle">
+  <div class="player">
+    <button class="close" id="closePlayer" aria-label="סגירה">×</button>
+    <div class="frame"><iframe id="pFrame" title="נגן וידאו" allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>
+    <div class="pbody">
+      <h2 id="pTitle"></h2>
+      <p class="meta" id="pMeta"></p>
+      <div class="tags" id="pTags"></div>
+      <div id="pMaterials"></div>
+      <details id="pDescWrap"><summary>תיאור הסרטון</summary><p class="desc" id="pDesc"></p></details>
+      <p class="actions"><a id="pYT" target="_blank" rel="noopener">לצפייה ביוטיוב</a> <button type="button" id="pCopy">העתקת קישור לסרטון</button></p>
+    </div>
+  </div>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>
