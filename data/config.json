@@ -1,5 +1,6 @@
 {
-  "_הסבר": "wish_form_url: קישור לטופס Google של 'משאלת דג הזהב'. wish_prefill: קישור 'מילוי מראש' של אותו טופס, שבו במקום התשובה כתוב QUERY. האתר יחליף אותו במה שהמבקר חיפש. אם wish_form_url ריק, התיבה לא מוצגת.",
+  "_הסבר": "wish_form_url: קישור לטופס Google של 'משאלת דג הזהב'. wish_prefill: קישור 'מילוי מראש' של אותו טופס, שבו במקום התשובה כתוב QUERY. האתר יחליף אותו במה שהמבקר חיפש. אם wish_form_url ריק, התיבה לא מוצגת. contact_url: קישור לכפתור 'צור קשר' (טופס Google או mailto:כתובת). אם ריק, הכפתור לא מוצג.",
   "wish_form_url": "https://docs.google.com/forms/d/e/1FAIpQLScYIPSaHxr-L5YPm2g6ssfxA33x2ty6rBq1G_0qv4eG0vKj8Q/viewform",
-  "wish_prefill": ""
+  "wish_prefill": "",
+  "contact_url": ""
 }

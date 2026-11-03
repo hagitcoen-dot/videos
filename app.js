@@ -132,6 +132,7 @@
     if (push) history.replaceState(null, "", v === "games" ? "#games" : location.pathname + location.search);
     render();
   }
+  if (cfg.contact_url) { const c = $("contact"); c.href = cfg.contact_url; c.hidden = false; if (cfg.contact_url.startsWith("mailto:")) c.removeAttribute("target"); }
   $("tabVideos").onclick = () => setView("videos");
   $("tabGames").onclick = () => setView("games");
   $("nGames").textContent = games.length || "";
