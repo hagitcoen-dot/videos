@@ -103,7 +103,7 @@ html,body{overflow-x:hidden}
 .tab[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .tab .n{opacity:.7;font-size:.85em;font-variant-numeric:tabular-nums}
 body.view-games .filters,body.view-games .selects{display:none}
-.games{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:22px;padding-bottom:40px}
+.games{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,230px));gap:18px;padding-bottom:40px}
 .gwrap{display:flex;flex-direction:column;gap:8px}
 .gcard{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;text-decoration:none;color:inherit}
 .gcard:hover{transform:translateY(-2px)}
@@ -111,8 +111,9 @@ body.view-games .filters,body.view-games .selects{display:none}
 .gart{aspect-ratio:16/9;display:grid;place-items:center;background:linear-gradient(135deg,#27AEE6,#8F5CFF);color:#FFCC29}
 .gart svg{width:38%}
 .gbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px}
-.gbody h3{margin:0;font-size:1.1rem}
-.gbody p{margin:0;color:var(--muted);font-size:.95rem}
+.gbody h3{margin:0;font-size:1rem}
+.gbody p{margin:0;color:var(--muted);font-size:.88rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+@media (max-width:480px){.games{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}
 .gplay{align-self:flex-start;font-weight:700;color:var(--accent)}
 .gcard.small{flex-direction:row;align-items:stretch}
 .gcard.small .gart,.gcard.small img{width:120px;flex:0 0 auto;aspect-ratio:auto}
