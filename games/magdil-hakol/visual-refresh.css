@@ -1,0 +1,81 @@
+/* A night-sky palette, with bright reading surfaces and motion tied to actions. */
+:root {
+  --ink: #16253a;
+  --ink-soft: #4b5b70;
+  --cream: #f9fbfe;
+  --thought: #5e4c9b;
+  --thought-soft: #ece8f7;
+  --thought-deep: #47347b;
+  --radius: 20px;
+}
+
+body, .sky { background: #0d182a; }
+
+.sky {
+  background:
+    radial-gradient(ellipse at 15% 28%, #254c63 0%, transparent 48%),
+    radial-gradient(ellipse at 85% 75%, #373253 0%, transparent 50%),
+    linear-gradient(155deg, #152b40, #0d182a 68%);
+}
+
+.sky::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-radial-gradient(
+    ellipse at 12% 110%, transparent 0 29px, #a9cde316 30px 31px
+  );
+  mask-image: linear-gradient(transparent 30%, #000);
+}
+
+.sky .stars { opacity: .38; animation: none; }
+.sky .glow { display: none; }
+
+.topbar, main { max-width: 650px; }
+.brand { font-weight: 600; }
+.icon-btn, .pill { background: #1b2c42; border-color: #71869e; }
+
+.intro-card, .panel, .card {
+  border: 1px solid #dbe4ee;
+  box-shadow: 0 18px 48px #07101c80;
+}
+
+.intro-card, .panel { background: var(--cream); }
+.intro-card { padding: clamp(18px, 5vw, 36px); }
+
+h1 { font-size: clamp(28px, 6vw, 42px); }
+h2 { font-size: clamp(24px, 5vw, 33px); }
+h1, h2 { text-wrap: balance; }
+
+.slide .chars {
+  align-items: center;
+  min-height: 164px;
+  margin: 0 0 18px;
+  padding: 8px;
+  border: 1px solid #dce5ef;
+  border-radius: 15px;
+  background:
+    radial-gradient(ellipse at center, #ffffffb0, transparent 62%),
+    repeating-radial-gradient(circle at center, #d2ddea 0 1px, transparent 2px 24px),
+    #e9eff6;
+}
+
+.slide .char { filter: drop-shadow(0 7px 7px #13254126); }
+.slide .char.float, .slide .char.wobble { animation: portrait-in .48s ease-out both; }
+
+@keyframes portrait-in {
+  from { opacity: .5; transform: translateY(7px) scale(.94); }
+  to { opacity: 1; transform: none; }
+}
+
+.btn, .answer, .card { border-radius: 14px; }
+.btn.primary { background: #304c70; box-shadow: 0 5px 12px #152b4029; }
+.btn.ghost { background: #e6edf5; }
+.dots span.on { background: #415f83; }
+.bar { background: linear-gradient(90deg, #68c8c6, #a1e0da); }
+.card-text { font-size: clamp(21px, 4.5vw, 28px); }
+:focus-visible { outline-color: #bc7300; }
+
+@media (prefers-reduced-motion: reduce) {
+  .slide .char.float, .slide .char.wobble { animation: none; }
+}

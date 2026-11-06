@@ -2,6 +2,22 @@
   "_הסבר": "משחקים. לכל משחק: title (שם), url (קישור), desc (תיאור קצר), age (גיל מתאים, לא חובה), topics (נושאים מתוך topics.json), videos (מזהי סרטונים מתאימים), image (תמונה בתיקייה games/, לא חובה).",
   "games": [
     {
+      "id": "magdil-hakol",
+      "title": "מגדיל‑הכול · חשיבה קטסטרופלית",
+      "url": "games/magdil-hakol/",
+      "desc": "כשבועי נבהל, הוא הופך לענן סופה שמגדיל כל דבר קטן לאסון. מזהים את מגדיל‑הכול, יורדים במדרגות האסון ומכווצים אותו בחזרה.",
+      "age": "",
+      "topics": [
+        "מחשבות ודפוסי חשיבה",
+        "חרדה ודאגה"
+      ],
+      "videos": [
+        "4W8TXuYzxF4",
+        "3ix9IBElft0"
+      ],
+      "image": "games/magdil-hakol.jpg"
+    },
+    {
       "id": "body-quest",
       "title": "Body Quest · בלשי התחושות",
       "url": "https://claude.ai/artifact/6U1PFQjnpyd6BWy2saccsL",
