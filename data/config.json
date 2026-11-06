@@ -2,5 +2,5 @@
   "_הסבר": "wish_form_url: קישור לטופס Google של 'משאלת דג הזהב'. wish_prefill: קישור 'מילוי מראש' של אותו טופס, שבו במקום התשובה כתוב QUERY. האתר יחליף אותו במה שהמבקר חיפש. אם wish_form_url ריק, התיבה לא מוצגת. contact_url: קישור לכפתור 'צור קשר' (טופס Google או mailto:כתובת). אם ריק, הכפתור לא מוצג.",
   "wish_form_url": "https://docs.google.com/forms/d/e/1FAIpQLScYIPSaHxr-L5YPm2g6ssfxA33x2ty6rBq1G_0qv4eG0vKj8Q/viewform",
   "wish_prefill": "",
-  "contact_url": ""
+  "contact_url": "mailto:hagitcoen@gmail.com?subject=%D7%A4%D7%A0%D7%99%D7%99%D7%94%20%D7%9E%D7%94%D7%9E%D7%A8%D7%97%D7%91%20%D7%9C%D7%A6%D7%9E%D7%99%D7%97%D7%94%20%D7%A8%D7%92%D7%A9%D7%99%D7%AA%20%D7%97%D7%91%D7%A8%D7%AA%D7%99%D7%AA"
 }
