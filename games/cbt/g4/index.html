@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>פותחים את המחשבות: משחק על מילים חוסמות ומחשבה מאוזנת | פתחי</title>
+<meta name="description" content="משחק קצר ומשמח על מחשבות שננעלות: מוצאים את המילים החוסמות, בוחרים מפתח גמיש ובונים מחשבה מאוזנת שפותחת את הדלת. מאת חגית כהן CBT | חברתי.">
+<meta name="theme-color" content="#24184f">
+<meta property="og:title" content="פותחים את המחשבות 🔓 משחק המפתחות של פתחי">
+<meta property="og:description" content="מוצאים מילים חוסמות, בוחרים מפתח גמיש ופותחים את הדלת למחשבה מאוזנת 🗝️ חגית כהן CBT | חברתי">
+<meta property="og:image" content="https://hagitcoen-dot.github.io/videos/games/cbt/g4/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="img/maftechi.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="fun.css">
+</head>
+<body class="theme-hunt">
+<div class="sky" aria-hidden="true"><div class="stars"></div><div class="glow g1"></div><div class="glow g2"></div></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div id="floaters" aria-hidden="true"></div>
+
+<header class="topbar">
+  <button class="brand" id="brandBtn" type="button" aria-label="למפה"><img src="img/maftechi.svg" alt="" width="34" height="34"><span>פותחים מחשבות</span></button>
+  <div class="hud" id="hud" hidden>
+    <span class="pill" id="scorePill" aria-label="נקודות">⭐ <b id="score">0</b></span>
+    <span class="pill streak" id="streakPill" hidden aria-label="רצף">🔥 <b id="streak">0</b></span>
+  </div>
+  <button class="icon-btn" id="soundBtn" type="button" aria-pressed="true" aria-label="השתקת צלילים">🔊</button>
+</header>
+
+<main id="app">
+  <!-- פתיחה -->
+  <section class="screen" id="screen-intro" aria-labelledby="introTitle">
+    <div class="card intro-card">
+      <div class="slides">
+        <div class="slide active">
+          <div class="chars"><img class="char bob" src="img/buei.svg" alt="" width="120" height="120"></div>
+          <h1>אוי! מחשבות ננעלו 🔒</h1>
+          <p>זוכרים את בועי, שגר בראש ומספר סיפורים? כבר למדנו ש<strong>מחשבה היא לא עובדה</strong>.</p>
+          <p>אבל הלילה קרה משהו: <strong>מנעולים קטנים</strong> נתפסו על המחשבות של בועי, ועכשיו הן תקועות ולא נותנות לו לראות אפשרויות אחרות 😟</p>
+          <p class="soft">מישהו צריך לפתוח אותן... ואני מכיר בדיוק את האיש המתאים!</p>
+        </div>
+        <div class="slide">
+          <div class="chars"><img class="char bob" src="img/maftechi.svg" alt="פתחי, שומר המפתחות" width="140" height="154"></div>
+          <h2 id="introTitle">היי, אני פתחי! 🗝️</h2>
+          <p>אני שומר המפתחות. התפקיד שלי: לפתוח <strong>מחשבות שננעלו</strong>.</p>
+          <p class="soft">יש לי צרור ענק של מפתחות, ואני צריך עוזרים 😉</p>
+        </div>
+        <div class="slide">
+          <div class="chars"><img class="char bob" src="img/buei.svg" alt="בועי, ענן המחשבה" width="120" height="120"></div>
+          <h2>איך מחשבה ננעלת? 🔒</h2>
+          <p>לפעמים בועי (המחשבה) משתמש ב<strong>מילים חוסמות</strong>: מילים שסוגרות את הראש לכל אפשרות אחרת.</p>
+          <div class="wordcloud"><span>תמיד</span><span>אף פעם</span><span>כולם</span><span>אף אחד</span><span>חייב</span><span>אין סיכוי</span><span>כלום</span><span>בחיים לא</span></div>
+        </div>
+        <div class="slide">
+          <h2>מילה אחת משנה הכל ✨</h2>
+          <div class="demo-swap" aria-label="דוגמה: אף פעם הופך לעדיין">
+            <p class="demo-line">אני <span class="dchip lockd">🔒 אף פעם</span> לא מצליח בזה</p>
+            <div class="demo-arrow">🗝️</div>
+            <p class="demo-line">אני <span class="dchip flex">🔓 עדיין</span> לא מצליח בזה</p>
+          </div>
+          <p class="soft">המשפט הראשון סוגר דלת. השני משאיר אותה פתוחה.</p>
+        </div>
+        <div class="slide">
+          <div class="chars"><img class="char bob heartbeat" src="img/levavi.svg" alt="לבבי, הלב" width="104" height="104"></div>
+          <h2>מחשבה מאוזנת 💛</h2>
+          <p>היא לא ״הכל מושלם״. היא <strong>מכירה ברגש</strong>, <strong>בודקת עובדות</strong> ומציעה <strong>צעד קטן</strong>.</p>
+          <ol class="steps3"><li>🔒 צדים מילים חוסמות</li><li>🗝️ בוחרים מפתחות</li><li>🚪 פותחים את הדלת</li></ol>
+        </div>
+      </div>
+      <div class="dots" id="dots" aria-hidden="true"></div>
+      <div class="row-actions">
+        <button class="btn ghost" id="skipBtn" type="button">דלגו למפה</button>
+        <button class="btn primary" id="nextSlideBtn" type="button">הבא</button>
+      </div>
+      <p class="credit">חגית כהן CBT | חברתי</p>
+    </div>
+  </section>
+
+  <!-- מפה -->
+  <section class="screen" id="screen-map" hidden aria-labelledby="mapTitle">
+    <div class="map-head">
+      <h2 id="mapTitle">מפת המנעולים 🗺️</h2>
+      <p class="soft" id="mapSub">בחרו את התחנה הבאה</p>
+      <div class="map-stars"><span id="mapStars">0</span> / 27 ⭐</div>
+    </div>
+    <div class="map" id="map">
+      <svg class="map-path" id="mapPath" aria-hidden="true"></svg>
+    </div>
+    <div class="map-foot">
+      <button class="btn ghost small" id="howBtn" type="button">איך משחקים?</button>
+      <button class="btn ghost small" id="resetBtn" type="button">התחלה מחדש</button>
+    </div>
+  </section>
+
+  <!-- הסבר שלב -->
+  <section class="screen" id="screen-howto" hidden aria-labelledby="howTitle">
+    <div class="card how-card">
+      <div class="how-icon" id="howIcon">🔒</div>
+      <p class="kicker" id="howKicker">שלב 1</p>
+      <h2 id="howTitle">צייד המילים</h2>
+      <ol class="how-list" id="howList"></ol>
+      <div class="guide"><img src="img/maftechi.svg" alt="" width="54" height="60"><p class="bubble" id="howSay">מוכנים? אני סומך עליכם!</p></div>
+      <button class="btn primary big" id="howGo" type="button">יאללה! ▶</button>
+    </div>
+  </section>
+
+  <!-- שלב 1: צייד מילים -->
+  <section class="screen play" id="screen-hunt" hidden aria-labelledby="huntTitle">
+    <div class="play-top">
+      <span class="lvl" id="huntLvl"></span>
+      <div class="progress" aria-hidden="true"><i id="huntBar"></i></div>
+    </div>
+    <h2 class="sr" id="huntTitle">צייד המילים</h2>
+    <p class="ask">הקישו על המילים ש<b>חוסמות</b> 🔍</p>
+    <div class="thought-card" id="huntCard">
+      <span class="tag" id="huntTag"></span>
+      <p class="thought words" id="huntWords"></p>
+      <div class="locks-meter" id="huntMeter" aria-live="polite"></div>
+    </div>
+    <div class="guide-bar" id="huntGuide"><img src="img/maftechi.svg" alt="" width="40" height="44"><p id="huntSay">איזו מילה סוגרת את המחשבה?</p></div>
+    <div class="row-actions">
+      <button class="btn ghost small" id="hintBtn" type="button">💡 רמז</button>
+      <button class="btn primary" id="huntNext" type="button" hidden>המשך ⬅</button>
+    </div>
+  </section>
+
+  <!-- שלב 2: מפתחות -->
+  <section class="screen play" id="screen-keys" hidden aria-labelledby="keysTitle">
+    <div class="play-top">
+      <span class="lvl" id="keysLvl"></span>
+      <div class="progress" aria-hidden="true"><i id="keysBar"></i></div>
+    </div>
+    <h2 class="sr" id="keysTitle">מפתחות</h2>
+    <div class="thought-card" id="keysCard">
+      <span class="tag" id="keysTag"></span>
+      <p class="thought" id="keysSentence"></p>
+    </div>
+    <p class="ask" id="keysAsk"></p>
+    <div class="keyring" id="keyring"></div>
+    <div class="guide-bar" id="keysGuide"><img src="img/maftechi.svg" alt="" width="40" height="44"><p id="keysSay">איזה מפתח פותח את המנעול?</p></div>
+    <div class="row-actions"><button class="btn primary" id="keysNext" type="button" hidden>המשך ⬅</button></div>
+  </section>
+
+  <!-- שלב 3: הדלת -->
+  <section class="screen play" id="screen-door" hidden aria-labelledby="doorTitle">
+    <div class="play-top">
+      <span class="lvl" id="doorLvl"></span>
+      <div class="progress" aria-hidden="true"><i id="doorBar"></i></div>
+    </div>
+    <h2 class="sr" id="doorTitle">הדלת</h2>
+    <div class="thought-card compact" id="doorCard">
+      <span class="tag" id="doorTag"></span>
+      <p class="sit" id="doorSit"></p>
+      <p class="thought blocked" id="doorThought"></p>
+      <span class="feel" id="doorFeel"></span>
+    </div>
+    <div class="door-row">
+      <div class="mini-door" id="miniDoor" aria-hidden="true"><i class="bolt b0"></i><i class="bolt b1"></i><i class="bolt b2"></i><span class="knob"></span></div>
+      <ol class="built" id="built"></ol>
+    </div>
+    <p class="ask" id="doorAsk"></p>
+    <div class="options" id="options"></div>
+    <div class="guide-bar" id="doorGuide" hidden><img src="img/maftechi.svg" alt="" width="40" height="44"><p id="doorSay"></p></div>
+  </section>
+
+  <!-- רמה הושלמה -->
+  <section class="screen" id="screen-done" hidden aria-labelledby="doneTitle">
+    <div class="card done-card">
+      <img class="char jump" src="img/maftechi.svg" alt="" width="110" height="121">
+      <h2 id="doneTitle">כל הכבוד!</h2>
+      <p class="soft" id="doneSub"></p>
+      <div class="big-stars" id="bigStars"><span>★</span><span>★</span><span>★</span></div>
+      <div class="tally"><div><b id="doneScore">0</b><span>נקודות ברמה</span></div><div><b id="doneStreak">0</b><span>רצף הכי ארוך</span></div></div>
+      <p class="stage-badge" id="stageBadge" hidden></p>
+      <button class="btn primary big" id="doneBtn" type="button">למפה 🗺️</button>
+    </div>
+  </section>
+
+  <!-- תעודה -->
+  <section class="screen" id="screen-final" hidden aria-labelledby="finalTitle">
+    <div class="card cert" id="cert">
+      <div class="cert-ribbon">🏅</div>
+      <p class="kicker">תעודה רשמית</p>
+      <h2 id="finalTitle">פותח/ת המחשבות</h2>
+      <label class="name-field"><span class="sr">השם שלך</span><input id="nameInput" type="text" maxlength="24" placeholder="כתבו כאן את השם ✍️" autocomplete="off"></label>
+      <p>פתחת <b id="finStars">0</b> כוכבים מתוך 27, צברת <b id="finScore">0</b> נקודות ורצף שיא של <b id="finStreak">0</b> 🔥</p>
+      <div class="keys-won" id="keysWon"></div>
+      <div class="recipe">
+        <p class="recipe-title">המתכון לפתיחת מחשבה 🗝️</p>
+        <ol><li><b>🔒 מוצאים</b> את המילה החוסמת</li><li><b>🗝️ מחליפים</b> אותה במילה גמישה</li><li><b>🚪 בונים</b> מחשבה מאוזנת: רגש · עובדה · צעד</li></ol>
+      </div>
+      <div class="cert-sign"><img src="img/maftechi.svg" alt="" width="46" height="51"><span>חתום: פתחי, שומר המפתחות</span></div>
+      <div class="row-actions">
+        <button class="btn ghost" id="mapAgainBtn" type="button">למפה</button>
+        <button class="btn primary" id="againBtn" type="button">משחק חדש 🔄</button>
+      </div>
+      <p class="credit">חגית כהן CBT | חברתי</p>
+    </div>
+  </section>
+
+  <!-- תמונת שיתוף -->
+  <section class="screen" id="screen-og" hidden>
+    <div class="og">
+      <div class="og-text">
+        <p class="og-kicker">משחק 4 · חגית כהן CBT | חברתי</p>
+        <h1>פותחים את<br>המחשבות 🔓</h1>
+        <p class="og-sub">מוצאים מילים חוסמות, בוחרים מפתח<br>ופותחים את הדלת למחשבה מאוזנת</p>
+        <div class="og-swap"><span class="dchip lockd">🔒 אף פעם</span><span class="og-arrow">←</span><span class="dchip flex">🔓 עדיין</span></div>
+      </div>
+      <div class="og-art"><div class="og-door"><div class="og-world"></div><div class="og-leaf"></div></div><img src="img/maftechi.svg" alt="" width="260" height="286"></div>
+    </div>
+  </section>
+</main>
+
+<!-- חגיגת הדלת -->
+<div class="celebrate" id="celebrate" hidden role="dialog" aria-modal="true" aria-labelledby="celTitle">
+  <div class="world" aria-hidden="true">
+    <div class="rays"></div><div class="glow"></div>
+    <div class="stars"></div>
+    <div class="skyline"></div>
+    <div class="path"></div>
+  </div>
+  <div class="big-door" id="bigDoor" aria-hidden="true"><div class="leaf"><span class="knob"></span><span class="keyhole"><b>🗝️</b></span><i class="bolt b0 open"></i><i class="bolt b1 open"></i><i class="bolt b2 open"></i></div></div>
+  <div class="cel-card" id="celCard">
+    <h2 id="celTitle">הדלת נפתחה ✨</h2>
+    <p class="cel-label">המחשבה המאוזנת שבנית:</p>
+    <p class="cel-thought" id="celThought"></p>
+    <button class="btn primary big" id="celBtn" type="button">המשך ⬅</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="data.js"></script>
+<script src="fun.js"></script>
+<script src="script.js"></script>
+<a class="series-home" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;z-index:80;left:calc(10px + env(safe-area-inset-left,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));background:#fff;color:#2b2350;font:600 14px Rubik,system-ui,sans-serif;padding:7px 12px;border-radius:99px;box-shadow:0 3px 10px rgba(0,0,0,.25);text-decoration:none" dir="rtl">🏠 כל המשחקים</a>
+</body>
+</html>

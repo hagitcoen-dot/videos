@@ -1,0 +1,109 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>משחקי CBT | חגית כהן</title>
+<meta property="og:title" content="משחקי CBT לילדים">
+<meta property="og:image" content="https://hagitcoen-dot.github.io/videos/games/cbt/og.jpg">
+</head><body>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&family=Secular+One&display=swap">
+<style>
+/* Layout: a winding trail of numbered stops (the real teaching order), one card per game, a separate video card at the end. */
+:root{
+  --bg:#eaf5f1; --bg2:#f7fbf9; --card:#ffffff; --ink:#1d2a45; --muted:#56637d;
+  --accent:#ff6a45; --accent-ink:#ffffff; --sun:#ffc23d; --trail:#c8ddd5; --line:#d9e6e1;
+  --tag-school:#e3effd; --tag-school-ink:#1f5fa8; --tag-kids:#fff0d1; --tag-kids-ink:#8a5a00;
+  --display:"Secular One","Rubik",system-ui,sans-serif;
+  --body:"Rubik",system-ui,"Segoe UI",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111a2b; --bg2:#152036; --card:#1c2741; --ink:#eef2fb; --muted:#a7b3cc;
+  --accent:#ff8466; --accent-ink:#1a1020; --sun:#ffcf5c; --trail:#2b3a5a; --line:#2b3754;
+  --tag-school:#20365a; --tag-school-ink:#a9cbff; --tag-kids:#3d3018; --tag-kids-ink:#ffd889; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111a2b; --bg2:#152036; --card:#1c2741; --ink:#eef2fb; --muted:#a7b3cc;
+  --accent:#ff8466; --accent-ink:#1a1020; --sun:#ffcf5c; --trail:#2b3a5a; --line:#2b3754;
+  --tag-school:#20365a; --tag-school-ink:#a9cbff; --tag-kids:#3d3018; --tag-kids-ink:#ffd889; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:linear-gradient(var(--bg),var(--bg2));color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px;min-height:100%}
+.wrap{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+header{display:flex;flex-direction:column;gap:8px}
+.by{font-size:14px;color:var(--muted);letter-spacing:.02em}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(40px,11vw,60px);line-height:1;margin:0;text-wrap:balance}
+h1 span{color:var(--accent)}
+.lead{margin:0;font-size:18px;max-width:34em}
+.note{margin:0;font-size:15px;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 14px}
+.trail{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px;position:relative}
+.trail::before{content:"";position:absolute;top:30px;bottom:30px;right:27px;border-right:4px dashed var(--trail)}
+.stop{position:relative;display:grid;grid-template-columns:58px 1fr;gap:12px;align-items:center}
+.num{width:58px;height:58px;border-radius:50%;background:var(--sun);color:#1d2a45;font-family:var(--display);font-size:28px;display:grid;place-items:center;position:relative;z-index:1;box-shadow:0 4px 0 rgba(0,0,0,.12)}
+.card{display:grid;grid-template-columns:72px 1fr;gap:12px;align-items:center;background:var(--card);border-radius:20px;padding:12px 14px;text-decoration:none;color:inherit;
+  box-shadow:0 5px 0 var(--line);border:2px solid transparent;transition:transform .12s,border-color .15s;min-width:0}
+.card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.card:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.pic{width:72px;height:72px;border-radius:16px;background:var(--bg);display:grid;place-items:center;overflow:hidden}
+.pic img{width:62px;height:62px;object-fit:contain}
+.info{min-width:0;display:flex;flex-direction:column;gap:4px}
+.info h2{margin:0;font-family:var(--display);font-weight:400;font-size:22px;line-height:1.15}
+.info p{margin:0;font-size:15px;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px}
+.tag{border-radius:99px;padding:2px 10px;font-weight:500}
+.tag.school{background:var(--tag-school);color:var(--tag-school-ink)}
+.tag.kids{background:var(--tag-kids);color:var(--tag-kids-ink)}
+.stars{font-variant-numeric:tabular-nums;font-weight:500}
+.play{margin-inline-start:auto;font-weight:700;color:var(--accent)}
+.video{display:grid;grid-template-columns:72px 1fr;gap:12px;align-items:center;background:var(--card);border-radius:20px;padding:12px 14px;border:2px dashed var(--trail);text-decoration:none;color:inherit}
+.video:hover{border-color:var(--accent)}
+.video .pic{font-size:36px}
+.video .pic img{width:58px}
+.sect{font-family:var(--display);font-size:20px;margin:6px 0 -6px}
+footer{font-size:13px;color:var(--muted);text-align:center}
+@media (max-width:420px){.trail::before{right:21px}.stop{grid-template-columns:46px 1fr;gap:8px}.num{width:46px;height:46px;font-size:22px}
+  .card,.video{grid-template-columns:56px 1fr;padding:10px}.pic{width:56px;height:56px}.pic img{width:48px;height:48px}.info h2{font-size:19px}}
+@media (prefers-reduced-motion:reduce){.card{transition:none}}
+</style>
+
+<div class="wrap" dir="rtl" lang="he">
+  <header>
+    <a class="by" href="../../#games" style="text-decoration:none">→ חזרה לאתר · חגית כהן · CBT לילדים</a>
+    <h1>משחקי <span>CBT</span></h1>
+    <p class="lead">סדרת משחקים קצרים שמלמדים ילדים להכיר מחשבות, רגשות ותחושות בגוף, ולבחור צעד שעוזר.</p>
+    <p class="note">💡 מומלץ לשחק לפי הסדר. משחקים 4 ו־5 מלמדים על מלכודות חשיבה, והם בנויים על מה שלומדים ב־1 עד 3.</p>
+  </header>
+
+  <ol class="trail" id="trail"></ol>
+
+  <div class="sect">ועוד בסדרה</div>
+  <a class="video" href="https://youtu.be/pTwTOWHySJA" target="_blank" rel="noopener">
+    <span class="pic"><img src="img/dolphin.svg" alt=""></span>
+    <span class="info"><h2>מודל הדולפין 🎬</h2><p>סרטון: כריש, סרדין ודולפין, שלושה יועצים שבתוכנו.</p><span class="meta"><span class="play">צפייה ביוטיוב ↗</span></span></span>
+  </a>
+
+  <footer>ההתקדמות של הילד נשמרת בדפדפן הזה בלבד.</footer>
+</div>
+
+<script>
+var GAMES=[
+ {href:"g3/index.html",img:"g3/img/gufi.svg",t:"אותות הגוף",d:"אותו סימן בגוף יכול לבוא מצורך של הגוף או מרגש.",tag:"school",key:"bs-progress",get:function(v){return {n:sum(v.s),max:9}}},
+ {href:"g1/index.html",img:"g2/img/kami.svg",t:"מחשבה או עובדה?",d:"מה באמת קרה, ומה הראש אומר על זה. עם קמי המצלמה ובועי.",tag:"school",key:"tof-kids",get:function(v){return {n:(v.stars||[]).reduce(function(a,b){return a+(b||0)},0),max:21}}},
+ {href:"g2/index.html",img:"g2/img/levavi.svg",t:"מצב, פרשנות או רגש?",d:"מה קרה, מה חשבתי ומה הרגשתי. קמי, בועי ולבבי.",tag:"school",key:"stf-progress-v2",get:function(v){return {n:sum(v.stars),max:15}}},
+ {href:"g4/index.html",img:"g4/img/maftechi.svg",t:"פותחים את המחשבות",d:"מוצאים מילים שנועלות מחשבה ומחליפים אותן במפתח גמיש.",tag:"school",key:"unlock-thoughts-v1",get:function(v){return {n:sum(v.stars),max:(v.stars||[]).length*3||27}}},
+ {href:"g5/index.html",img:"g5/img/storm.svg",t:"מגדיל־הכול",d:"בודקים מה ידוע ומה רק ניחוש, ובוחרים צעד גם בלי ודאות.",tag:"school",key:"cat-progress-v2",get:function(v){return {n:sum(v.stars),max:12}}},
+ {href:"g6/index.html",img:"g6/img/chart.webp",t:"מחשבה אדומה, מחשבה ירוקה",d:"רמזור של מחשבות: עוצרים, ובוחרים צעד שעוזר.",tag:"kids",key:"rg-progress",get:function(v){return {n:sum(v.stars),max:(v.n||8)*3}}}
+];
+function sum(a){return (a||[]).reduce(function(x,y){return x+(y||0)},0)}
+function read(k){try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}}
+var ol=document.getElementById("trail");
+GAMES.forEach(function(g,i){
+  var v=read(g.key),st=null;try{if(v)st=g.get(v)}catch(e){}
+  var li=document.createElement("li");li.className="stop";
+  li.innerHTML='<span class="num" aria-hidden="true">'+(i+1)+'</span>'+
+   '<a class="card" href="'+g.href+'"><span class="pic"><img src="'+g.img+'" alt=""></span><span class="info"><h2></h2><p></p>'+
+   '<span class="meta"><span class="tag '+g.tag+'">'+(g.tag==="kids"?"גיל הרך":"בית ספר")+'</span>'+
+   (st&&st.n?'<span class="stars">⭐ '+st.n+' מתוך '+st.max+'</span>':'')+'<span class="play">▶ לשחק</span></span></span></a>';
+  li.querySelector("h2").textContent=g.t;li.querySelector("p").textContent=g.d;
+  li.querySelector(".card").setAttribute("aria-label","משחק "+(i+1)+": "+g.t);
+  ol.appendChild(li);
+});
+</script>
+
+</body></html>

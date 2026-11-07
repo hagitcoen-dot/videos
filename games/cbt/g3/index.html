@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>אותות הגוף: מה הגוף שלי אומר לי? | גופי</title>
+<meta name="description" content="משחק קצר ומשמח על סימנים בגוף: מתי זה צורך של הגוף ומתי זה רגש. חגית כהן CBT">
+<meta name="theme-color" content="#e9f7f4">
+<meta property="og:title" content="אותות הגוף 💓 מה הגוף שלי אומר לי?">
+<meta property="og:description" content="צורך או רגש? משחק עם גופי: מסבירים, משחקים ואוספים כוכבים ⭐ חגית כהן CBT">
+<meta property="og:image" content="https://hagitcoen-dot.github.io/videos/games/cbt/g3/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="img/gufi.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="fun.css">
+</head>
+<body>
+<canvas id="fx" aria-hidden="true"></canvas>
+<header class="top">
+  <button class="brand" id="homeBtn" type="button" aria-label="להתחלה"><img src="img/gufi.svg" alt="" width="30" height="33"><span>אותות הגוף</span></button>
+  <div class="hud">
+    <button class="icon-btn" id="mapBtn" type="button" aria-label="למפה">🗺️</button>
+    <span class="pill" id="starPill" aria-label="כוכבים">⭐ <b id="stars">0</b></span>
+    <button class="icon-btn" id="soundBtn" type="button" aria-label="צלילים">🔊</button>
+  </div>
+</header>
+<main id="app" aria-live="polite"></main>
+<div id="sheet" class="sheet" hidden>
+  <div class="sheet-card">
+    <div class="sheet-head"><img src="img/gufi.svg" alt="" class="sheet-gufi"><span id="sheetTitle">נכון!</span><button class="speak" id="sheetSpeak" type="button" aria-label="הקראה">🔈</button></div>
+    <p id="sheetText" class="sheet-text"></p>
+    <button class="btn big" id="sheetNext" type="button">הבא ←</button>
+  </div>
+</div>
+<div id="toast" class="toast" role="status"></div>
+<script src="data.js"></script>
+<script src="fun.js"></script>
+<script src="game.js"></script>
+<a class="series-home" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;z-index:80;left:calc(10px + env(safe-area-inset-left,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));background:#fff;color:#2b2350;font:600 14px Rubik,system-ui,sans-serif;padding:7px 12px;border-radius:99px;box-shadow:0 3px 10px rgba(0,0,0,.25);text-decoration:none" dir="rtl">🏠 כל המשחקים</a>
+</body>
+</html>

@@ -3,7 +3,7 @@
   var D = window.GAME_DATA;
   var S = D.SORT;
   var SORT_ORDER = ["storm", "balanced"];
-  var SCREENS = ["screen-intro", "screen-stage", "screen-play", "screen-stairs", "screen-det", "screen-done", "screen-final", "screen-og", "screen-map"];
+  var SCREENS = ["screen-intro", "screen-stage", "screen-play", "screen-stairs", "screen-det", "screen-msg", "screen-done", "screen-final", "screen-og", "screen-map"];
   var $ = function (id) { return document.getElementById(id); };
   var each = function (list, fn) { Array.prototype.forEach.call(list, fn); };
 
@@ -115,7 +115,7 @@
   $("skipBtn").addEventListener("click", startGame);
   renderSlide();
 
-  var KEY = "cat-progress";
+  var KEY = "cat-progress-v2";
   var prog = FUN.load(KEY, null) || { stars: [], unlocked: 1, score: 0, right: 0, total: 0, best: 0 };
   function saveProg() { prog.score = state.score; prog.right = state.right; prog.total = state.total; prog.best = state.bestStreak; FUN.save(KEY, prog); }
   function startGame() {
@@ -148,6 +148,7 @@
     state.pos = 0; state.stageRight = 0; state.stageTotal = 0;
     if (st.type === "sort") { state.queue = shuffle(D.CARDS); buildAnswers(); show("screen-play"); renderCard(); }
     else if (st.type === "stairs") { state.queue = shuffle(D.STAIRS).slice(0, 4); show("screen-stairs"); renderStairs(); }
+    else if (st.type === "msg") { show("screen-msg"); msgStart(); }
     else { state.queue = D.DETECTIVE.slice(); show("screen-det"); renderDet(); }
   }
   function nextItem(render) {
@@ -467,6 +468,113 @@
   }
   $("detNextBtn").addEventListener("click", function () { nextItem(renderDet); });
 
+
+  /* ---------- stage 4: the message I didn't get ---------- */
+  var M = null;
+  function msgCloud(scale) { $("msgCloud").style.transform = "scale(" + scale + ")"; }
+  function msgPhase(n) { each($("msgSteps").children, function (s, i) { s.classList.toggle("on", i === n); s.classList.toggle("done", i < n); }); }
+  function msgReset() { $("msgChips").innerHTML = ""; $("msgHint").hidden = true; $("msgBtn").hidden = true; $("msgBtn").onclick = null; }
+  function msgStart() {
+    var d = D.MSG; M = { scale: 0.55, b: 0 };
+    msgPhase(0); msgReset(); msgCloud(M.scale);
+    $("msgPic").classList.remove("end"); $("msgNote").hidden = true; $("msgMaybes").innerHTML = "";
+    $("idoMouth").setAttribute("d", "M-7 31 Q0 27 7 31");
+    $("msgScene").textContent = d.scene; $("msgScene").hidden = false;
+    $("msgBuei").innerHTML = ""; $("msgBuei").hidden = false;
+    $("msgAsk").textContent = "💭 מה בועי אומר? לחצו כדי לשמוע";
+    var btn = $("msgBtn"); btn.hidden = false; btn.textContent = "💭 מה בועי אומר?";
+    btn.onclick = function () {
+      if (M.b < d.buei.length) {
+        var p = document.createElement("p"); p.className = "bq"; p.textContent = "״" + d.buei[M.b] + "״"; $("msgBuei").appendChild(p);
+        M.b++; M.scale += 0.3; msgCloud(M.scale); FUN.sfx("whoosh"); FUN.floatText("+💭", $("msgCloud"));
+        var pic = $("msgPic"); pic.classList.remove("rumble"); void pic.offsetWidth; pic.classList.add("rumble");
+        if (M.b < d.buei.length) btn.textContent = "💭 ומה עוד?";
+        else { $("msgAsk").textContent = "🌪️ הענן גדל פעמיים, פעם עם כל השערה."; btn.textContent = "📷 בודקים: מה אני יודע?"; }
+      } else msgKnown();
+    };
+  }
+  function msgKnown() {
+    var d = D.MSG; msgReset(); msgPhase(1 - 1);
+    $("msgAsk").innerHTML = "📷 <b>מה אני יודע?</b> סמנו את מה שבאמת ידוע (אפשר לבחור כמה)";
+    var box = $("msgChips");
+    d.known.forEach(function (c) {
+      var b = document.createElement("button"); b.type = "button"; b.className = "chip pick"; b.textContent = c.t;
+      b.addEventListener("click", function () { if (b.disabled) return; b.classList.toggle("sel"); FUN.sfx("click"); });
+      box.appendChild(b);
+    });
+    var btn = $("msgBtn"); btn.hidden = false; btn.textContent = "✔ בודקים";
+    btn.onclick = function () {
+      var all = true, lines = [];
+      each(box.children, function (b, i) {
+        var c = d.known[i], sel = b.classList.contains("sel"), ok = sel === !!c.k;
+        if (!ok) all = false;
+        b.disabled = true; b.classList.add(c.k ? "known" : "guess");
+        if (!ok) b.classList.add("missed");
+        var w = document.createElement("small"); w.className = "chip-why"; w.textContent = c.why; b.appendChild(w);
+      });
+      registerResult(all);
+      $("msgAsk").innerHTML = all ? "מדויק! 🎯 רק שני דברים באמת ידועים. השאר בועי הוסיף." : "בדקנו יחד 👇 רק שני דברים באמת ידועים. השאר בועי הוסיף.";
+      if (all) burst(8);
+      btn.textContent = "🤔 מה עוד יכול להיות?"; btn.onclick = msgMaybe;
+    };
+  }
+  function msgMaybe() {
+    var d = D.MSG, picked = 0; msgReset(); msgPhase(1);
+    $("msgScene").hidden = true; $("msgBuei").hidden = true;
+    $("msgAsk").innerHTML = "🤔 <b>מה עוד יכול להיות?</b> בחרו שני הסברים שעדיין אפשריים";
+    var box = $("msgChips"), first = true;
+    shuffle(d.maybe).forEach(function (m) {
+      var b = document.createElement("button"); b.type = "button"; b.className = "chip"; b.textContent = m.t + (m.ok ? "?" : "");
+      b.addEventListener("click", function () {
+        if (b.disabled || picked >= 2) return;
+        if (m.ok) {
+          b.disabled = true; b.classList.add("right"); picked++;
+          var bub = document.createElement("span"); bub.className = "maybe m" + picked; bub.innerHTML = "<i>?</i>"; bub.appendChild(document.createTextNode(m.t));
+          $("msgMaybes").appendChild(bub); FUN.sfx("pop"); FUN.confettiAt(bub, 14);
+          M.scale = Math.max(0.6, M.scale - 0.2); msgCloud(M.scale);
+          if (first) registerResult(true); first = false;
+          if (picked === 2) {
+            each(box.children, function (c) { c.disabled = true; });
+            $("msgAsk").innerHTML = "✨ יש עוד אפשרויות! כל אחת עם סימן שאלה, כי עוד לא יודעים.";
+            var btn = $("msgBtn"); btn.hidden = false; btn.textContent = "👣 מה יעזור לי להתקדם?"; btn.onclick = msgStep;
+          }
+        } else {
+          if (first) registerResult(false); first = false;
+          b.classList.add("shake", "wrong"); b.disabled = true;
+          var h = $("msgHint"); h.textContent = m.why; h.hidden = false; swapIn(h);
+        }
+      });
+      box.appendChild(b);
+    });
+  }
+  function msgStep() {
+    var d = D.MSG; msgReset(); msgPhase(2);
+    $("msgAsk").innerHTML = "👣 <b>מה יעזור לי להתקדם?</b> כל צעד כאן יכול לעזור. בחרו אחד";
+    var box = $("msgChips");
+    d.steps.forEach(function (s) {
+      var b = document.createElement("button"); b.type = "button"; b.className = "chip"; b.textContent = s.t;
+      b.addEventListener("click", function () {
+        if (b.disabled) return;
+        each(box.children, function (c) { c.disabled = true; if (c !== b) c.classList.add("wrong"); });
+        b.classList.add("right"); registerResult(true); burst(10);
+        laterSheet({ char: D.CHARS.buei, title: "צעד טוב! 👣", tag: s.note, why: s.why, tone: "good", btn: "לסיום ✨", next: function () { msgEnd(s); } }, 450);
+      });
+      box.appendChild(b);
+    });
+  }
+  function msgEnd(s) {
+    clearTimeout(sheetLater); $("sheet").hidden = true; msgReset(); msgPhase(3);
+    $("msgMaybes").innerHTML = "";
+    M.scale = 0.38; msgCloud(M.scale); sShrink();
+    $("idoMouth").setAttribute("d", "M-7 30 Q0 29 7 30");
+    var n = $("msgNote"); n.textContent = "✏️ " + s.note; n.hidden = false; swapIn(n);
+    $("msgPic").classList.add("end");
+    $("msgAsk").innerHTML = "<span class=\"msg-end\">" + D.MSG.end + "</span>";
+    var btn = $("msgBtn"); btn.hidden = false; btn.textContent = "סיימנו! ✨";
+    btn.onclick = function () { stageDone(); };
+    burst(12, ["✨", "👣", "☁️", "💫"]);
+  }
+
   /* ---------- stage done / final ---------- */
   function stageDone() {
     var ratio = state.stageTotal ? state.stageRight / state.stageTotal : 0;
@@ -502,7 +610,7 @@
     FUN.renderCertificate({
       el: $("certBox"), title: "מאלפ/ת הסופות 🌤️",
       line: "הרגעת את מגדיל‑הכול והחזרת את השמש לכפר הלב. עכשיו את/ה יודע/ת:",
-      skill: "🌪️ לזהות קפיצה לאסון &nbsp;·&nbsp; 🪜 לרדת במדרגות &nbsp;·&nbsp; 🔍 לחקור ולמצוא מחשבה מאוזנת",
+      skill: "🌪️ לזהות קפיצה לאסון &nbsp;·&nbsp; 🪜 לבדוק מה ידוע ומה ניחוש &nbsp;·&nbsp; 🔍 לחקור &nbsp;·&nbsp; 👣 לבחור צעד גם בלי ודאות",
       stars: tot, maxStars: D.STAGES.length * 3, chars: [D.CHARS.storm, D.CHARS.buei, D.CHARS.levavi],
       onMap: function () { openMap(); },
       onAgain: function () { prog = { stars: [], unlocked: 1, score: 0, right: 0, total: 0, best: 0 }; saveProg(); slideIdx = 0; renderSlide(); startGame(); }
@@ -517,6 +625,7 @@
   /* ---------- preview hooks for screenshots (?screen=...) ---------- */
   var q = new URLSearchParams(location.search).get("screen");
   function goStage(i) { startGame(); state.stageIndex = i; startStage(); }
+  window.__cat = { goStage: goStage };
   function find(sel, pred) { return Array.prototype.find.call(document.querySelectorAll(sel), pred); }
   if (q === "og") { document.body.classList.add("og-mode"); show("screen-og"); }
   else if (q && q.indexOf("slide") === 0) { slideIdx = +q.slice(5) || 0; renderSlide(); }

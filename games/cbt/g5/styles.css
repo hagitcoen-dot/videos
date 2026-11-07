@@ -415,3 +415,31 @@ body.og-mode main{max-width:none;height:100dvh;display:flex;align-items:center;j
 .check-btns .know{background:var(--sit-soft);color:#0b5a73;border:2px solid var(--sit)}
 .check-btns .guess{background:#ede6fb;color:#4b2a8f;border:2px solid var(--storm)}
 .check-btns .btn:disabled{opacity:.6}
+
+/* stage 4: the message I didn't get */
+.msg-panel{padding:14px 12px}
+.msg-steps{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;margin-bottom:8px}
+.msg-steps span{font-size:12.5px;font-weight:700;padding:4px 8px;border-radius:99px;background:#f0ebfa;color:#8f7e9f}
+.msg-steps span.on{background:var(--storm);color:#fff}
+.msg-steps span.done{background:#e0f6f1;color:#1d7564}
+.msg-pic{position:relative;border-radius:18px;overflow:hidden;box-shadow:0 4px 14px rgba(40,20,80,.12)}
+.msg-pic.rumble{animation:cloudRumble .5s}
+.ido{display:block;width:100%;height:auto}
+.msg-cloud{position:absolute;top:2px;right:6%;width:90px;height:90px;transform-origin:70% 20%;transition:transform .6s cubic-bezier(.3,1.6,.5,1),filter .5s}
+.msg-pic.end .msg-cloud{filter:saturate(.5) brightness(1.2)}
+.msg-note{position:absolute;left:10%;top:60%;background:#fff;border:2px solid #c9bde6;border-radius:10px;padding:4px 8px;font-size:14px;font-weight:700;transform:rotate(-3deg);max-width:42%}
+.msg-maybes{position:absolute;inset:0;pointer-events:none}
+.maybe{position:absolute;background:#fff;border:2px solid var(--storm);border-radius:16px;padding:4px 10px 4px 8px;font-size:13.5px;font-weight:700;color:#463a7a;max-width:46%;box-shadow:0 3px 10px rgba(0,0,0,.12);animation:pop .4s}
+.maybe i{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#ffd27a;color:#6a4500;font-style:normal;font-weight:900;margin-inline-end:5px}
+.maybe.m1{left:4%;top:8%}.maybe.m2{left:4%;top:44%}
+.msg-scene{font-size:17px;line-height:1.45;margin:10px 0 6px;text-align:center}
+.msg-buei{display:flex;flex-direction:column;gap:6px;margin-bottom:4px}
+.msg-buei .bq{margin:0;background:#ede6fb;border-radius:16px;padding:8px 12px;font-weight:700;color:#463a7a;animation:pop .4s}
+.chip.pick.sel{border-color:var(--sit);background:var(--sit-soft);box-shadow:0 0 0 3px rgba(47,159,208,.25)}
+.chip.pick.sel::before{content:"✔ ";color:var(--sit-deep)}
+.chip.known{border-color:var(--sit);background:var(--sit-soft)}
+.chip.guess{border-color:var(--storm);background:#f3effb;border-style:dashed}
+.chip.missed{box-shadow:0 0 0 3px #ffb4c4}
+.chip-why{display:block;font-size:14px;font-weight:600;margin-top:4px;color:#4c3f75}
+.msg-end{display:inline-block;background:linear-gradient(135deg,#e0f6f1,#fff8e1);border-radius:16px;padding:10px 14px;font-size:20px;font-weight:800;color:#1d7564}
+#msgBtn{width:100%;margin-top:10px}

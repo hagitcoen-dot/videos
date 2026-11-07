@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>מצב, פרשנות או רגש? המשחק של קמי, בועי ולבבי</title>
+<meta name="description" content="משחק קצר וקסום שמלמד את הצעד הבא במודל ה־CBT: להבחין בין מצב, פרשנות ורגש. מאת חגית כהן CBT | חברתי.">
+<meta name="theme-color" content="#3b2a6b">
+<meta property="og:title" content="מצב, פרשנות או רגש? 📷💭❤️">
+<meta property="og:image" content="https://hagitcoen-dot.github.io/videos/games/cbt/g2/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta property="og:description" content="משחק קסום: מה המצלמה רואה, מה הראש אומר, ומה מרגישים בלב. חגית כהן CBT | חברתי">
+<link rel="icon" href="img/levavi.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="fun.css">
+</head>
+<body>
+<div class="sky" aria-hidden="true"><div class="stars"></div><div class="glow g1"></div><div class="glow g2"></div></div>
+
+<header class="topbar">
+  <div class="brand"><img src="img/levavi.svg" alt="" width="30" height="30"><span>מצב, פרשנות או רגש?</span></div>
+  <div class="hud" id="hud" hidden>
+    <span class="pill" id="scorePill" aria-live="polite">⭐ <b id="score">0</b></span>
+    <span class="pill streak" id="streakPill" hidden>🔥 <b id="streak">0</b></span>
+    <span class="pill combo-pill" id="comboPill" hidden>x<b id="combo">2</b></span>
+    <button class="icon-btn" id="mapBtn" type="button" aria-label="למפה" hidden>🗺️</button>
+  </div>
+  <button class="icon-btn" id="soundBtn" type="button" aria-pressed="false" aria-label="הפעלת צלילים">🔇</button>
+</header>
+
+<main id="app">
+  <!-- Intro -->
+  <section class="screen" id="screen-intro" aria-labelledby="introTitle">
+    <div class="intro-card">
+      <div class="slides" id="slides">
+        <div class="slide active">
+          <div class="chars three"><img class="char float" src="img/kami.svg" alt="" width="90" height="90"><img class="char float slow heartbeat" src="img/levavi.svg" alt="" width="100" height="100"><img class="char float" src="img/buei.svg" alt="" width="90" height="90"></div>
+          <h1>אוי, סערה! 🌪️</h1>
+          <p>בממלכת הלב הייתה <b>שרשרת קסם</b> שעזרה לכולם לדעת <strong>מה קרה, מה חשבו ומה הרגישו</strong>.</p>
+          <p>אתמול בלילה סערה גדולה פיזרה את החוליות שלה בכל הממלכה 😱</p>
+          <p class="soft">שלושה חברים צריכים את העזרה שלכם כדי למצוא אותן. בואו נכיר אותם!</p>
+        </div>
+        <div class="slide">
+          <div class="chars two"><img class="char float" src="img/kami.svg" alt="קמי המצלמה" width="120" height="120"><img class="char float slow" src="img/buei.svg" alt="בועי המחשבה" width="120" height="120"></div>
+          <h2 id="introTitle">שלום! אנחנו קמי ובועי</h2>
+          <p><b>קמי</b> היא מצלמה קטנה שרואה ושומעת רק את מה <strong>שקורה באמת</strong>.<br><b>בועי</b> גר בראש, ואוהב <strong>להסביר, לנחש ולספר סיפורים</strong> על מה שקורה.</p>
+          <p class="soft">והיום מצטרף אלינו חבר חדש...</p>
+        </div>
+        <div class="slide">
+          <div class="chars"><img class="char float heartbeat" src="img/levavi.svg" alt="לבבי הלב" width="150" height="150"></div>
+          <h2>נעים מאוד, אני לבבי ❤️</h2>
+          <p>אני גר בלב, ואני אחראי על <strong>הרגשות</strong>: מה שמרגישים בפנים, כמו שמחה, עצב, כעס או פחד.</p>
+          <p class="soft">אצלי כל הרגשות מותרים, גם הלא נעימים. הם באים והולכים, כמו מזג אוויר 🌦️</p>
+        </div>
+        <div class="slide">
+          <h2>שלושה חברים, שלושה תפקידים</h2>
+          <div class="defs">
+            <div class="def sit"><img src="img/kami.svg" alt="" width="46" height="46"><div><b>מצב 📷</b> מה שמצלמה הייתה מקליטה: מי, מה, איפה ומתי. בלי תוספות.</div></div>
+            <div class="def int"><img src="img/buei.svg" alt="" width="46" height="46"><div><b>פרשנות 💭</b> מה הראש שלי אומר על זה: הסבר, ניחוש, שיפוט או תחזית.</div></div>
+            <div class="def emo"><img src="img/levavi.svg" alt="" width="46" height="46"><div><b>רגש ❤️</b> מה שמרגישים בפנים, בדרך כלל <strong>במילה אחת</strong>: עצב, כעס, פחד, שמחה, בושה, קנאה, תסכול...</div></div>
+          </div>
+        </div>
+        <div class="slide">
+          <div class="chars"><img class="char float" src="img/levavi.svg" alt="" width="110" height="110"></div>
+          <h2>הטריק של לבבי 🔍</h2>
+          <p>רגש הוא בדרך כלל <b>מילה אחת</b>.<br>אם אפשר להתחיל את המשפט ב<b class="nowrap">״חשבתי ש...״</b>, זו פרשנות!</p>
+          <div class="trick">
+            <div class="trick-row"><span class="q">״הרגשתי שהמורה כועסת עליי״</span></div>
+            <div class="trick-row">נסו: <span class="q">״חשבתי שהמורה כועסת עליי״</span> ✔️</div>
+            <div class="trick-row ans">זה עובד, אז זו <b>פרשנות 💭</b>. הרגש שמתחת: אולי <b>פחד</b> או <b>עצב</b> ❤️</div>
+          </div>
+          <p class="soft">כשאחרי ״הרגשתי״ בא ״ש...״, זה בועי שהתחפש ללבבי 😉</p>
+        </div>
+        <div class="slide">
+          <div class="chars three"><img class="char float" src="img/kami.svg" alt="" width="90" height="90"><img class="char float slow" src="img/buei.svg" alt="" width="90" height="90"><img class="char float" src="img/levavi.svg" alt="" width="90" height="90"></div>
+          <h2>איך משחקים?</h2>
+          <p>על המסך יופיע משפט. בחרו אם הוא <b>מצב 📷</b>, <b>פרשנות 💭</b> או <b>רגש ❤️</b>.</p>
+          <p class="soft">4 תחנות על המפה 🗺️ בכל תחנה אוספים כוכבים ⭐, רצפים 🔥 וחוליה לשרשרת 🔗. מוכנים?</p>
+        </div>
+      </div>
+      <div class="dots" id="dots" aria-hidden="true"></div>
+      <div class="intro-actions">
+        <button class="btn ghost" id="skipBtn" type="button">דלגו להתחלה</button>
+        <button class="btn primary" id="nextSlideBtn" type="button">הבא</button>
+      </div>
+      <p class="credit">חגית כהן CBT | חברתי</p>
+    </div>
+  </section>
+
+  <!-- Map -->
+  <section class="screen" id="screen-map" hidden aria-label="מפת המסע"><div id="mapBox"></div></section>
+
+  <!-- Stage intro -->
+  <section class="screen" id="screen-stage" hidden aria-live="polite">
+    <div class="panel center">
+      <div class="stage-badge" id="stageBadge">שלב 1</div>
+      <h2 id="stageTitle"></h2>
+      <p id="stageSubtitle" class="soft"></p>
+      <img class="char float" id="stageChar" src="img/kami.svg" alt="" width="120" height="120">
+      <button class="btn primary big" id="startStageBtn" type="button">יוצאים לדרך ✨</button>
+    </div>
+  </section>
+
+  <!-- Guided round -->
+  <section class="screen" id="screen-guided" hidden>
+    <div class="panel guided">
+      <h2 class="center-text" id="gTitle"></h2>
+      <div class="g-scene" id="gScene">
+        <svg viewBox="0 -70 360 300" aria-hidden="true">
+          <rect y="-70" width="360" height="300" fill="#dff3fc"/>
+          <circle cx="40" cy="-30" r="20" fill="#ffe27a"/>
+          <rect y="160" width="360" height="70" fill="#bfe8a6"/>
+          <path d="M0 160 Q90 140 180 160 T360 160" fill="#a5dc8c"/>
+          <g transform="translate(40,10)"><rect x="0" y="40" width="10" height="110" fill="#b07a4a"/><circle cx="5" cy="40" r="34" fill="#6cc46c"/></g>
+          <!-- Noa (right) -->
+          <g transform="translate(250,82)">
+            <path d="M-26 70 Q0 30 26 70 L30 108 L-30 108 Z" fill="#ff8fb1"/>
+            <rect x="-14" y="106" width="9" height="26" rx="4" fill="#f2c9a5"/><rect x="5" y="106" width="9" height="26" rx="4" fill="#f2c9a5"/>
+            <path d="M-26 72 L-46 52" stroke="#f2c9a5" stroke-width="8" stroke-linecap="round"/>
+            <circle cx="0" cy="30" r="26" fill="#f2c9a5"/>
+            <path d="M-27 30 Q-28 0 0 2 Q28 0 27 30 Q20 12 0 12 Q-20 12 -27 30Z" fill="#7a4a2a"/>
+            <circle cx="-9" cy="31" r="3" fill="#2e2350"/><circle cx="9" cy="31" r="3" fill="#2e2350"/>
+            <path d="M-7 42 Q0 47 7 42" stroke="#2e2350" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          </g>
+          <!-- speech -->
+          <g transform="translate(150,58)"><rect x="0" y="0" width="70" height="34" rx="14" fill="#fff" stroke="#2e2350" stroke-width="2"/><path d="M58 32 L74 44 L50 33" fill="#fff" stroke="#2e2350" stroke-width="2"/><text x="35" y="23" text-anchor="middle" font-size="17" font-weight="700" fill="#2e2350" font-family="Rubik,Arial">שלום!</text></g>
+          <!-- Maya walking away (left) -->
+          <g transform="translate(110,92)">
+            <path d="M-22 64 Q0 28 22 64 L26 98 L-26 98 Z" fill="#7aa7ff"/>
+            <rect x="-6" y="40" width="26" height="34" rx="8" fill="#ffb347"/>
+            <rect x="-14" y="96" width="9" height="24" rx="4" fill="#f2c9a5" transform="rotate(12 -10 96)"/><rect x="5" y="96" width="9" height="24" rx="4" fill="#f2c9a5" transform="rotate(-12 9 96)"/>
+            <circle cx="0" cy="26" r="23" fill="#3b2a1a"/>
+            <path d="M-23 26 Q-30 50 -14 56" stroke="#3b2a1a" stroke-width="8" fill="none" stroke-linecap="round"/>
+          </g>
+          <path d="M60 190 l-14 0 m6 -6 l-6 6 l6 6" stroke="#5d5384" stroke-width="3" fill="none" stroke-linecap="round"/>
+        </svg>
+        <div class="g-layer g-sit" id="gSit"><img src="img/kami.svg" alt="" width="40" height="40"><span><b>📷 מה קרה:</b> <span id="gSitT"></span></span></div>
+        <div class="g-layer g-int" id="gInt"><img src="img/buei.svg" alt="" width="40" height="40"><span><b>💭</b> ״<span id="gIntT"></span>״</span></div>
+        <div class="g-layer g-emo" id="gEmo"><img src="img/levavi.svg" alt="" width="38" height="38"><span><b>❤️</b> <span id="gEmoT"></span></span></div>
+      </div>
+      <div class="flow g-flow" id="gFlow" hidden><span class="mini sit">מצב</span><span class="arr">←</span><span class="mini int">פרשנות</span><span class="arr">←</span><span class="mini emo">רגש</span></div>
+      <p class="g-step" id="gStep"></p>
+      <button class="btn primary big" id="gNext" type="button"></button>
+    </div>
+  </section>
+
+  <!-- Play (sort cards) -->
+  <section class="screen" id="screen-play" hidden>
+    <div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
+    <p class="progress-label" id="progressLabel"></p>
+    <div class="deck" id="deck">
+      <article class="card" id="card" tabindex="-1" aria-live="polite">
+        <div class="card-kicker" id="cardKicker">מצב, פרשנות או רגש?</div>
+        <p class="card-text" id="cardText"></p>
+      </article>
+    </div>
+    <div class="answers" id="answers"></div>
+    <div class="feedback" id="feedback" hidden role="status">
+      <div class="fb-head"><img id="fbChar" src="img/kami.svg" alt="" width="54" height="54"><div><div class="fb-title" id="fbTitle"></div><div class="fb-tag" id="fbTag"></div></div></div>
+      <p class="fb-why" id="fbWhy"></p>
+      <p class="fb-cam" id="fbCam" hidden></p>
+      <button class="btn primary" id="nextBtn" type="button">המשך</button>
+    </div>
+  </section>
+
+  <!-- Chains -->
+  <section class="screen" id="screen-chain" hidden>
+    <div class="progress" aria-hidden="true"><div class="bar" id="chainBar"></div></div>
+    <p class="progress-label" id="chainLabel"></p>
+    <div class="panel chain-panel">
+      <h3 class="chain-title" id="chainTitle"></h3>
+      <ol class="links" id="links"></ol>
+      <p class="chain-ask" id="chainAsk" aria-live="polite"></p>
+      <p class="chain-hint" id="chainHint" aria-live="assertive"></p>
+      <div class="chips" id="chips"></div>
+    </div>
+    <div class="feedback" id="chainFeedback" hidden role="status">
+      <div class="fb-head"><img src="img/levavi.svg" alt="" width="54" height="54"><div><div class="fb-title" id="chainFbTitle"></div><div class="fb-tag">מצב ← פרשנות ← רגש</div></div></div>
+      <p class="fb-why" id="chainWhy"></p>
+      <div class="alt">
+        <div class="alt-head">🔄 ומה אם בועי היה חושב אחרת?</div>
+        <div class="alt-row"><span class="mini int">💭</span><span id="altInt"></span></div>
+        <div class="alt-row"><span class="mini emo">❤️</span><span id="altEmo"></span></div>
+        <p class="alt-note">אותו מצב, פרשנות אחרת, ורגש אחר ✨</p>
+      </div>
+      <button class="btn primary" id="chainNextBtn" type="button">המשך</button>
+    </div>
+  </section>
+
+  <!-- Stage done -->
+  <section class="screen" id="screen-done" hidden>
+    <div class="panel center">
+      <div class="stars-row" id="starsRow" aria-hidden="true"></div>
+      <h2 id="doneTitle"></h2>
+      <p id="doneText"></p>
+      <div class="links-earned" id="linkEarned"></div>
+      <button class="btn primary big" id="doneNextBtn" type="button">חזרה למפה 🗺️</button>
+    </div>
+  </section>
+
+  <!-- Final -->
+  <section class="screen" id="screen-final" hidden>
+    <div id="certBox"></div>
+    <div class="panel" style="margin-top:16px">
+      <div class="chars three"><img class="char float" src="img/kami.svg" alt="" width="84" height="84"><img class="char float slow" src="img/buei.svg" alt="" width="84" height="84"><img class="char float" src="img/levavi.svg" alt="" width="84" height="84"></div>
+      <h2 class="center-text">מה למדנו במסע? 🌟</h2>
+      <div class="final-score"><div><span id="finalScore">0</span><small>נקודות</small></div><div><span id="finalRight">0</span><small>תשובות מדויקות</small></div><div><span id="finalBest">0</span><small>הרצף הכי ארוך</small></div></div>
+      <p class="reflect" id="reflect"></p>
+      <div class="tip">
+        <h3>🔗 השרשרת של קמי, בועי ולבבי</h3>
+        <div class="flow" aria-label="מצב, ואז פרשנות, ואז רגש"><span class="mini sit">מצב</span><span class="arr">←</span><span class="mini int">פרשנות</span><span class="arr">←</span><span class="mini emo">רגש</span></div>
+        <p>הרגש לא מגיע ישר מהמצב. הוא מגיע <b>ממה שהראש אומר</b> על המצב.</p>
+        <div class="example">
+          <div class="ex-sit">📷 דנה לא הזמינה אותי ליום ההולדת</div>
+          <div class="ex-two">
+            <div class="ex-path"><div>💭 ״בטח היא לא רוצה להיות חברה שלי״</div><div class="ex-emo">❤️ עצב</div></div>
+            <div class="ex-path"><div>💭 ״אולי הרשו לה להזמין רק כמה ילדים״</div><div class="ex-emo">❤️ רוגע</div></div>
+          </div>
+        </div>
+        <p class="soft">פרשנות אחרת מביאה רגש אחר. בפעם הבאה שמשהו מציק, אפשר לשאול: <b>מה קרה? מה הראש שלי אומר? מה אני מרגיש או מרגישה?</b> ואז: <b>איזה עוד הסבר יכול להיות?</b> 💜</p>
+      </div>
+      <div class="final-actions">
+        <button class="btn ghost" id="shareBtn" type="button">שיתוף המשחק</button>
+      </div>
+      <p class="credit">חגית כהן CBT | חברתי</p>
+    </div>
+  </section>
+  <section class="screen og" id="screen-og" hidden aria-hidden="true">
+    <div class="og-chars"><img src="img/kami.svg" alt="" width="190" height="190"><img src="img/buei.svg" alt="" width="190" height="190"><img src="img/levavi.svg" alt="" width="190" height="190"></div>
+    <div class="og-title">מצב, פרשנות או רגש?</div>
+    <div class="og-sub">משחק קסום: מה המצלמה רואה, מה הראש אומר, ומה מרגישים בלב</div>
+  </section>
+</main>
+
+<div class="toast" id="toast" aria-live="assertive"></div>
+<div class="burst" id="burst" aria-hidden="true"></div>
+
+<script src="data.js"></script>
+<script src="fun.js"></script>
+<script src="script.js"></script>
+<a class="series-home" href="../" onclick="if(document.referrer&&history.length>1){history.back();return false}" style="position:fixed;z-index:80;left:calc(10px + env(safe-area-inset-left,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));background:#fff;color:#2b2350;font:600 14px Rubik,system-ui,sans-serif;padding:7px 12px;border-radius:99px;box-shadow:0 3px 10px rgba(0,0,0,.25);text-decoration:none" dir="rtl">🏠 כל המשחקים</a>
+</body>
+</html>
