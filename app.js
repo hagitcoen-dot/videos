@@ -155,12 +155,12 @@
     list.forEach((g) => {
       const card = gameCard(g);
       const vids = (g.videos || []).map((id) => state.videos.find((v) => v.id === id)).filter(Boolean);
+      const rel = document.createElement("div"); rel.className = "grel";
       if (vids.length) {
-        const rel = document.createElement("div"); rel.className = "grel";
-        rel.append("סרטון מתאים: ");
-        vids.forEach((v) => { const b = document.createElement("button"); b.type = "button"; b.className = "linkish"; b.textContent = v.title.split("|")[0].trim(); b.onclick = () => openVideo(v.id); rel.append(b); });
-        const wrap = document.createElement("div"); wrap.className = "gwrap"; wrap.append(card, rel); box.append(wrap);
-      } else box.append(card);
+        const lbl = document.createElement("span"); lbl.textContent = "סרטון מתאים:"; rel.append(lbl);
+        vids.slice(0, 2).forEach((v) => { const b = document.createElement("button"); b.type = "button"; b.className = "linkish"; b.textContent = v.title.split("|")[0].trim(); b.title = b.textContent; b.onclick = () => openVideo(v.id); rel.append(b); });
+      }
+      const wrap = document.createElement("div"); wrap.className = "gwrap"; wrap.append(card, rel); box.append(wrap);
     });
     $("status").textContent = words.length ? `נמצאו ${list.length} משחקים` : `${games.length} משחקים`;
     $("empty").hidden = true;
