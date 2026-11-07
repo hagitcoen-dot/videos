@@ -51,6 +51,7 @@ mark{background:var(--mark);color:inherit;border-radius:3px;padding:0 2px}
 .empty h2{color:var(--ink);font-family:var(--display);font-weight:400}
 .footlinks{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
 .contact{display:inline-block;padding:8px 16px;border-radius:999px;background:var(--accent);color:var(--accent-ink) !important;text-decoration:none;font-weight:600}
+.copy{margin-top:14px;font-weight:600;color:var(--ink)}
 .foot{border-top:1px solid var(--line);padding-block:20px 40px;color:var(--muted);font-size:.9rem}
 dialog{border:none;padding:0;border-radius:16px;width:min(920px,calc(100vw - 24px));max-height:calc(100vh - 24px);background:var(--surface);color:var(--ink)}
 dialog::backdrop{background:rgba(8,20,18,.65)}
