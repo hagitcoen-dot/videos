@@ -133,6 +133,19 @@
       "image": "games/wise-mind-v2.jpg"
     },
     {
+      "id": "flexible-kids",
+      "title": "ילדים גמישים",
+      "url": "https://flexible-kids.sites.tab.bot/",
+      "desc": "משחק על גמישות מחשבתית: לחשוב על עוד דרכים להסתכל על מצב, ולהסתגל כשדברים משתנים.",
+      "age": "",
+      "topics": [
+        "מחשבות ודפוסי חשיבה",
+        "חוסן והתמודדות"
+      ],
+      "videos": [],
+      "added": "2026-11-08"
+    },
+    {
       "id": "body-quest",
       "title": "Body Quest · בלשי התחושות",
       "url": "https://claude.ai/artifact/6U1PFQjnpyd6BWy2saccsL",
