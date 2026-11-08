@@ -13,9 +13,10 @@
   async function load(path, fallback) {
     try { const r = await fetch(path, { cache: "no-cache" }); if (!r.ok) throw 0; return await r.json(); } catch { return fallback; }
   }
-  const [vd, td, md, sel, cfg, gd] = await Promise.all([
+  const [vd, td, vt, md, sel, cfg, gd] = await Promise.all([
     load("data/videos.json", { videos: [] }),
     load("data/topics.json", { topics: [] }),
+    load("data/video_topics.json", { videos: {} }),
     load("data/materials.json", { videos: {}, topics: {} }),
     load("data/selection.json", {}),
     load("data/config.json", {}),
@@ -33,11 +34,15 @@
     if (/סיפור|story|[^א-ת]פרק /.test(t)) return "story";
     return "video";
   }
+  const APPROACH = ["CBT", "SEL"];
   state.videos = (vd.videos || []).map((v) => {
     const mats = (state.materials.videos[v.id] || []).slice();
     // נושאים לפי כותרת ותגיות בלבד: התיאורים כוללים לרוב האשטגים כלליים שהיו משייכים כל סרטון לכל נושא
     const base = norm([v.title, (v.tags || []).join(" ")].join(" "));
-    const topics = state.topics.filter((t) => (t.keywords || [t.name]).some((k) => base.includes(norm(k)))).map((t) => t.name);
+    const auto = state.topics.filter((t) => (t.keywords || [t.name]).some((k) => base.includes(norm(k)))).map((t) => t.name);
+    // נושאים שנקבעו ידנית (data/video_topics.json) מחליפים את ההתאמה האוטומטית. CBT ו-SEL נשארים אוטומטיים
+    const manual = (vt.videos || {})[v.id];
+    const topics = manual ? state.topics.map((t) => t.name).filter((n) => manual.includes(n) || (APPROACH.includes(n) && auto.includes(n))) : auto;
     topics.forEach((t) => (state.materials.topics[t] || []).forEach((m) => mats.push({ ...m, fromTopic: t })));
     return {
       ...v, topics, mats, kind: kindOf(v), lang: /[\u0590-\u05FF]/.test(v.title) ? "he" : "en",
@@ -58,6 +63,7 @@
     if (exc.has(v.id)) return false;
     if (excKw.some((k) => v.nTitle.includes(k))) return false;
     if (inc.has(v.id)) return true;
+    if (sel.min_seconds && v.duration && v.duration < sel.min_seconds) return false;
     if (sel.from_date && v.published && v.published.slice(0, 10) < sel.from_date) return false;
     if (fromOrder !== null && (v.order ?? 0) > fromOrder) return false;
     if (selPl.length && !(v.playlists || []).some((p) => selPl.includes(p))) return false;
