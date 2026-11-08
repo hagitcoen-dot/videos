@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>מחשבה של גומי: משחק גמישות מחשבתית לילדים | גומי</title>
+<meta name="description" content="משחק קצר ומשמח לכיתות ב'-ה' על גמישות מחשבתית: מחשבה של אבן מול מחשבה של גומי, תוכנית ב', ומשחק החלפה. עם הקראה בקול. מאת חגית כהן CBT | חברתי.">
+<meta name="theme-color" content="#bfe9ff">
+<meta property="og:title" content="מחשבה של גומי 🟢 משחק גמישות מחשבתית לילדים">
+<meta property="og:description" content="מחשבה של אבן או מחשבה של גומי? משחק לכיתות ב'-ה' עם גומי ✨ חגית כהן CBT | חברתי">
+<meta property="og:image" content="https://hagitcoen-dot.github.io/videos/games/flexible-kids/og.jpg">
+<meta property="og:url" content="https://hagitcoen-dot.github.io/videos/games/flexible-kids/">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="img/gumi.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-intro">
+<div class="sky" aria-hidden="true"><i class="cloud c1"></i><i class="cloud c2"></i><i class="cloud c3"></i><div class="hills"></div></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div id="floaters" aria-hidden="true"></div>
+<div class="burst" id="burst" aria-hidden="true"><b>יש!</b></div>
+
+<header class="topbar">
+  <button class="brand" id="brandBtn" type="button" aria-label="למפה"><img src="img/gumi.svg" alt="" width="30" height="33"><span>מחשבה של גומי</span></button>
+  <div class="hud" id="hud" hidden>
+    <span class="pill" id="scorePill" aria-label="נקודות">⭐ <b id="score">0</b></span>
+    <span class="pill streak" id="streakPill" hidden aria-label="רצף">🔥 <b id="streak">0</b></span>
+  </div>
+  <button class="icon-btn" id="soundBtn" type="button" aria-pressed="true" aria-label="השתקת צלילים">🎵</button>
+  <button class="read-btn" id="readBtn" type="button" aria-label="הקראה בקול"><span class="rb-i">🔊</span><span class="rb-t">הקראה</span></button>
+</header>
+
+
+<main id="app">
+  <!-- פתיחה -->
+  <section class="screen" id="screen-intro" aria-labelledby="introTitle">
+    <div class="card intro-card">
+      <div class="slides">
+        <div class="slide active">
+          <div class="chars"><img class="char wobble" src="img/gumi.svg" alt="גומי" width="150" height="165"></div>
+          <h1 class="rd" id="introTitle">היי, אני גומי! 💚</h1>
+          <p class="rd">אני מתכופף, מתמתח, ולא נשבר.</p>
+        </div>
+        <div class="slide">
+          <div class="duo" aria-hidden="true"><img class="stiff" src="img/stone.svg" alt="" width="110" height="110"><span class="vs">או</span><img class="wobble" src="img/gumi.svg" alt="" width="100" height="110"></div>
+          <h2 class="rd">אבן או גומי?</h2>
+          <p class="rd">יש מחשבות קשות כמו אבן, ויש מחשבות גמישות כמו גומי.</p>
+        </div>
+        <div class="slide">
+          <div class="chars"><img class="char bob" src="img/gumi.svg" alt="" width="120" height="132"></div>
+          <h2 class="rd">איך משחקים? 🎮</h2>
+          <ol class="steps3"><li class="rd">🪨 אבן או גומי?</li><li class="rd">🅱️ תוכנית ב'</li><li class="rd">🤸 גומי בחיים</li></ol>
+          <p class="soft rd">על כל תשובה טובה: נקודות, כוכבים והפתעות 🎉</p>
+          <p class="soft small-tip">🔊 לחצו על ״הקראה״ ואני אקריא לכם</p>
+        </div>
+      </div>
+      <div class="dots" id="dots" aria-hidden="true"></div>
+      <div class="row-actions">
+        <button class="btn ghost" id="skipBtn" type="button">למפה</button>
+        <button class="btn primary" id="nextSlideBtn" type="button">הבא</button>
+      </div>
+      <p class="credit">חגית כהן CBT | חברתי</p>
+    </div>
+  </section>
+
+  <!-- מפה -->
+  <section class="screen" id="screen-map" hidden aria-labelledby="mapTitle">
+    <div class="map-head">
+      <h2 class="rd" id="mapTitle">המסלול של גומי 🗺️</h2>
+      <p class="soft rd" id="mapSub">בחרו את התחנה הבאה</p>
+      <div class="map-stars"><span>⭐ <b id="mapStars">0</b> מתוך 9</span><span class="stretch-count">🤸 <b id="mapStretch">0</b> מתוך 3</span></div>
+    </div>
+    <div class="stage-path" id="stagePath"></div>
+    <div class="map-foot">
+      <button class="btn ghost small" id="resetBtn" type="button">התחלה מחדש</button>
+    </div>
+  </section>
+
+  <!-- הסבר שלב -->
+  <section class="screen" id="screen-howto" hidden aria-labelledby="howTitle">
+    <div class="card how-card">
+      <div class="how-icon" id="howIcon">🪨</div>
+      <p class="kicker" id="howKicker">תחנה 1</p>
+      <h2 class="rd" id="howTitle"></h2>
+      <ol class="how-list" id="howList"></ol>
+      <div class="guide"><img src="img/gumi.svg" alt="" width="54" height="60"><p class="bubble rd" id="howSay"></p></div>
+      <button class="btn primary big" id="howGo" type="button">יאללה! ▶</button>
+    </div>
+  </section>
+
+  <!-- משחק -->
+  <section class="screen play" id="screen-play" hidden aria-labelledby="playTitle">
+    <div class="play-top">
+      <span class="lvl" id="playLvl"></span>
+      <div class="progress" aria-hidden="true"><i id="playBar"></i></div>
+      <span class="count" id="playCount"></span>
+    </div>
+    <h2 class="sr" id="playTitle">משחק</h2>
+    <div id="stage"></div>
+  </section>
+
+  <!-- שלב הושלם -->
+  <section class="screen" id="screen-done" hidden aria-labelledby="doneTitle">
+    <div class="card done-card">
+      <img class="char jump" id="doneChar" src="img/gumi.svg" alt="" width="110" height="121">
+      <h2 class="rd" id="doneTitle">כל הכבוד!</h2>
+      <p class="soft rd" id="doneSub"></p>
+      <div class="big-stars" id="bigStars"><span>★</span><span>★</span><span>★</span></div>
+      <div class="tally"><div><b id="doneScore">0</b><span>נקודות</span></div><div><b id="doneStreak">0</b><span>רצף הכי ארוך</span></div></div>
+      <p class="stage-badge rd" id="stageBadge"></p>
+      <div class="stretch-ask" id="stretchAsk">
+        <div class="sa-art" aria-hidden="true"><img class="stretchy" src="img/gumi.svg" alt="" width="70" height="77"></div>
+        <p class="sa-q rd" id="stretchQ">מוכנים למתוח עוד את הגומייה? 💪</p>
+        <p class="sa-sub rd" id="stretchSub">עוד 2-3 כרטיסים, קצת יותר מאתגרים</p>
+        <button class="btn stretch big" id="stretchYes" type="button">כן! למתוח 💪</button>
+        <button class="btn ghost" id="stretchNo" type="button">להמשיך הלאה ⬅</button>
+      </div>
+      <button class="btn primary big" id="doneBtn" type="button" hidden>הלאה ⬅</button>
+    </div>
+  </section>
+
+  <!-- מתיחה הושלמה -->
+  <section class="screen" id="screen-stretched" hidden aria-labelledby="stTitle">
+    <div class="card done-card stretched-card">
+      <div class="stretch-hero" aria-hidden="true"><img class="mega-stretch" src="img/gumi.svg" alt="" width="130" height="143"></div>
+      <div class="badge-big"><span>🤸</span><b class="rd" id="stTitle">מתחתי את הגומייה!</b></div>
+      <p class="soft rd" id="stSub">יצאתם מאזור הנוחות, וזה אומץ אמיתי 💚</p>
+      <div class="bonus-stars" id="bonusStars"><span>⭐</span><span>⭐</span></div>
+      <p class="rd bonus-line">קיבלתם 2 כוכבי בונוס!</p>
+      <button class="btn primary big" id="stBtn" type="button">הלאה ⬅</button>
+    </div>
+  </section>
+
+  <!-- חגיגת סיום + תעודה -->
+  <section class="screen" id="screen-final" hidden aria-labelledby="finalTitle">
+    <div class="card cert" id="cert">
+      <div class="cert-ribbon">🏅</div>
+      <p class="kicker rd">סיימתם את כל המסלול!</p>
+      <h2 class="rd" id="finalTitle">תעודת גמישות</h2>
+      <div class="cert-art" aria-hidden="true"><img class="stiff small-stone" src="img/stone.svg" alt="" width="64" height="64"><span class="arrow">⬅</span><img class="wobble" src="img/gumi.svg" alt="" width="110" height="121"></div>
+      <label class="name-field"><span class="sr">השם שלי</span><input id="nameInput" type="text" maxlength="20" placeholder="כתבו כאן את השם ✍️" autocomplete="off"></label>
+      <p class="cert-line rd">יודע/ת לחשוב כמו גומי: מתכופפים ולא נשברים 💚</p>
+      <div class="fin-tally">
+        <div><b id="finStars">0</b><span>כוכבים ⭐</span></div>
+        <div><b id="finScore">0</b><span>נקודות</span></div>
+        <div><b id="finStreak">0</b><span>רצף שיא 🔥</span></div>
+      </div>
+      <div class="fin-stretch" id="finStretch"></div>
+      <div class="summary">
+        <p class="sum-title rd">מה למדתי:</p>
+        <ul class="tips" id="sumTips"></ul>
+      </div>
+      <p class="soft shot-tip">📸 אפשר לצלם מסך ולשמור את התעודה</p>
+      <div class="cert-sign"><img src="img/gumi.svg" alt="" width="40" height="44"><span>חתום: גומי, מתכופף ולא נשבר</span></div>
+      <div class="row-actions">
+        <button class="btn ghost" id="mapAgainBtn" type="button">למפה</button>
+        <button class="btn primary" id="againBtn" type="button">משחק חדש 🔄</button>
+      </div>
+      <p class="credit">חגית כהן CBT | חברתי</p>
+    </div>
+  </section>
+
+  <!-- תמונת שיתוף -->
+  <section class="screen" id="screen-og" hidden>
+    <div class="og">
+      <div class="og-text">
+        <p class="og-kicker">כיתות ב'-ה' · חגית כהן CBT | חברתי</p>
+        <h1>מחשבה<br>של גומי 🟢</h1>
+        <p class="og-sub">אבן או גומי? משחק על<br>גמישות מחשבתית</p>
+      </div>
+      <div class="og-art"><img class="og-s" src="img/stone.svg" alt="" width="150" height="150"><img src="img/gumi.svg" alt="" width="260" height="286"></div>
+    </div>
+  </section>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

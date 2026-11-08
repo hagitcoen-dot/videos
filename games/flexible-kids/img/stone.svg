@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+<defs><radialGradient id="sg" cx="38%" cy="30%" r="80%"><stop offset="0" stop-color="#d9dde6"/><stop offset=".6" stop-color="#a7adbd"/><stop offset="1" stop-color="#848a9c"/></radialGradient></defs>
+<ellipse cx="100" cy="186" rx="70" ry="8" fill="#2b4a6b" opacity=".13"/>
+<path d="M40 150 C26 120 34 72 70 54 C98 40 140 44 160 72 C180 100 176 146 158 166 C136 186 66 186 40 150 Z" fill="url(#sg)" stroke="#6d7385" stroke-width="3"/>
+<circle cx="136" cy="70" r="5" fill="#8b91a3" opacity=".6"/><circle cx="56" cy="138" r="4" fill="#8b91a3" opacity=".6"/><circle cx="150" cy="140" r="6" fill="#8b91a3" opacity=".5"/>
+<path d="M66 64 C76 56 88 54 98 55" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".55"/>
+<!-- stiff straight brows -->
+<path d="M66 92 L92 94" stroke="#3a3f52" stroke-width="5" stroke-linecap="round"/><path d="M110 94 L136 92" stroke="#3a3f52" stroke-width="5" stroke-linecap="round"/>
+<ellipse cx="80" cy="108" rx="8" ry="9" fill="#2d3246"/><ellipse cx="122" cy="108" rx="8" ry="9" fill="#2d3246"/>
+<circle cx="83" cy="104" r="3" fill="#fff"/><circle cx="125" cy="104" r="3" fill="#fff"/>
+<ellipse cx="62" cy="126" rx="8" ry="5" fill="#ff9fb0" opacity=".45"/><ellipse cx="140" cy="126" rx="8" ry="5" fill="#ff9fb0" opacity=".45"/>
+<!-- straight pursed mouth -->
+<path d="M90 134 L112 134" stroke="#2d3246" stroke-width="5" stroke-linecap="round"/>
+</svg>

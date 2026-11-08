@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" width="200" height="220">
+<defs>
+<radialGradient id="gb" cx="40%" cy="30%" r="75%"><stop offset="0" stop-color="#9df2c6"/><stop offset=".55" stop-color="#4fd29a"/><stop offset="1" stop-color="#2fae7c"/></radialGradient>
+<linearGradient id="band" x1="0" x2="1"><stop offset="0" stop-color="#ffb35c"/><stop offset="1" stop-color="#ff8a4c"/></linearGradient>
+</defs>
+<ellipse cx="100" cy="210" rx="52" ry="7" fill="#2b4a6b" opacity=".13"/>
+<!-- noodle arms -->
+<path d="M50 120 C28 112 22 92 30 74" fill="none" stroke="#3cc28c" stroke-width="13" stroke-linecap="round"/>
+<path d="M150 120 C176 124 186 106 180 86" fill="none" stroke="#3cc28c" stroke-width="13" stroke-linecap="round"/>
+<circle cx="30" cy="72" r="9" fill="#5fd9a5"/><circle cx="180" cy="84" r="9" fill="#5fd9a5"/>
+<!-- legs -->
+<ellipse cx="78" cy="200" rx="17" ry="10" fill="#33b582"/><ellipse cx="124" cy="200" rx="17" ry="10" fill="#33b582"/>
+<!-- body -->
+<path d="M100 26 C146 24 160 62 154 100 C150 132 162 160 152 184 C142 206 60 208 50 184 C40 158 56 130 52 100 C48 60 58 28 100 26 Z" fill="url(#gb)" stroke="#239a6b" stroke-width="3"/>
+<!-- rubber band belt -->
+<path d="M52 150 C82 162 122 162 156 148" fill="none" stroke="url(#band)" stroke-width="10" stroke-linecap="round"/>
+<!-- gloss -->
+<path d="M70 48 C78 38 92 34 104 35" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".75"/>
+<circle cx="66" cy="62" r="4.5" fill="#fff" opacity=".7"/>
+<!-- eyes -->
+<ellipse cx="80" cy="94" rx="15" ry="18" fill="#26314f"/><ellipse cx="124" cy="94" rx="15" ry="18" fill="#26314f"/>
+<circle cx="85" cy="87" r="6" fill="#fff"/><circle cx="129" cy="87" r="6" fill="#fff"/>
+<circle cx="76" cy="101" r="2.8" fill="#fff" opacity=".85"/><circle cx="120" cy="101" r="2.8" fill="#fff" opacity=".85"/>
+<!-- cheeks -->
+<ellipse cx="62" cy="118" rx="10" ry="6" fill="#ff8fa3" opacity=".75"/><ellipse cx="142" cy="118" rx="10" ry="6" fill="#ff8fa3" opacity=".75"/>
+<!-- smile -->
+<path d="M88 118 Q102 134 116 118" fill="#d9475f" stroke="#26314f" stroke-width="3.5" stroke-linejoin="round"/>
+<path d="M95 125 Q102 130 109 125" fill="#ff8fa3"/>
+<!-- sprout curl on top -->
+<path d="M100 27 C98 14 108 8 116 12" fill="none" stroke="#2fae7c" stroke-width="6" stroke-linecap="round"/>
+</svg>
