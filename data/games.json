@@ -102,7 +102,7 @@
     {
       "id": "stop-tipp",
       "title": "עוצרים את הסערה · STOP ו‑TIPP",
-      "url": "https://stop-tipp.sites.tab.bot/",
+      "url": "games/stop-tipp/",
       "desc": "משחק DBT לבני נוער עם טיפי: STOP כדי לעצור ולבחור, TIPP כדי לקרר את הגוף, ומדחום רגשות שעוזר לבחור מתי משתמשים בכל כלי.",
       "age": "נוער",
       "topics": [
