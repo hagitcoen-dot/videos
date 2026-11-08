@@ -216,7 +216,16 @@
       (opts.onMap ? '<button type="button" class="btn ghost" id="funMap">🗺️ חזרה למפה</button>' : "") +
       '<button type="button" class="btn ghost" id="funAgain">🔄 משחקים מההתחלה</button></div>';
     el.querySelector("#funName").addEventListener("input", function () { store("fun-name", this.value); });
-    el.querySelector("#funPrint").addEventListener("click", function () { window.print(); });
+    el.querySelector("#funPrint").addEventListener("click", function () {
+      /* מעתיקים את התעודה לשכבת הדפסה נפרדת, כדי שתצא תמיד על דף אחד */
+      var old = document.getElementById("funPrintCert"); if (old) old.remove();
+      var box = document.createElement("div"); box.id = "funPrintCert";
+      var c = el.querySelector("#funCert").cloneNode(true); c.removeAttribute("id");
+      var inp = c.querySelector("input"), nm = el.querySelector("#funName").value;
+      if (inp) { var b = document.createElement("div"); b.className = "fun-cert-printname"; b.textContent = nm || "\u00a0"; inp.replaceWith(b); }
+      box.appendChild(c); document.body.appendChild(box);
+      window.print();
+    });
     el.querySelector("#funAgain").addEventListener("click", opts.onAgain);
     if (opts.onMap) el.querySelector("#funMap").addEventListener("click", opts.onMap);
     FUN.sfx("fanfare");

@@ -68,10 +68,16 @@
 .fun-cert-stars{font-size:22px;font-weight:800}
 .fun-cert-credit{font-size:12px;color:#8a80a8;margin:8px 0 0}
 .fun-cert-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}
+#funPrintCert{display:none}
+@page{size:A4 portrait;margin:12mm}
 @media print{
-  body *{visibility:hidden!important}
-  .fun-cert,.fun-cert *{visibility:visible!important}
-  .fun-cert{position:fixed;inset:20px;box-shadow:none;animation:none}
-  .fun-confetti{display:none}
+  html,body{height:auto!important;min-height:0!important;margin:0!important;padding:0!important;overflow:visible!important;background:#fff!important}
+  body>*:not(#funPrintCert){display:none!important}
+  #funPrintCert{display:block!important}
+  #funPrintCert .fun-cert{box-shadow:none;animation:none;border:4px double #e0b04a;max-width:170mm;margin:0 auto;
+    page-break-inside:avoid;break-inside:avoid;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #funPrintCert .fun-cert{zoom:1.4;margin-top:10mm}
+  #funPrintCert .fun-cert-chars img{animation:none}
+  .fun-cert-printname{font-size:26px;font-weight:800;color:#b8325a;border-bottom:3px dashed #e0b04a;min-width:200px;padding:2px 8px}
 }
 @media (prefers-reduced-motion:reduce){.fun-node.current .fun-node-ball,.fun-map-guide,.fun-cert-chars img{animation:none}}
