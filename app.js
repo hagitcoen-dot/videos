@@ -160,6 +160,19 @@
     const go = document.createElement("span"); go.className = "gplay"; go.textContent = "לשחק ←"; b.append(go);
     a.append(b); return a;
   }
+  // רישום חיפושים בלי תוצאות ב-GoatCounter (בלי עוגיות), רק אחרי שהמשתמש הפסיק להקליד
+  let missTimer = null; const missSent = new Set();
+  function logMiss(q, where) {
+    clearTimeout(missTimer);
+    q = (q || "").trim().replace(/\s+/g, " ").slice(0, 60);
+    if (q.length < 2) return;
+    missTimer = setTimeout(() => {
+      const key = where + ":" + q; if (missSent.has(key)) return;
+      if (!window.goatcounter || !window.goatcounter.count) return;
+      missSent.add(key);
+      window.goatcounter.count({ path: "חיפוש-ללא-תוצאות/" + (where === "games" ? "משחקים/" : "") + q, title: q, event: true });
+    }, 2000);
+  }
   function renderGames(words) {
     const box = $("games"); box.textContent = "";
     const list = games.filter((g) => words.every((w) => g.n.includes(w) || g.n.includes(stripPrefix(w))));
@@ -173,6 +186,7 @@
       }
       const wrap = document.createElement("div"); wrap.className = "gwrap"; wrap.append(card, rel); box.append(wrap);
     });
+    if (words.length && !list.length) logMiss(state.q, "games"); else clearTimeout(missTimer);
     $("status").textContent = words.length ? `נמצאו ${list.length} משחקים` : `${games.length} משחקים`;
     $("empty").hidden = true;
   }
@@ -214,6 +228,7 @@
     grid.append(frag);
 
     renderWish(words.length ? state.q.trim() : "", !list.length);
+    if (words.length && !list.length && !state.videos.some((v) => score(v, words) > 0)) logMiss(state.q, "videos"); else clearTimeout(missTimer);
     const empty = $("empty");
     if (!state.videos.length) {
       $("status").textContent = "";
