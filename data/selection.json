@@ -5,7 +5,10 @@
   "playlists": [],
   "match_topics": false,
   "include_keywords": [],
-  "include_ids": [],
+  "include_ids": [
+    "34mf-mp2v6A",
+    "DUR_BLS8ilQ"
+  ],
   "exclude_ids": [
     "OB2aiYJJfQc",
     "cItI1y7I2Y8"
