@@ -143,10 +143,15 @@
   $("tabGames").onclick = () => setView("games");
   $("nGames").textContent = games.length || "";
   $("tabGames").hidden = !games.length;
+  // תווית "חדש": תוכן שעלה מ-NEW_FROM והלאה מקבל תווית ל-NEW_DAYS ימים
+  const NEW_FROM = "2026-11-08", NEW_DAYS = 5;
+  function isNew(d) { if (!d) return false; const day = String(d).slice(0, 10); if (day < NEW_FROM) return false; const t = Date.parse(day); return !isNaN(t) && Date.now() - t < NEW_DAYS * 864e5; }
+  function newBadge() { const s = document.createElement("span"); s.className = "newb"; s.textContent = "חדש"; return s; }
   function gameCard(g, small) {
     const a = document.createElement("a"); a.className = small ? "gcard small" : "gcard"; a.href = g.url; a.target = "_blank"; a.rel = "noopener";
     if (g.image) { const img = document.createElement("img"); img.src = g.image; img.alt = ""; img.loading = "lazy"; a.append(img); }
     else { const art = document.createElement("div"); art.className = "gart"; art.innerHTML = '<svg viewBox="0 0 48 32" aria-hidden="true"><rect x="2" y="6" width="44" height="22" rx="11" fill="currentColor" opacity=".9"/><rect x="11" y="15" width="10" height="3" rx="1.5" fill="#fff"/><rect x="14.5" y="11.5" width="3" height="10" rx="1.5" fill="#fff"/><circle cx="33" cy="14" r="2.6" fill="#fff"/><circle cx="38" cy="19" r="2.6" fill="#fff"/></svg>'; a.append(art); }
+    if (isNew(g.added)) a.append(newBadge());
     const b = document.createElement("div"); b.className = "gbody";
     const h = document.createElement("h3"); h.textContent = g.title; b.append(h);
     if (g.desc) { const p = document.createElement("p"); p.textContent = g.desc; b.append(p); }
@@ -196,6 +201,7 @@
       const th = document.createElement("div"); th.className = "thumb";
       const img = document.createElement("img"); img.loading = "lazy"; img.alt = ""; img.src = v.thumbnail || `https://i.ytimg.com/vi/${v.id}/mqdefault.jpg`; th.append(img);
       if (v.duration) { const d = document.createElement("span"); d.className = "dur"; d.textContent = fmtDur(v.duration); th.append(d); }
+      if (isNew(v.published)) th.append(newBadge());
       const body = document.createElement("div"); body.className = "cbody";
       const h = document.createElement("h3"); highlight(h, v.title, words);
       const meta = document.createElement("p"); meta.className = "meta"; meta.textContent = fmtDate(v.published);

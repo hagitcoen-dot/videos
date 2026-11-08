@@ -103,7 +103,7 @@ body.view-games .filters,body.view-games .selects{display:none}
 .games{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,230px));grid-auto-rows:1fr;gap:18px;padding-bottom:40px}
 .gwrap{display:flex;flex-direction:column;gap:8px;min-width:0}
 .gwrap>.gcard{flex:1}
-.gcard{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;text-decoration:none;color:inherit}
+.gcard{position:relative;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;text-decoration:none;color:inherit}
 .gcard:hover{transform:translateY(-2px)}
 .gcard img{width:100%;height:auto;display:block}
 .games .gcard img,.games .gart{aspect-ratio:1/1;height:auto;object-fit:contain;background:var(--surface)}
@@ -142,3 +142,6 @@ body.view-games .filters,body.view-games .selects{display:none}
 @media (hover:hover){.tab:hover{animation:tabWiggle .6s ease-in-out .2s 1}}
 @media (max-width:480px){.tabs{gap:10px}.tab{border-radius:14px}.tab img{border-radius:11px}}
 @media (prefers-reduced-motion:reduce){.tab,.tab:hover{transition:none;animation:none;transform:none}}
+.newb{position:absolute;top:8px;inset-inline-end:8px;z-index:2;background:#e8436b;color:#fff;font-weight:700;font-size:.82rem;line-height:1;padding:5px 10px;border-radius:999px;box-shadow:0 2px 6px rgba(0,0,0,.25);animation:newPop 2.4s ease-in-out infinite}
+@keyframes newPop{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@media (prefers-reduced-motion:reduce){.newb{animation:none}}
