@@ -117,6 +117,22 @@
       "image": ""
     },
     {
+      "id": "wise-mind",
+      "title": "מוצאים את המוח החכם · Wise Mind",
+      "url": "https://wise-mind.sites.tab.bot/",
+      "desc": "משחק DBT לבני נוער עם מולי: מכירים את מוח הרגש, מוח ההיגיון ואת המוח החכם שבמפגש ביניהם, ובוחרים תגובה חכמה במצבים בבית ובבית הספר.",
+      "age": "נוער",
+      "topics": [
+        "ויסות רגשי",
+        "מחשבות ודפוסי חשיבה",
+        "DBT"
+      ],
+      "videos": [
+        "lDGVui9HjyQ"
+      ],
+      "image": ""
+    },
+    {
       "id": "body-quest",
       "title": "Body Quest · בלשי התחושות",
       "url": "https://claude.ai/artifact/6U1PFQjnpyd6BWy2saccsL",
