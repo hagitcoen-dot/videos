@@ -100,6 +100,23 @@
       "image": "games/cbt-6.jpg"
     },
     {
+      "id": "stop-tipp",
+      "title": "עוצרים את הסערה · STOP ו‑TIPP",
+      "url": "https://stop-tipp.sites.tab.bot/",
+      "desc": "משחק DBT לבני נוער עם טיפי: STOP כדי לעצור ולבחור, TIPP כדי לקרר את הגוף, ומדחום רגשות שעוזר לבחור מתי משתמשים בכל כלי.",
+      "age": "נוער",
+      "topics": [
+        "ויסות רגשי",
+        "כעס",
+        "DBT"
+      ],
+      "videos": [
+        "A0Xe8_oWUzw",
+        "wCZzahhWtM4"
+      ],
+      "image": ""
+    },
+    {
       "id": "body-quest",
       "title": "Body Quest · בלשי התחושות",
       "url": "https://claude.ai/artifact/6U1PFQjnpyd6BWy2saccsL",
