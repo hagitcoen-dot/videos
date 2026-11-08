@@ -31,6 +31,10 @@
   <div class="wrap">
     <h1><span class="sr-only">חגית כהן · </span>מרחב לצמיחה רגשית חברתית</h1>
     <p class="lede">סרטונים, שירים, חומרים ומשחקים במקום אחד. חפשו לפי מילה, נושא או מצב, ומצאו את מה שמתאים לכם.</p>
+    <nav class="tabs" aria-label="סוג תוכן">
+      <button type="button" class="tab" id="tabVideos" aria-pressed="true" aria-label="סרטונים"><img src="tab-videos.webp" alt="" width="900" height="300"><span class="n" id="nVideos"></span></button>
+      <button type="button" class="tab" id="tabGames" aria-pressed="false" aria-label="משחקים"><img src="tab-games.webp" alt="" width="900" height="300"><span class="n" id="nGames"></span></button>
+    </nav>
     <form class="search" role="search" id="searchForm">
       <label class="sr-only" for="q">חיפוש סרטונים</label>
       <input id="q" type="search" placeholder="למשל: כעס, ויסות רגשי, חברות, מחשבות אוטומטיות" autocomplete="off">
@@ -61,10 +65,6 @@
 </header>
 
 <main class="wrap">
-  <nav class="tabs" aria-label="סוג תוכן">
-    <button type="button" class="tab" id="tabVideos" aria-pressed="true">סרטונים <span class="n" id="nVideos"></span></button>
-    <button type="button" class="tab" id="tabGames" aria-pressed="false">משחקים <span class="n" id="nGames"></span></button>
-  </nav>
   <p class="status" id="status" aria-live="polite">טוען את רשימת הסרטונים…</p>
   <section class="games" id="games" hidden></section>
   <section class="grid" id="grid"></section>
