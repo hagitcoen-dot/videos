@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>מוצאים את המוח החכם: משחק Wise Mind לנוער | מולי</title>
+<meta name="description" content="משחק קצר ומשמח לנוער על מוח חכם (Wise Mind) מ-DBT: מכירים את המוח הרגשי, המוח השכלי והמפגש ביניהם, ובוחרים תגובה חכמה במצבים מבית הספר ומהבית. מאת חגית כהן CBT | חברתי.">
+<meta name="theme-color" content="#2a1d5c">
+<meta property="og:title" content="מוצאים את המוח החכם 💗🧠✨ משחק Wise Mind עם מולי">
+<meta property="og:description" content="מוח רגשי, מוח שכלי, ומה שביניהם: משחק 9 בסדרה ✨ חגית כהן CBT | חברתי">
+<meta property="og:image" content="https://hagitcoen-dot.github.io/videos/games/wise-mind/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="img/moli.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-meet">
+<div class="sky" aria-hidden="true"><div class="stars"></div><div class="glow g1"></div><div class="glow g2"></div></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div id="floaters" aria-hidden="true"></div>
+<div class="speed" id="speed" aria-hidden="true"></div>
+<div class="burst" id="burst" aria-hidden="true"><b>יש!</b></div>
+
+<header class="topbar">
+  <button class="brand" id="brandBtn" type="button" aria-label="למפה"><img src="img/moli.svg" alt="" width="30" height="33"><span>מוצאים את המוח החכם</span></button>
+  <div class="hud" id="hud" hidden>
+    <span class="pill" id="scorePill" aria-label="נקודות">⭐ <b id="score">0</b></span>
+    <span class="pill streak" id="streakPill" hidden aria-label="רצף">🔥 <b id="streak">0</b></span>
+  </div>
+  <button class="icon-btn" id="soundBtn" type="button" aria-pressed="true" aria-label="השתקת צלילים">🔊</button>
+</header>
+
+<main id="app">
+  <!-- פתיחה -->
+  <section class="screen" id="screen-intro" aria-labelledby="introTitle">
+    <div class="card intro-card">
+      <div class="slides">
+        <div class="slide active">
+          <div class="chars"><img class="char bob" src="img/moli.svg" alt="מולי, חצי לב וחצי מוח" width="150" height="167"></div>
+          <h1 id="introTitle">היי, אני מולי! 💜</h1>
+          <p>אני חצי <strong>לב</strong> 💗 וחצי <strong>מוח</strong> 🧠. כשהחצאים שלי עובדים ביחד, אני נהיה שלם, וזה נקרא <strong>מוח חכם</strong>.</p>
+          <p class="soft">אני אהיה איתכם לאורך כל הדרך 😊</p>
+        </div>
+        <div class="slide">
+          <div class="duo" aria-hidden="true"><img src="img/heart.svg" alt="" width="96" height="107"><span class="vs">VS</span><img src="img/brain.svg" alt="" width="96" height="107"></div>
+          <h2>מכירים את זה? ⚡</h2>
+          <p>הלב צועק: <strong>״תעשה משהו עכשיו!״</strong><br>והשכל אומר: <strong>״תתעלם, זה לא חשוב.״</strong></p>
+          <p class="soft">שניהם רוצים לעזור. השאלה היא איך לשמוע את שניהם.</p>
+        </div>
+        <div class="slide">
+          <div class="venn mini" aria-hidden="true"><div class="vc v-e"></div><div class="vc v-r"></div><div class="v-w">✨</div></div>
+          <h2>שלושה מוחות 🧠</h2>
+          <p><strong>💗 מוח רגשי</strong> <span class="en">Emotion Mind</span><br><strong>🧠 מוח שכלי</strong> <span class="en">Reasonable Mind</span><br><strong>✨ מוח חכם</strong> <span class="en">Wise Mind</span>, המקום שבו הם נפגשים</p>
+        </div>
+        <div class="slide">
+          <div class="chars"><img class="char bob" src="img/moli.svg" alt="" width="120" height="134"></div>
+          <h2>איך זה עובד? 🎮</h2>
+          <ol class="steps3"><li>💗🧠 מכירים את שלושת המוחות</li><li>🔍 מזהים מוח חכם</li><li>🌟 בחיים האמיתיים</li></ol>
+          <p class="soft">על כל תשובה נכונה: נקודות, כוכבים ורצף 🔥</p>
+        </div>
+      </div>
+      <div class="dots" id="dots" aria-hidden="true"></div>
+      <div class="row-actions">
+        <button class="btn ghost" id="skipBtn" type="button">דלגו למפה</button>
+        <button class="btn primary" id="nextSlideBtn" type="button">הבא</button>
+      </div>
+      <p class="credit">חגית כהן CBT | חברתי</p>
+    </div>
+  </section>
+
+  <!-- מפה -->
+  <section class="screen" id="screen-map" hidden aria-labelledby="mapTitle">
+    <div class="map-head">
+      <h2 id="mapTitle">המסלול של מולי 🗺️</h2>
+      <p class="soft" id="mapSub">בחרו את התחנה הבאה</p>
+      <div class="map-stars"><span id="mapStars">0</span> / 9 ⭐</div>
+    </div>
+    <div class="stage-path" id="stagePath"></div>
+    <div class="map-foot">
+      <button class="btn ghost small" id="resetBtn" type="button">התחלה מחדש</button>
+    </div>
+  </section>
+
+  <!-- הסבר שלב -->
+  <section class="screen" id="screen-howto" hidden aria-labelledby="howTitle">
+    <div class="card how-card">
+      <div class="how-icon" id="howIcon">✋</div>
+      <p class="kicker" id="howKicker">שלב 1</p>
+      <h2 id="howTitle"></h2>
+      <ol class="how-list" id="howList"></ol>
+      <div class="guide"><img src="img/moli.svg" alt="" width="54" height="60"><p class="bubble" id="howSay"></p></div>
+      <button class="btn primary big" id="howGo" type="button">יאללה! ▶</button>
+    </div>
+  </section>
+
+  <!-- משחק -->
+  <section class="screen play" id="screen-play" hidden aria-labelledby="playTitle">
+    <div class="play-top">
+      <span class="lvl" id="playLvl"></span>
+      <div class="progress" aria-hidden="true"><i id="playBar"></i></div>
+      <span class="count" id="playCount"></span>
+    </div>
+    <h2 class="sr" id="playTitle">משחק</h2>
+    <div id="stage"></div>
+  </section>
+
+  <!-- שלב הושלם -->
+  <section class="screen" id="screen-done" hidden aria-labelledby="doneTitle">
+    <div class="card done-card">
+      <img class="char jump" src="img/moli.svg" alt="" width="110" height="123">
+      <h2 id="doneTitle">כל הכבוד!</h2>
+      <p class="soft" id="doneSub"></p>
+      <div class="big-stars" id="bigStars"><span>★</span><span>★</span><span>★</span></div>
+      <div class="tally"><div><b id="doneScore">0</b><span>נקודות בשלב</span></div><div><b id="doneStreak">0</b><span>רצף הכי ארוך</span></div></div>
+      <p class="stage-badge" id="stageBadge"></p>
+      <button class="btn primary big" id="doneBtn" type="button">הלאה ⬅</button>
+    </div>
+  </section>
+
+  <!-- חגיגת סיום + כרטיס סיכום -->
+  <section class="screen" id="screen-final" hidden aria-labelledby="finalTitle">
+    <div class="card cert" id="cert">
+      <div class="cert-ribbon">🏆</div>
+      <p class="kicker">עברתם את כל המסלול!</p>
+      <h2 id="finalTitle">מצאתי את המוח החכם שלי</h2>
+      <div class="merge-stage final-merge" id="finalMerge" aria-hidden="true"><img class="m-h" src="img/heart.svg" alt="" width="96" height="107"><img class="m-b" src="img/brain.svg" alt="" width="96" height="107"><img class="m-w" src="img/moli.svg" alt="" width="150" height="167"><span class="m-flash"></span></div>
+      <label class="name-field"><span class="sr">השם שלך</span><input id="nameInput" type="text" maxlength="24" placeholder="כתבו כאן את השם ✍️" autocomplete="off"></label>
+      <p class="fin-line">צברתם <b id="finScore">0</b> נקודות, <b id="finStars">0</b> כוכבים מתוך 9, ורצף שיא של <b id="finStreak">0</b> 🔥</p>
+      <div class="summary">
+        <p class="sum-title">הכרטיס שלי: שלושת המוחות 🧠</p>
+        <ul class="sum-minds" id="sumMinds"></ul>
+        <div class="sum-block"><p class="sum-h">✨ כשקשה, שואלים את המוח החכם</p><ul id="sumQs"></ul></div>
+        <p class="sum-note">לא תמיד התשובה ברורה מיד, ולא תמיד הכל מסתדר. וזה בסדר. כל פעם שעוצרים לשאול, זה אימון 💪</p>
+      </div>
+      <p class="soft shot-tip">📸 צלמו מסך ושמרו את הכרטיס</p>
+      <div class="cert-sign"><img src="img/moli.svg" alt="" width="46" height="51"><span>חתום: מולי, חצי לב חצי מוח, שלם לגמרי</span></div>
+      <div class="row-actions">
+        <button class="btn ghost" id="mapAgainBtn" type="button">למפה</button>
+        <button class="btn primary" id="againBtn" type="button">משחק חדש 🔄</button>
+      </div>
+      <p class="credit">חגית כהן CBT | חברתי</p>
+    </div>
+  </section>
+
+  <!-- תמונת שיתוף -->
+  <section class="screen" id="screen-og" hidden>
+    <div class="og">
+      <div class="og-text">
+        <p class="og-kicker">משחק 9 · חגית כהן CBT | חברתי</p>
+        <h1>מוצאים את<br>המוח החכם ✨</h1>
+        <p class="og-sub">מוח רגשי, מוח שכלי,<br>ומה שביניהם</p>
+        <div class="og-chips"><span>💗 Emotion</span><span>🧠 Reason</span><span>✨ Wise Mind</span></div>
+      </div>
+      <div class="og-art"><img class="og-h" src="img/heart.svg" alt="" width="120" height="134"><img src="img/moli.svg" alt="" width="250" height="279"><img class="og-b" src="img/brain.svg" alt="" width="120" height="134"></div>
+    </div>
+  </section>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
