@@ -47,7 +47,7 @@
     topics.forEach((t) => (state.materials.topics[t] || []).forEach((m) => mats.push({ ...m, fromTopic: t })));
     return {
       ...v, topics, mats, kind: kindOf(v), lang: /[\u0590-\u05FF]/.test(v.title) ? "he" : "en",
-      nTitle: norm(v.title), nTags: norm((v.tags || []).concat(topics).join(" ")),
+      nTitle: norm(v.title), nTags: norm((v.tags || []).concat(topics, (sel.search_words || {})[v.id] || []).join(" ")),
       nDesc: norm(v.description), nMats: norm(mats.map((m) => m.title + " " + (m.note || "")).join(" ")),
     };
   });
