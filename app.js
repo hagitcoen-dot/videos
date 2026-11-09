@@ -160,8 +160,8 @@
     if (g.image) { const img = document.createElement("img"); img.src = g.image; img.alt = ""; img.loading = "lazy"; a.append(img); }
     else { const art = document.createElement("div"); art.className = "gart"; art.innerHTML = '<svg viewBox="0 0 48 32" aria-hidden="true"><rect x="2" y="6" width="44" height="22" rx="11" fill="currentColor" opacity=".9"/><rect x="11" y="15" width="10" height="3" rx="1.5" fill="#fff"/><rect x="14.5" y="11.5" width="3" height="10" rx="1.5" fill="#fff"/><circle cx="33" cy="14" r="2.6" fill="#fff"/><circle cx="38" cy="19" r="2.6" fill="#fff"/></svg>'; a.append(art); }
     if (isNew(g.added)) a.append(newBadge());
-    if (g.adult_label) { const s = document.createElement("span"); s.className = "adultb"; s.textContent = g.adult_label; a.append(s); }
     const b = document.createElement("div"); b.className = "gbody";
+    if (g.adult_label) { const s = document.createElement("span"); s.className = "adultb"; s.textContent = "👥 " + g.adult_label; b.append(s); }
     const h = document.createElement("h3"); h.textContent = g.title; b.append(h);
     if (g.desc) { const p = document.createElement("p"); p.textContent = g.desc; b.append(p); }
     const meta = [g.age ? "גיל " + g.age : "", ...(g.topics || [])].filter(Boolean);
