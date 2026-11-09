@@ -198,7 +198,7 @@
       btn.setAttribute("aria-label", (v ? "לצפייה: " : "לשחק: ") + (v ? v.title : g.title)); btn.append(pic);
       const body = document.createElement("div"); body.className = "fbody";
       const lb = document.createElement("span"); lb.className = "flabel"; lb.textContent = it.label || "המלצת השבוע";
-      const h = document.createElement("h2"); h.textContent = (v ? v.title : g.title).split("|")[0].trim();
+      const h = document.createElement("h2"); h.textContent = (v ? v.title : g.title).split("|")[0].split("#")[0].trim();
       body.append(lb, h);
       if (it.why) { const p = document.createElement("p"); p.textContent = it.why; body.append(p); }
       if (it.tip) { const p = document.createElement("p"); p.className = "ftip"; const b = document.createElement("b"); b.textContent = "💡 רעיון: "; p.append(b, it.tip); body.append(p); }
