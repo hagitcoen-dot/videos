@@ -1,4 +1,4 @@
-/* תוכן המשחק: מוצאים את המוח החכם (Wise Mind, DBT). מאת חגית כהן CBT | חברתי */
+/* תוכן המשחק: מוצאים את המוח החכם (Wise Mind, DBT). מאת חגית כהן CBT | טיפול חברתי */
 window.GAME_DATA = {
   MINDS: [
     { k: "e", he: "מוח רגשי", en: "Emotion Mind", img: "img/heart.svg", icon: "💗", line: "הרגש נוהג לבד. העובדות נדחקות הצידה." },

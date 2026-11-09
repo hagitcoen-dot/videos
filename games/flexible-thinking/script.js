@@ -892,7 +892,7 @@
     var b = el("button", "btn primary big", go ? "לכרטיס הסיום 🏆" : "חזרה למפה 🗺️"); b.type = "button"; b.style.marginTop = "14px";
     b.addEventListener("click", function () { SFX.tap(); if (go) openFinal(); else openMap(); });
     c.appendChild(b);
-    c.appendChild(el("p", "credit", "חגית כהן CBT | חברתי"));
+    c.appendChild(el("p", "credit", "חגית כהן CBT | טיפול חברתי"));
     p.appendChild(c);
     $("score").textContent = totalScore();
     SFX.mega(); confetti(true); setTimeout(function () { confetti(true); }, 900); setTimeout(function () { confetti(false); }, 1900);

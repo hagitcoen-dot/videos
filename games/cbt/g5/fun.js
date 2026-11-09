@@ -210,7 +210,7 @@
       '<p class="fun-cert-line">' + opts.line + '</p>' +
       '<div class="fun-cert-skill">' + opts.skill + '</div>' +
       '<div class="fun-cert-stars">⭐ ' + opts.stars + ' / ' + opts.maxStars + '</div>' +
-      '<p class="fun-cert-credit">חגית כהן CBT | חברתי</p>' +
+      '<p class="fun-cert-credit">חגית כהן CBT | טיפול חברתי</p>' +
       '</div><div class="fun-cert-actions">' +
       '<button type="button" class="btn primary" id="funPrint">🖨️ הדפסת התעודה</button>' +
       (opts.onMap ? '<button type="button" class="btn ghost" id="funMap">🗺️ חזרה למפה</button>' : "") +
