@@ -167,6 +167,18 @@
       "image": "games/flexible-thinking-v2.jpg"
     },
     {
+      "id": "self-worth",
+      "title": "ערך עצמי",
+      "url": "https://self-worth.sites.tab.bot/",
+      "desc": "משחק על ערך עצמי: לגלות מה טוב בי, גם כשמשהו לא הולך.",
+      "age": "",
+      "topics": [
+        "דימוי וביטחון עצמי"
+      ],
+      "videos": [],
+      "added": "2026-11-09"
+    },
+    {
       "id": "body-quest",
       "title": "Body Quest · בלשי התחושות",
       "url": "https://claude.ai/artifact/6U1PFQjnpyd6BWy2saccsL",
