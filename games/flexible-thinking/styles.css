@@ -875,3 +875,161 @@ html{background:#070a22}
 .lg-kicker{font-family:'Rubik',system-ui,sans-serif; letter-spacing:.06em}
 .legend.locked .lg-title{font-family:'Rubik',system-ui,sans-serif; font-style:normal; letter-spacing:0}
 bdi{unicode-bidi:isolate}
+
+/* intro tightening for short phones (intro scrolled at 375x600 before) */
+@media (max-height:700px){#screen-intro .slide.active .char{width:104px}#screen-intro .hero-tag{font-size:24px}}
+@media (max-height:700px){#screen-intro .slide.active .char{width:88px}#app:has(#screen-intro:not([hidden])){padding-bottom:8px}}
+
+/* ---- Hagit logo: small footer credit on the ending screen only (Nov 9, v2) ---- */
+.hfoot{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:nowrap}
+.hfoot .hlogo-sm{display:block;height:36px;width:auto}
+.hfoot .hbadge-sm{display:inline-block;line-height:0;background:rgba(255,255,255,.92);border-radius:9px;padding:2px 5px}
+@media (max-height:640px){.hfoot .hlogo-sm{height:32px}}
+@media (min-width:900px) and (min-height:760px){.hfoot .hlogo-sm{height:42px}}
+
+/* ===== v3: sticky bottom action bar (always visible, safe-area aware) ===== */
+:root{--barh:0px}
+main{padding-bottom:calc(var(--barh) + 12px)!important}
+.actbar{position:fixed; left:0; right:0; bottom:0; z-index:55; padding:10px 14px calc(10px + env(safe-area-inset-bottom)); background:linear-gradient(to top, rgba(14,8,40,.94) 70%, rgba(14,8,40,0)); pointer-events:none}
+.actbar[hidden]{display:none}
+.actbar-in{pointer-events:auto; max-width:520px; margin:0 auto; display:flex; gap:10px; align-items:stretch}
+.actbar-in > .btn{flex:1 1 0; margin:0!important; min-height:52px; width:auto; max-width:none}
+.actbar-in.n2 > .btn.ghost{flex:0.8 1 0}
+.actbar-in > .btn.big{font-size:18px; padding:12px 14px}
+#barPark{display:none}
+#screen-done .stretch-offer .stretch-yes{display:none}
+.learn-actions,.why-big > .btn{display:none}
+@media (min-width:900px) and (min-height:760px){.actbar-in{max-width:640px}.actbar-in > .btn.big{font-size:20px; min-height:58px}}
+/* compact screens so they fit 360x640 / 375x600 */
+@media (max-height:700px){
+  .topbar{padding-top:calc(4px + env(safe-area-inset-top)); padding-bottom:4px}
+  .done-card .char{width:76px; height:auto}
+  .done-card h2{margin:4px 0 2px}
+  .big-stars{margin:4px 0}
+  .stretch-offer .so-gumi{width:44px; height:auto}
+  .why-big{padding:10px 12px; margin-top:8px}
+  .why-big h3{margin:4px 0}
+  .sit-card{padding:10px 12px}
+  .guide-bar img{width:32px; height:auto}
+}
+
+/* ===== v3 compaction: fit 360x640 / 375x600 / 390x844 ===== */
+#stage.is-solved .ask, #stage.is-solved .guide-bar, #stage.is-solved > .sw-game .sw-ask{display:none!important}
+#stage.is-solved .sit-card{padding:8px 12px}
+#stage.is-solved .sit{font-size:16px; line-height:1.4}
+#stage.is-solved .mind-tile.right{padding:6px 12px}
+#stage.is-solved .mind-tile.right img{width:34px; height:auto}
+#stage.is-solved .opt.right{padding:8px 12px; font-size:15.5px}
+.why-big{margin:10px 0 2px; padding:10px 14px}
+.why-cheer{font-size:20px; margin:0 0 2px}
+.why-cheer img{width:28px; height:auto}
+.why-big h3{display:none}
+.why-yes{font-size:17px; line-height:1.45}
+.why-less{margin-top:8px; padding:7px 10px}
+.why-less h4{font-size:14.5px; margin:0 0 2px}
+.why-less p{font-size:15.5px; line-height:1.4}
+.why-stat{font-size:14px; margin:0 0 4px}
+.why-more summary{font-size:14.5px}
+.stage-path{gap:10px; margin:10px 0 6px}
+.stage-node{padding:9px 12px}
+.map-head h2{font-size:24px; margin:2px 0 0}
+.map-head .soft{margin:2px 0}
+.map-head .level-chip{margin:0 auto 2px}
+.map-stars{margin:2px 0}
+.map-head .teaser{margin:4px 0 0; font-size:14px}
+.map-foot{margin-top:6px; text-align:center}
+@media (max-height:700px){
+  .stage-node{padding:7px 10px; gap:9px}
+  .stage-node .sn-icon{font-size:24px; width:40px; height:40px}
+  .stage-node small{font-size:12px}
+  .stage-path{gap:8px}
+  .learn-card{padding:12px 14px 10px}
+  .learn-mind img{width:76px; height:auto}
+  .learn-title{font-size:20px; margin:4px 0}
+  .learn-body{font-size:16.5px; line-height:1.5}
+  .play-top{margin:0 0 8px}
+  .guide-bar{margin-top:10px; min-height:44px}
+  .guide-bar p{font-size:15.5px; padding:7px 11px}
+  .sit{font-size:16.5px; line-height:1.45}
+  .ask{margin:9px 2px 7px; font-size:16px}
+  .opt{padding:9px 12px; font-size:15.5px; line-height:1.35}
+  .options{gap:8px}
+  .chip{padding:8px 12px; font-size:15.5px; min-height:44px}
+  .chips{gap:7px}
+  .slots{margin:8px 0; gap:5px}
+  .slot{min-height:40px}
+  .mind-tile img{width:46px; height:auto}
+  .how-list li{padding:8px 10px; padding-inline-start:42px; font-size:16px}
+  .how-list{margin:8px 0; gap:7px}
+  .how-icon{font-size:36px}
+  .tally{margin:4px 0 8px}
+  .tally b{font-size:22px}
+  .tally div{padding:5px 12px}
+  .stage-badge{margin:0 0 8px; padding:6px 10px; font-size:15px}
+  .stretch-offer{padding:10px 12px 10px; margin:2px 0 6px}
+  .stretch-offer .so-q{font-size:18px; margin:0 0 2px}
+  .stretch-offer .so-sub{font-size:14px; margin:0}
+  .big-stars span{font-size:40px}
+  .cert{margin-top:6px}
+}
+
+#stage.is-solved .fix-src.fixed ~ .options{display:none!important}
+
+/* ===== v3: bar buttons solid; compact certificate & MAX overlay ===== */
+.actbar-in > .btn.ghost{background:#241a5c; color:#fff; border:2px solid rgba(63,240,255,.55)}
+#screen-final .cert{padding-top:10px}
+#screen-final .cert-ribbon{font-size:40px; margin-top:-34px}
+#screen-final h2{font-size:22px; margin:2px 0 4px}
+#screen-final .kicker{margin:0}
+#screen-final .final-gumi{margin:0 0 4px}
+#screen-final .final-gumi img{width:84px}
+#screen-final .cert:has(#legendCard:not([hidden])) .final-gumi{display:none}
+#screen-final .name-field input{padding:7px 10px; font-size:17px}
+#screen-final .fin-line{margin:6px 0 4px; font-size:14.5px}
+#screen-final .fin-stretch{margin:0 0 6px; font-size:14px; padding:4px 8px}
+#screen-final .legend{display:grid; grid-template-columns:64px 1fr; align-items:center; column-gap:10px; text-align:start; padding:8px 10px; margin:6px auto 6px; max-width:100%}
+#screen-final .legend img{grid-row:1 / span 4; grid-column:1; width:64px}
+#screen-final .legend > p{grid-column:2; margin:0}
+#screen-final .legend .lg-kicker{font-size:11px}
+#screen-final .legend .lg-title{font-size:19px}
+#screen-final .legend .lg-line{font-size:13px; line-height:1.35}
+#screen-final .legend .lg-boss{font-size:13px}
+#screen-final .legend.locked{display:block; text-align:center}
+#screen-final .summary{padding:8px 10px; margin-top:6px}
+#screen-final .sum-title{font-size:16px; margin:0 0 6px}
+#screen-final .sum-tools{grid-template-columns:1fr 1fr; gap:5px}
+#screen-final .sum-tools li{padding:5px 7px; gap:6px; font-size:13.5px; line-height:1.25}
+#screen-final .sum-tools li i{font-size:18px; width:22px}
+#screen-final .sum-tools li em, #screen-final .sum-tools li br, #screen-final .sum-tools li span > :not(b){display:none}
+#screen-final .sum-tools li span{font-size:0}
+#screen-final .sum-tools li span b{font-size:13.5px}
+#screen-final .sum-tools li:last-child:nth-child(odd){grid-column:1 / -1}
+#screen-final .sum-block{margin-top:6px}
+#screen-final .sum-h{font-size:14px; margin:0 0 4px}
+#screen-final .sum-swaps{grid-template-columns:1fr 1fr; gap:5px}
+#screen-final .sum-swaps li{padding:4px 7px; font-size:13px}
+#screen-final .sum-note{font-size:13px; margin:6px 0 0; line-height:1.4}
+#screen-final .shot-tip{margin:6px 0 2px; font-size:13px}
+#screen-final .cert-sign{margin:2px 0; font-size:13px}
+#screen-final .cert-sign img{width:30px; height:auto}
+#screen-final .credit.hfoot{margin:4px 0 0}
+@media (max-height:700px){
+  .xf-hero{height:150px}
+  .xf-hero img{width:130px}
+  .xf-pre{font-size:17px; margin:0 0 2px}
+  .xf-title{font-size:38px}
+  .xf-sub{font-size:15px; margin:4px 0}
+  .mystery{width:210px; height:118px; margin:4px auto 8px}
+}
+.xf-actions{position:sticky; bottom:0}
+
+/* certificate: two views (certificate / toolbox) so each fits a phone screen */
+.cert-tabs{display:flex; gap:6px; justify-content:center; margin:4px 0 8px}
+.ct-btn{flex:1; max-width:170px; border:2px solid #070a1f; border-radius:999px; padding:7px 10px; font:inherit; font-weight:800; font-size:15px; background:#eceefa; color:#2b2f5c; cursor:pointer; min-height:40px}
+.ct-btn.on{background:linear-gradient(90deg,#3ff0ff,#c58cff); color:#070a1f; box-shadow:2px 2px 0 #070a1f}
+#cert:not(.show-tools) .summary{display:none}
+#cert.show-tools .final-gumi, #cert.show-tools .name-field, #cert.show-tools .fin-line, #cert.show-tools .fin-stretch, #cert.show-tools .legend, #cert.show-tools .shot-tip{display:none!important}
+#cert.show-tools .summary{margin-top:2px}
+@media (max-height:700px){ #cert:not(.show-tools) .cert-sign{display:none} #screen-final .kicker{font-size:12px} }
+
+@media (max-height:700px){ .mystery{height:138px} .my-back span{font-size:14px; line-height:1.35} }
