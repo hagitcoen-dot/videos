@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>כרטיסי פתיחת מפגש · חגית כהן CBT</title>
+<meta name="description" content="כרטיסי שאלות חמודים לפתיחת מפגש טיפולי: בית ספר, משפחה, חברים וכללי, ביסודי ובחטיבה ומעלה.">
+<meta property="og:title" content="כרטיסי פתיחת מפגש">
+<meta property="og:description" content="שאלה קטנה, שיחה גדולה · חגית כהן CBT | טיפול חברתי">
+<meta property="og:image" content="https://hagitcoen-dot.github.io/videos/games/session-cards/og.jpg">
+<meta property="og:url" content="https://hagitcoen-dot.github.io/videos/games/session-cards/">
+<meta name="theme-color" content="#063a3a">
+<link rel="icon" href="icon.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app">
+
+<section id="home" class="screen active" aria-labelledby="ttl">
+  <header class="home-head">
+    <img class="logo" src="logo.png" alt="חגית כהן CBT | טיפול חברתי">
+    <h1 id="ttl">כרטיסי פתיחת מפגש</h1>
+    <p class="sub">שאלה קטנה, שיחה גדולה</p>
+  </header>
+  <div class="level" role="radiogroup" aria-label="רמה">
+    <button role="radio" data-level="kids" aria-checked="true">יסודי</button>
+    <button role="radio" data-level="teens" aria-checked="false">חטיבה ומעלה</button>
+  </div>
+  <div class="cats" id="cats"></div>
+  <footer class="credit">חגית כהן · פסיכותרפיסטית · CBT | טיפול חברתי</footer>
+  <div class="bar"><button class="btn primary" id="randomBtn"><span aria-hidden="true">✨</span> הפתעה: קלף מכל הקטגוריות</button></div>
+</section>
+
+<section id="deck" class="screen" aria-label="חפיסה">
+  <header class="deck-head">
+    <button class="icon" id="backBtn" aria-label="חזרה לקטגוריות">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="deck-title"><span id="deckName">בית ספר</span><small id="deckMeta">יסודי · 1/20</small></div>
+    <button class="icon lvl" id="levelBtn" aria-label="החלפת רמה" title="החלפת רמה"><span aria-hidden="true">⇄</span> <span id="levelShort">יסודי</span></button>
+    <button class="icon" id="muteBtn" aria-label="השתקה" aria-pressed="false">
+      <svg class="on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <svg class="off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M17 9l5 6M22 9l-5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <button class="icon" id="fsBtn" aria-label="מסך מלא למקרן">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </header>
+
+  <div class="stage" id="stage">
+    <div class="pile" aria-hidden="true"><i></i><i></i></div>
+    <button class="card" id="card" aria-label="פתיחת הקלף">
+      <span class="face back">
+        <span class="back-in">
+          <img src="logo.png" alt="">
+          <span class="txt"><span class="back-cat" id="backCat">בית ספר</span>
+          <span class="tap">נגיעה לפתיחה</span></span>
+        </span>
+      </span>
+      <span class="face front">
+        <span class="tag" id="tag">בית ספר</span>
+        <img class="art" id="art" src="art/school.svg" alt="">
+        <span class="q" id="q" aria-live="polite"></span>
+        <span class="mini">חגית כהן CBT | טיפול חברתי</span>
+      </span>
+    </button>
+    <div class="toast" id="toast" role="status"></div>
+  </div>
+
+  <div class="bar deck-bar">
+    <button class="btn ghost" id="homeBtn">לקטגוריות</button>
+    <button class="btn ghost" id="shuffleBtn"><span aria-hidden="true">🔀</span> ערבוב</button>
+    <button class="btn primary" id="nextBtn">פתיחת קלף</button>
+  </div>
+</section>
+
+</div>
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
