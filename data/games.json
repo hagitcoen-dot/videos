@@ -180,6 +180,19 @@
       "image": "games/self-worth-v1.jpg"
     },
     {
+      "id": "satir-stances",
+      "title": "עמדות התקשורת לפי סאטיר (חלק 2)",
+      "url": "https://satir-stances.sites.tab.bot/",
+      "desc": "המשך ל\"הסיר שלי\": עמדות התקשורת של וירג׳יניה סאטיר, ואיך מדברים מתוך ערך עצמי. חלק 2 מתוך 2.",
+      "age": "נוער",
+      "topics": [
+        "תקשורת ופתרון קונפליקטים",
+        "דימוי וביטחון עצמי"
+      ],
+      "videos": [],
+      "added": "2026-11-09"
+    },
+    {
       "id": "body-quest",
       "title": "Body Quest · בלשי התחושות",
       "url": "https://claude.ai/artifact/6U1PFQjnpyd6BWy2saccsL",
