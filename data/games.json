@@ -208,7 +208,8 @@
         "ויסות רגשי"
       ],
       "videos": [],
-      "added": "2026-11-09"
+      "added": "2026-11-09",
+      "image": "games/session-cards-v1.jpg"
     },
     {
       "id": "couple-cards",
@@ -224,7 +225,8 @@
         "תקשורת ופתרון קונפליקטים"
       ],
       "videos": [],
-      "added": "2026-11-09"
+      "added": "2026-11-09",
+      "image": "games/couple-cards-v1.jpg"
     }
   ]
 }
