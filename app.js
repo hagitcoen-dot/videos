@@ -13,7 +13,7 @@
   async function load(path, fallback) {
     try { const r = await fetch(path, { cache: "no-cache" }); if (!r.ok) throw 0; return await r.json(); } catch { return fallback; }
   }
-  const [vd, td, vt, md, sel, cfg, gd] = await Promise.all([
+  const [vd, td, vt, md, sel, cfg, gd, fd] = await Promise.all([
     load("data/videos.json", { videos: [] }),
     load("data/topics.json", { topics: [] }),
     load("data/video_topics.json", { videos: {} }),
@@ -21,6 +21,7 @@
     load("data/selection.json", {}),
     load("data/config.json", {}),
     load("data/games.json", { games: [] }),
+    load("data/featured.json", { items: [] }),
   ]);
   state.topics = td.topics || [];
   state.materials = { videos: md.videos || {}, topics: md.topics || {} };
@@ -129,6 +130,7 @@
   // משחקים
   const games = (gd.games || []).map((g) => ({ ...g, n: norm([g.title, g.desc, (g.topics || []).join(" "), g.age].join(" ")) }));
   const gamesFor = (id) => games.filter((g) => (g.videos || []).includes(id));
+  renderFeatured();
   state.view = "videos";
   function setView(v, push = true) {
     state.view = v;
@@ -173,6 +175,32 @@
       window.goatcounter.count({ path: "חיפוש-ללא-תוצאות/" + (where === "games" ? "משחקים/" : "") + q, title: q, event: true });
     }, 2000);
   }
+  // המלצת השבוע (data/featured.json): כרטיס בראש הדף לפי טווח תאריכים
+  function renderFeatured() {
+    const box = $("feat"); box.textContent = ""; box.hidden = true;
+    const now = new Date(), today = [now.getFullYear(), String(now.getMonth() + 1).padStart(2, "0"), String(now.getDate()).padStart(2, "0")].join("-");
+    for (const it of fd.items || []) {
+      if (!(it.from <= today && today <= it.to)) continue;
+      const v = it.kind === "video" ? state.videos.find((x) => x.id === it.id) : null;
+      const g = it.kind === "game" ? games.find((x) => x.id === it.id) : null;
+      if (!v && !g) continue;
+      const pic = document.createElement("img"); pic.alt = ""; pic.loading = "lazy";
+      pic.src = v ? (v.thumbnail || `https://i.ytimg.com/vi/${v.id}/mqdefault.jpg`) : (g.image || "");
+      const btn = document.createElement(v ? "button" : "a"); btn.className = "fpic";
+      if (v) { btn.type = "button"; btn.onclick = () => openVideo(v.id); } else { btn.href = g.url; btn.target = "_blank"; btn.rel = "noopener"; }
+      btn.setAttribute("aria-label", (v ? "לצפייה: " : "לשחק: ") + (v ? v.title : g.title)); btn.append(pic);
+      const body = document.createElement("div"); body.className = "fbody";
+      const lb = document.createElement("span"); lb.className = "flabel"; lb.textContent = it.label || "המלצת השבוע";
+      const h = document.createElement("h2"); h.textContent = (v ? v.title : g.title).split("|")[0].trim();
+      body.append(lb, h);
+      if (it.why) { const p = document.createElement("p"); p.textContent = it.why; body.append(p); }
+      if (it.tip) { const p = document.createElement("p"); p.className = "ftip"; const b = document.createElement("b"); b.textContent = "💡 רעיון: "; p.append(b, it.tip); body.append(p); }
+      const go = btn.cloneNode(false); go.className = "fgo"; go.textContent = v ? "לצפייה ←" : "לשחק ←"; go.removeAttribute("aria-label");
+      if (v) go.onclick = () => openVideo(v.id);
+      body.append(go);
+      box.append(btn, body); box.hidden = false; return;
+    }
+  }
   function renderGames(words) {
     const box = $("games"); box.textContent = "";
     const list = games.filter((g) => words.every((w) => g.n.includes(w) || g.n.includes(stripPrefix(w))));
@@ -193,6 +221,7 @@
 
   function render() {
     const gview = state.view === "games";
+    $("feat").classList.toggle("off", !!norm(state.q).trim());
     $("games").hidden = !gview; $("grid").hidden = gview;
     if (gview) { $("wish").hidden = true; renderGames(norm(state.q).split(" ").filter(Boolean)); return; }
     const words = norm(state.q).split(" ").filter(Boolean);

@@ -145,3 +145,13 @@ body.view-games .filters,body.view-games .selects{display:none}
 .newb{position:absolute;top:8px;inset-inline-end:8px;z-index:2;background:#e8436b;color:#fff;font-weight:700;font-size:.82rem;line-height:1;padding:5px 10px;border-radius:999px;box-shadow:0 2px 6px rgba(0,0,0,.25);animation:newPop 2.4s ease-in-out infinite}
 @keyframes newPop{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
 @media (prefers-reduced-motion:reduce){.newb{animation:none}}
+.feat{display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:16px;align-items:center;background:var(--surface);border:2px solid var(--accent);border-radius:18px;padding:14px;margin:4px 0 18px}
+.feat .fpic{display:block;padding:0;border:0;background:none;cursor:pointer;border-radius:12px;overflow:hidden;line-height:0}
+.feat .fpic img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:var(--chip)}
+.feat .flabel{display:inline-block;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:.85rem;padding:3px 10px;border-radius:999px}
+.feat h2{margin:6px 0 4px;font-size:1.2rem;line-height:1.3}
+.feat p{margin:4px 0;line-height:1.5}
+.feat .ftip{background:var(--chip);border-radius:10px;padding:8px 10px;font-size:.95rem}
+.feat .fgo{display:inline-block;margin-top:6px;padding:0;border:0;background:none;color:var(--accent);font:inherit;font-weight:700;cursor:pointer;text-decoration:none}
+@media (max-width:640px){.feat{grid-template-columns:minmax(0,1fr)}}
+.feat.off{display:none}
