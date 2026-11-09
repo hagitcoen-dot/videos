@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>מה הייתי עושה? · משחק דילמות חברתיות</title>
+<meta name="description" content="משחק דילמות חברתיות לכיתות ג׳–ו׳: 12 מצבים מהיום-יום, 3 תגובות אפשריות, מה כל אחד מרגיש, ומה עוד אפשר לעשות.">
+<meta property="og:title" content="מה הייתי עושה?">
+<meta property="og:description" content="משחק דילמות חברתיות לילדים, לשיחה עם מטפל/ת או הורה">
+<meta property="og:image" content="https://hagitcoen-dot.github.io/videos/games/social-dilemmas/og.jpg">
+<meta property="og:url" content="https://hagitcoen-dot.github.io/videos/games/social-dilemmas/">
+<meta name="theme-color" content="#fff4e6">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="tb-title" id="tbTitle">מה הייתי עושה?</div>
+  <div class="tb-stars" id="tbStars" aria-label="כוכבים"><span class="st">★</span> <b id="starCount">0</b></div>
+  <button class="iconbtn" id="muteBtn" aria-label="השתקה" title="השתקה">🔊</button>
+</header>
+<main id="app">
+
+  <section class="screen" id="s-start">
+    <div class="start-cast" id="startCast"></div>
+    <h1 class="game-title">מה הייתי עושה?</h1>
+    <p class="lead">משחק דילמות חברתיות</p>
+    <p class="sub">12 מצבים מהיום-יום. אין כאן תשובה נכונה אחת, יש על מה לחשוב יחד.</p>
+    <p class="credit-text">חגית כהן CBT | טיפול חברתי</p>
+  </section>
+
+  <section class="screen" id="s-cast" hidden>
+    <p class="kicker">נעים להכיר</p>
+    <h2>החבר'ה מהכיתה</h2>
+    <div class="cast-grid" id="castGrid"></div>
+  </section>
+
+  <section class="screen" id="s-howto" hidden>
+    <p class="kicker">לפני שמתחילים</p>
+    <h2>איך משחקים?</h2>
+    <ol class="steps">
+      <li><span class="num">1</span><span>קוראים מצב קצר ומסתכלים בתמונה.</span></li>
+      <li><span class="num">2</span><span>בוחרים מה הייתי עושה באמת.</span></li>
+      <li><span class="num">3</span><span>רואים מה קורה אחר כך, ומה כל אחד מרגיש.</span></li>
+      <li><span class="num">4</span><span>מדברים יחד: מה עוד אפשר לעשות?</span></li>
+    </ol>
+    <p class="note">על כל דרך טובה שמוצאים, מקבלים תג לארגז הכלים החברתי.</p>
+  </section>
+
+  <section class="screen" id="s-map" hidden>
+    <p class="kicker" id="mapKicker">המסע</p>
+    <h2 id="mapTitle">שלושה עולמות</h2>
+    <div class="worlds" id="worlds"></div>
+  </section>
+
+  <section class="screen" id="s-scene" hidden>
+    <p class="kicker" id="sceneKicker"></p>
+    <h2 id="sceneTitle"></h2>
+    <div class="scene-wrap" id="sceneArt"></div>
+    <p class="situation" id="sceneText"></p>
+  </section>
+
+  <section class="screen" id="s-choose" hidden>
+    <p class="kicker" id="chooseKicker"></p>
+    <h2>מה הייתי עושה?</h2>
+    <p class="recap" id="chooseRecap"></p>
+    <div class="options" id="options"></div>
+  </section>
+
+  <section class="screen" id="s-out" hidden>
+    <p class="kicker">מה קורה אחר כך?</p>
+    <div class="scene-wrap small" id="outArt"></div>
+    <p class="out-text" id="outText"></p>
+    <div class="meters" id="meters"></div>
+    <p class="why" id="outWhy"></p>
+  </section>
+
+  <section class="screen" id="s-badge" hidden>
+    <p class="kicker">כל הכבוד!</p>
+    <div class="badge-big" id="badgeBig"></div>
+    <h2 id="badgeName"></h2>
+    <p class="badge-tip" id="badgeTip"></p>
+  </section>
+
+  <section class="screen" id="s-reflect" hidden>
+    <p class="kicker">רגע של שיחה</p>
+    <div class="think" id="thinkArt"></div>
+    <h2 class="reflect-q">ומה עוד אפשר לעשות?</h2>
+    <p class="sub">עצרו רגע ודברו על זה יחד. יש עוד דרך?</p>
+    <button class="btn soft" id="ideaBtn" type="button">💡 רעיון נוסף</button>
+    <p class="idea" id="ideaText" hidden></p>
+  </section>
+
+  <section class="screen" id="s-world" hidden>
+    <div class="world-done-art" id="worldDoneArt"></div>
+    <p class="kicker">סיימנו עולם!</p>
+    <h2 id="worldDoneTitle"></h2>
+    <div class="big-stars" id="worldStars"></div>
+    <p class="sub" id="worldDoneSub"></p>
+  </section>
+
+  <section class="screen" id="s-tools" hidden>
+    <p class="kicker">ארגז הכלים החברתי</p>
+    <h2>הכלים שאספנו</h2>
+    <div class="tools" id="tools"></div>
+  </section>
+
+  <section class="screen" id="s-cert" hidden>
+    <div class="cert">
+      <div class="cert-ribbon">🏅</div>
+      <p class="kicker">תעודת כבוד</p>
+      <h2 class="cert-title">ארגז הכלים החברתי שלי</h2>
+      <label class="name-field"><span class="sr">שם</span><input id="certName" type="text" maxlength="24" placeholder="כאן כותבים שם" autocomplete="off"></label>
+      <p class="cert-line">על חשיבה אמיצה על 12 מצבים חברתיים, ועל חיפוש דרכים טובות להתמודד.</p>
+      <div class="cert-badges" id="certBadges"></div>
+      <p class="cert-meta" id="certMeta"></p>
+      <div class="cert-credit"><img src="logo-small.png" alt="הלוגו של חגית כהן" width="38" height="34"><span>חגית כהן CBT | טיפול חברתי</span></div>
+    </div>
+  </section>
+
+</main>
+
+<div class="actbar" id="actbar"><div class="actbar-in" id="actbarIn"></div></div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+<div id="park" hidden>
+  <button class="btn big" id="b-start" type="button">יוצאים לדרך ▶</button>
+  <button class="btn big" id="b-cast" type="button">הבנתי ▶</button>
+  <button class="btn big" id="b-howto" type="button">למפה ▶</button>
+  <button class="btn big" id="b-map" type="button">מתחילים ▶</button>
+  <button class="btn big" id="b-scene" type="button">מה הייתי עושה? ▶</button>
+  <button class="btn big" id="b-out" type="button">הלאה ▶</button>
+  <button class="btn big" id="b-badge" type="button">ומה עוד אפשר? ▶</button>
+  <button class="btn ghost" id="b-retry" type="button">↺ לנסות תגובה אחרת</button>
+  <button class="btn big" id="b-next" type="button">לדילמה הבאה ▶</button>
+  <button class="btn big" id="b-world" type="button">למפה ▶</button>
+  <button class="btn big" id="b-tools" type="button">לתעודה ▶</button>
+  <button class="btn ghost" id="b-print" type="button">🖨️ הדפסה</button>
+  <button class="btn big" id="b-again" type="button">↺ משחק חדש</button>
+</div>
+<script src="data.js"></script>
+<script src="art.js"></script>
+<script src="script.js"></script>
+<script src="../brand.js" data-into="#s-start" defer></script>
+</body>
+</html>

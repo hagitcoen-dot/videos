@@ -195,15 +195,16 @@
     },
     {
       "id": "social-dilemmas",
-      "title": "דילמות חברתיות",
-      "url": "https://social-dilemmas.sites.tab.bot/",
-      "desc": "משחק על דילמות חברתיות: מה עושים כשלא ברור מה נכון לעשות עם חברים.",
-      "age": "",
+      "title": "מה הייתי עושה? · דילמות חברתיות",
+      "url": "games/social-dilemmas/",
+      "desc": "12 מצבים מהיום-יום, 3 תגובות אפשריות, מה כל אחד מרגיש ומה עוד אפשר לעשות. לשיחה עם מטפל/ת או הורה.",
+      "age": "ג'–ו'",
       "topics": [
         "חברות וקשרים חברתיים"
       ],
       "videos": [],
-      "added": "2026-11-09"
+      "added": "2026-11-09",
+      "image": "games/social-dilemmas-v1.jpg"
     },
     {
       "id": "body-quest",
