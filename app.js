@@ -211,6 +211,8 @@
   function renderGames(words) {
     const box = $("games"); box.textContent = "";
     const list = games.filter((g) => audOk(g.aud)).filter((g) => words.every((w) => g.n.includes(w) || g.n.includes(stripPrefix(w))));
+    // החדשים קודם (לפי added), ובתוך אותו תאריך לפי הסדר בקובץ
+    list.sort((x, y) => (y.added || "").localeCompare(x.added || ""));
     list.forEach((g) => {
       const card = gameCard(g);
       const vids = (g.videos || []).map((id) => state.videos.find((v) => v.id === id)).filter(Boolean);
