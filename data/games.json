@@ -194,6 +194,18 @@
       "image": "games/satir-stances-v1.jpg"
     },
     {
+      "id": "social-dilemmas",
+      "title": "דילמות חברתיות",
+      "url": "https://social-dilemmas.sites.tab.bot/",
+      "desc": "משחק על דילמות חברתיות: מה עושים כשלא ברור מה נכון לעשות עם חברים.",
+      "age": "",
+      "topics": [
+        "חברות וקשרים חברתיים"
+      ],
+      "videos": [],
+      "added": "2026-11-09"
+    },
+    {
       "id": "body-quest",
       "title": "Body Quest · בלשי התחושות",
       "url": "https://claude.ai/artifact/6U1PFQjnpyd6BWy2saccsL",
