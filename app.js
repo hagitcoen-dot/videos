@@ -13,7 +13,7 @@
   async function load(path, fallback) {
     try { const r = await fetch(path, { cache: "no-cache" }); if (!r.ok) throw 0; return await r.json(); } catch { return fallback; }
   }
-  const [vd, td, vt, md, sel, cfg, gd, fd] = await Promise.all([
+  const [vd, td, vt, md, sel, cfg, gd, fd, ad] = await Promise.all([
     load("data/videos.json", { videos: [] }),
     load("data/topics.json", { topics: [] }),
     load("data/video_topics.json", { videos: {} }),
@@ -22,7 +22,13 @@
     load("data/config.json", {}),
     load("data/games.json", { games: [] }),
     load("data/featured.json", { items: [] }),
+    load("data/audience.json", { videos: {} }),
   ]);
+  // קהל יעד: ילדים / נוער / מבוגרים (data/audience.json, ובמשחקים audience או age)
+  const AUD = ["ילדים", "נוער", "מבוגרים"];
+  try { state.aud = localStorage.getItem("aud") || "all"; } catch { state.aud = "all"; }
+  if (state.aud !== "all" && !AUD.includes(state.aud)) state.aud = "all";
+  const audOk = (list) => state.aud === "all" || list.includes(state.aud);
   state.topics = td.topics || [];
   state.materials = { videos: md.videos || {}, topics: md.topics || {} };
 
@@ -46,7 +52,7 @@
     const topics = manual ? state.topics.map((t) => t.name).filter((n) => manual.includes(n) || (APPROACH.includes(n) && auto.includes(n))) : auto;
     topics.forEach((t) => (state.materials.topics[t] || []).forEach((m) => mats.push({ ...m, fromTopic: t })));
     return {
-      ...v, topics, mats, kind: kindOf(v), lang: /[\u0590-\u05FF]/.test(v.title) ? "he" : "en",
+      ...v, topics, mats, aud: (ad.videos || {})[v.id] || ["ילדים"], kind: kindOf(v), lang: /[\u0590-\u05FF]/.test(v.title) ? "he" : "en",
       nTitle: norm(v.title), nTags: norm((v.tags || []).concat(topics, (sel.search_words || {})[v.id] || []).join(" ")),
       nDesc: norm(v.description), nMats: norm(mats.map((m) => m.title + " " + (m.note || "")).join(" ")),
     };
@@ -128,7 +134,7 @@
   const fmtDur = (s) => { if (!s) return ""; s = Math.round(s); const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = String(s % 60).padStart(2, "0"); return h ? `${h}:${String(m).padStart(2, "0")}:${x}` : `${m}:${x}`; };
 
   // משחקים
-  const games = (gd.games || []).map((g) => ({ ...g, n: norm([g.title, g.desc, (g.topics || []).join(" "), g.age].join(" ")) }));
+  const games = (gd.games || []).map((g) => ({ ...g, aud: g.audience || (g.age === "נוער" ? ["נוער"] : ["ילדים"]), n: norm([g.title, g.desc, (g.topics || []).join(" "), g.age].join(" ")) }));
   const gamesFor = (id) => games.filter((g) => (g.videos || []).includes(id));
   renderFeatured();
   state.view = "videos";
@@ -203,7 +209,7 @@
   }
   function renderGames(words) {
     const box = $("games"); box.textContent = "";
-    const list = games.filter((g) => words.every((w) => g.n.includes(w) || g.n.includes(stripPrefix(w))));
+    const list = games.filter((g) => audOk(g.aud)).filter((g) => words.every((w) => g.n.includes(w) || g.n.includes(stripPrefix(w))));
     list.forEach((g) => {
       const card = gameCard(g);
       const vids = (g.videos || []).map((id) => state.videos.find((v) => v.id === id)).filter(Boolean);
@@ -215,7 +221,7 @@
       const wrap = document.createElement("div"); wrap.className = "gwrap"; wrap.append(card, rel); box.append(wrap);
     });
     if (words.length && !list.length) logMiss(state.q, "games"); else clearTimeout(missTimer);
-    $("status").textContent = words.length ? `נמצאו ${list.length} משחקים` : `${games.length} משחקים`;
+    $("status").textContent = words.length || state.aud !== "all" ? `נמצאו ${list.length} משחקים` : `${games.length} משחקים`;
     $("empty").hidden = true;
   }
 
@@ -230,6 +236,7 @@
       .filter((v) => !state.onlyMat || v.mats.length)
       .filter((v) => state.lang === "all" || v.lang === state.lang)
       .filter((v) => state.kind === "all" || v.kind === state.kind)
+      .filter((v) => audOk(v.aud))
       .map((v) => ({ v, s: words.length ? score(v, words) : 1 }))
       .filter((x) => x.s > 0);
     const byDate = (a, b) => (b.v.published || "").localeCompare(a.v.published || "") || ((a.v.order ?? 0) - (b.v.order ?? 0));
@@ -269,7 +276,7 @@
       empty.innerHTML = "<h2>לא נמצאו סרטונים</h2><p>נסו מילה אחרת או קצרה יותר, או בטלו את סינון הנושא.</p>";
     } else {
       empty.hidden = true;
-      $("status").textContent = words.length || state.topic || state.onlyMat || state.lang !== "all" || state.kind !== "all" ? `נמצאו ${list.length} סרטונים מתוך ${state.videos.length}` : `${state.videos.length} סרטונים בספרייה`;
+      $("status").textContent = words.length || state.topic || state.onlyMat || state.lang !== "all" || state.kind !== "all" || state.aud !== "all" ? `נמצאו ${list.length} סרטונים מתוך ${state.videos.length}` : `${state.videos.length} סרטונים בספרייה`;
     }
   }
 
@@ -338,6 +345,15 @@
   const qp = new URLSearchParams(location.search).get("q"); if (qp) { $("q").value = qp; state.q = qp; }
 
   $("nVideos").textContent = state.videos.length;
+  // כפתורי "למי זה?"
+  document.querySelectorAll("#aud button").forEach((b) => {
+    b.setAttribute("aria-pressed", String(b.dataset.a === state.aud));
+    b.onclick = () => {
+      state.aud = b.dataset.a; try { localStorage.setItem("aud", state.aud); } catch {}
+      document.querySelectorAll("#aud button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      render();
+    };
+  });
   renderTopics();
   if (location.hash === "#games" && games.length) setView("games", false); else render();
   fromHash();

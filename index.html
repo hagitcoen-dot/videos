@@ -35,6 +35,13 @@
       <button type="button" class="tab" id="tabVideos" aria-pressed="true" aria-label="סרטונים"><img src="tab-videos.webp" alt="" width="900" height="300"><span class="n" id="nVideos"></span></button>
       <button type="button" class="tab" id="tabGames" aria-pressed="false" aria-label="משחקים"><img src="tab-games.webp" alt="" width="900" height="300"><span class="n" id="nGames"></span></button>
     </nav>
+    <div class="aud" id="aud" role="group" aria-label="למי זה?">
+      <span class="audl">למי זה?</span>
+      <button type="button" data-a="all" aria-pressed="true">הכל</button>
+      <button type="button" data-a="ילדים" aria-pressed="false">🧒 ילדים</button>
+      <button type="button" data-a="נוער" aria-pressed="false">🧑 נוער</button>
+      <button type="button" data-a="מבוגרים" aria-pressed="false">👩 מבוגרים</button>
+    </div>
     <form class="search" role="search" id="searchForm">
       <label class="sr-only" for="q">חיפוש סרטונים</label>
       <input id="q" type="search" placeholder="למשל: כעס, ויסות רגשי, חברות, מחשבות אוטומטיות" autocomplete="off">

@@ -155,3 +155,9 @@ body.view-games .filters,body.view-games .selects{display:none}
 .feat .fgo{display:inline-block;margin-top:6px;padding:0;border:0;background:none;color:var(--accent);font:inherit;font-weight:700;cursor:pointer;text-decoration:none}
 @media (max-width:640px){.feat{grid-template-columns:minmax(0,1fr)}}
 .feat.off{display:none}
+.aud{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;margin:0 0 12px}
+.aud .audl{font-weight:700;color:var(--muted);margin-inline-end:4px}
+.aud button{font:inherit;font-size:.95rem;padding:6px 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.aud button:hover{border-color:var(--accent)}
+.aud button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700}
+@media (max-width:480px){.aud{gap:4px}.aud .audl{display:none}.aud button{font-size:.85rem;padding:5px 10px}}
