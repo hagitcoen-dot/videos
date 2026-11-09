@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>קלפי שיח למפגש זוגי · חגית כהן</title>
+<meta name="description" content="קלפי שאלות עדינים לדייטים ולזוגות: היכרות, ערכים, זיכרונות, הערכה וחלומות משותפים.">
+<meta property="og:title" content="קלפי שיח למפגש זוגי">
+<meta property="og:description" content="שאלה טובה פותחת לב · חגית כהן CBT | טיפול חברתי">
+<meta property="og:image" content="https://hagitcoen-dot.github.io/videos/games/couple-cards/og.jpg">
+<meta property="og:url" content="https://hagitcoen-dot.github.io/videos/games/couple-cards/">
+<meta name="theme-color" content="#fbf6ee">
+<link rel="icon" href="icon.png">
+<link rel="preload" href="fonts/frank.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app">
+<div class="wash w1"></div><div class="wash w2"></div><div class="wash w3"></div>
+
+<section id="home" class="screen active" aria-labelledby="ttl">
+  <header class="home-head">
+    <h1 id="ttl">קלפים זוגיים</h1>
+    <p class="sub">שאלה טובה פותחת לב</p>
+  </header>
+  <div class="mode" role="radiogroup" aria-label="מצב">
+    <button role="radio" data-mode="dates" aria-checked="true">דייטים / היכרות</button>
+    <button role="radio" data-mode="couples" aria-checked="false">זוגות</button>
+  </div>
+  <div class="cats" id="cats"></div>
+  <footer class="credit"><img src="logo.png" alt="" width="36" height="32"><span>חגית כהן · פסיכותרפיסטית · CBT | טיפול חברתי</span></footer>
+</section>
+
+<section id="deck" class="screen" aria-label="חפיסה">
+  <header class="deck-head">
+    <button class="icon" id="backBtn" aria-label="חזרה לקטגוריות"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+    <div class="deck-title"><b id="deckName"></b><small id="deckMeta"></small></div>
+    <div class="tools">
+      <button class="icon" id="muteBtn" aria-label="השתקה" aria-pressed="false"><svg viewBox="0 0 24 24"><path class="spk" d="M4 9h4l5-4v14l-5-4H4z"/><path class="on" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/><path class="off" d="M17 9l5 6M22 9l-5 6"/></svg></button>
+      <button class="icon" id="fsBtn" aria-label="מסך מלא"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+    </div>
+  </header>
+  <div class="stage">
+    <button class="card" id="card" aria-label="פתיחת הקלף">
+      <span class="face back"><span class="back-cat" id="backCat"></span><span class="tap">נגיעה לפתיחה</span></span>
+      <span class="face front"><img id="art" src="" alt=""><span class="tag" id="tag"></span><span class="q" id="q"></span><span class="orn" aria-hidden="true"></span></span>
+    </button>
+  </div>
+</section>
+
+<nav class="bar" id="bar">
+  <div class="bar-in">
+    <button class="btn ghost" id="homeBtn">לקטגוריות</button>
+    <button class="btn ghost" id="shuffleBtn">ערבוב</button>
+    <button class="btn main" id="nextBtn">פתיחת קלף</button>
+  </div>
+  <div class="bar-in home-only"><button class="btn main wide" id="randomBtn">קלף הפתעה מכל הקטגוריות</button></div>
+</nav>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+</div>
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
