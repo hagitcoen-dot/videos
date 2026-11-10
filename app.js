@@ -395,7 +395,7 @@
     window.scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   }
   $("homeBtn").onclick = goHome;
-  const homeShow = () => $("homeBtn").classList.toggle("on", scrollY > 350);
+  const homeShow = () => $("homeBar").classList.toggle("on", scrollY > 350);
   addEventListener("scroll", homeShow, { passive: true }); homeShow();
   $("favOnly").onclick = () => { state.onlyFav = !state.onlyFav; $("favOnly").setAttribute("aria-pressed", String(state.onlyFav)); render(); };
   updFavBtn();
