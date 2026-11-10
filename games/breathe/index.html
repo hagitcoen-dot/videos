@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>נושמים יחד</title>
+<meta name="description" content="תרגול נשימות לילדים: בוחרים חבר לנשימה ונושמים יחד עם המסך. בלי מיקרופון ובלי מצלמה.">
+<meta name="theme-color" content="#fff3e4">
+<meta property="og:title" content="נושמים יחד">
+<meta property="og:description" content="בוחרים חבר לנשימה ונושמים יחד עם המסך 🎈🌸🐢">
+<meta property="og:image" content="https://hagitcoen-dot.github.io/videos/games/breathe/og.jpg">
+<meta property="og:url" content="https://hagitcoen-dot.github.io/videos/games/breathe/">
+<link rel="icon" href="logo-small.png">
+<link rel="preload" href="fonts/rubik-hebrew.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="styles.css?v=1">
+</head>
+<body data-screen="s-choose">
+<div id="card">
+  <header class="top">
+    <span class="topname" id="topName"></span>
+    <button type="button" class="iconbtn" id="muteBtn" aria-label="השתקת צלילים" aria-pressed="false">🔊</button>
+  </header>
+  <main id="stage">
+    <section class="screen" id="s-choose" aria-labelledby="h-choose">
+      <h1 id="h-choose">נושמים יחד</h1>
+      <p class="sub">בוחרים חבר לנשימה 👇</p>
+      <div class="grid" id="grid"></div>
+    </section>
+
+    <section class="screen" id="s-set" hidden aria-labelledby="setTitle">
+      <div class="mini" id="setPic"></div>
+      <h2 id="setTitle">נושמים</h2>
+      <div class="grp"><p class="lab">באיזה קצב?</p><div class="chips c2" id="paceChips" role="radiogroup" aria-label="קצב"></div></div>
+      <div class="grp"><p class="lab">כמה זמן?</p><div class="chips c3" id="durChips" role="radiogroup" aria-label="משך"></div></div>
+    </section>
+
+    <section class="screen" id="s-go" hidden aria-label="נושמים">
+      <div class="prog"><div class="bar"><i id="progFill"></i></div><span id="progTxt"></span></div>
+      <div class="viz" id="viz"></div>
+      <p class="phase" id="phase" aria-live="polite"></p>
+      <p class="count" id="count" aria-hidden="true"></p>
+    </section>
+
+    <section class="screen" id="s-end" hidden aria-labelledby="h-end">
+      <h1 id="h-end">כל הכבוד!</h1>
+      <p class="big" id="endLine"></p>
+      <div class="mini" id="endPic"></div>
+      <p class="lab">איך הגוף מרגיש עכשיו?</p>
+      <div class="chips c2 feels" id="feelChips" role="radiogroup" aria-label="איך הגוף מרגיש"></div>
+      <p class="resp" id="feelResp" aria-live="polite"></p>
+    </section>
+  </main>
+  <footer class="credit" id="credit"><img src="logo-small.png" alt="" width="32" height="32"><span>חגית כהן · פסיכותרפיסטית · CBT | טיפול חברתי</span></footer>
+  <nav class="actbar" id="actbar" hidden aria-label="פעולות"><div class="actbar-in" id="actbarIn"></div></nav>
+</div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+<script src="art.js?v=1"></script>
+<script src="script.js?v=1"></script>
+</body>
+</html>
