@@ -163,3 +163,4 @@ body.view-games .filters,body.view-games .selects{display:none}
 @media (max-width:480px){.aud{gap:4px}.aud .audl{display:none}.aud button{font-size:.85rem;padding:5px 10px}}
 .adultb{align-self:flex-start;display:inline-block;background:#ece8fb;color:#4b3f8f;font-weight:700;font-size:.75rem;line-height:1.3;padding:3px 9px;border-radius:999px;margin-bottom:4px}
 @media (prefers-color-scheme:dark){.adultb{background:#2f2a52;color:#d6cffb}}
+.disc{font-size:.82rem;line-height:1.6;max-width:62ch;margin-block:10px}
