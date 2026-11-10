@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>מבצע אזעקת שווא: מסע לתוך המוח | משחק פסיכו-חינוך על חרדה</title>
+<meta name="description" content="משחק קווסט בעברית מכיתה ו׳: מסע לתוך המוח והגוף כדי להבין חרדה. האמיגדלה, המערכת הסימפתטית והפאראסימפתטית, המפקד במוח, מעגל ההימנעות ובוס אזעקת השווא. חגית כהן CBT | טיפול חברתי.">
+<meta name="theme-color" content="#0b0f2e">
+<meta property="og:title" content="מבצע אזעקת שווא 🧠⚡ מסע לתוך המוח">
+<meta property="og:description" content="משחק קווסט על חרדה מכיתה ו׳: אמיגדלה, גז ובלם, המפקד, ובוס אזעקת השווא. חגית כהן CBT | טיפול חברתי">
+<meta property="og:image" content="https://hagitcoen-dot.github.io/videos/games/anxiety-quest/og.jpg">
+<meta property="og:url" content="https://hagitcoen-dot.github.io/videos/games/anxiety-quest/">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="img/neuro.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-map">
+<div class="sky" aria-hidden="true">
+  <svg class="synapses" viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice">
+    <g fill="none" stroke-linecap="round">
+      <path class="syn s1" d="M-20 120 C80 90 120 200 210 170 S330 60 430 110"/>
+      <path class="syn s2" d="M-20 380 C60 330 150 430 230 380 S350 300 430 350"/>
+      <path class="syn s3" d="M-20 620 C90 580 140 690 250 640 S360 560 430 600"/>
+      <path class="syn s4" d="M90 -20 C120 140 40 260 110 420 S60 700 120 820"/>
+      <path class="syn s5" d="M300 -20 C270 160 360 300 300 470 S350 700 290 820"/>
+    </g>
+    <g class="nodes">
+      <circle cx="210" cy="170" r="4"/><circle cx="230" cy="380" r="4"/><circle cx="250" cy="640" r="4"/>
+      <circle cx="110" cy="420" r="3"/><circle cx="300" cy="470" r="3"/><circle cx="60" cy="96" r="2.5"/><circle cx="350" cy="300" r="2.5"/>
+    </g>
+  </svg>
+  <div class="dust"></div>
+</div>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div id="floaters" aria-hidden="true"></div>
+
+<header class="topbar">
+  <button class="brand" id="brandBtn" type="button" aria-label="חזרה למפה"><span class="brand-ico" aria-hidden="true">🧠</span><span>מבצע אזעקת שווא</span></button>
+  <div class="hud" id="hud">
+    <div class="lvl" id="lvlBox" title="רמה ונקודות">
+      <span class="lvl-num" id="lvlNum">1</span>
+      <div class="lvl-txt"><span id="lvlName">ניצוץ</span><span class="xpbar"><i id="xpFill"></i></span></div>
+    </div>
+    <span class="pill streak" id="streakPill" hidden>🔥 <b id="streakNum">0</b></span>
+    <button class="icon-btn" id="packBtn" type="button" aria-label="פתיחת התרמיל">🎒<span class="dot" id="packDot" hidden></span></button>
+    <button class="icon-btn" id="soundBtn" type="button" aria-pressed="true" aria-label="השתקת צלילים">🔊</button>
+  </div>
+</header>
+
+<main id="main">
+  <!-- intro -->
+  <section id="intro" class="screen" aria-labelledby="introTitle">
+    <div class="intro-hero">
+      <div class="mascot big" id="introMascot"></div>
+      <p class="kicker">מסע לתוך המוח · מכיתה ו׳</p>
+      <h1 id="introTitle" class="glow-title">מבצע<br><span>אזעקת שווא</span></h1>
+    </div>
+    <div class="card intro-card" aria-live="polite">
+      <div class="slides" id="slides"></div>
+      <div class="dots" id="dots" aria-hidden="true"></div>
+      <div class="row-actions">
+        <button class="btn ghost small" id="skipBtn" type="button">למפה</button>
+        <button class="btn primary" id="nextSlideBtn" type="button">יוצאים לדרך ➜</button>
+      </div>
+    </div>
+    <p class="credit">חגית כהן CBT | טיפול חברתי</p>
+  </section>
+
+  <!-- map -->
+  <section id="map" class="screen" hidden aria-labelledby="mapTitle">
+    <div class="map-head">
+      <h2 id="mapTitle">מפת המסע</h2>
+      <p class="soft" id="mapSub">בחרו את האזור הזוהר הבא</p>
+      <div class="progress"><i id="mapProg"></i></div>
+    </div>
+    <div class="mapwrap" id="mapwrap">
+      <svg class="map-path" viewBox="0 0 100 200" preserveAspectRatio="none" aria-hidden="true">
+        <path id="pathBase" d="M50 14 C88 26 86 42 70 52 S12 70 22 86 S86 104 76 120 S14 136 26 152 S74 168 50 182"/>
+        <path id="pathLit" d="M50 14 C88 26 86 42 70 52 S12 70 22 86 S86 104 76 120 S14 136 26 152 S74 168 50 182"/>
+      </svg>
+      <div id="nodes"></div>
+      <button class="egg" id="egg" type="button" aria-label="ניצוץ נסתר" hidden>✦</button>
+      <button class="map-mascot" id="mapMascot" type="button" aria-label="ניורו: עובדה מגניבה"></button>
+    </div>
+    <div class="map-foot">
+      <button class="btn ghost small" id="packBtn2" type="button">🎒 התרמיל שלי</button>
+      <button class="btn ghost small" id="resetBtn" type="button">התחלה מחדש</button>
+    </div>
+    <p class="credit">חגית כהן CBT | טיפול חברתי</p>
+  </section>
+
+  <!-- play -->
+  <section id="play" class="screen" hidden aria-live="polite">
+    <div class="play-head">
+      <span class="region-chip" id="regionChip"></span>
+      <div class="steps" id="steps" aria-hidden="true"></div>
+    </div>
+    <div id="cardHost"></div>
+  </section>
+
+  <!-- region done -->
+  <section id="done" class="screen" hidden aria-labelledby="doneTitle">
+    <div class="card done-card">
+      <div class="burst-ring" aria-hidden="true"></div>
+      <p class="kicker" id="doneKicker">אזור הושלם!</p>
+      <h2 id="doneTitle"></h2>
+      <div class="stars" id="doneStars" aria-label="כוכבים"></div>
+      <p class="xp-line" id="doneXp"></p>
+      <div class="badge-get" id="doneBadge"></div>
+      <div class="anchor-get" id="doneAnchor"></div>
+      <div class="row-actions col">
+        <button class="btn primary big" id="nextRegionBtn" type="button">לאזור הבא ➜</button>
+        <button class="btn ghost small" id="toMapBtn" type="button">למפה</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- final -->
+  <section id="final" class="screen" hidden aria-labelledby="finalTitle">
+    <div class="card cert" id="cert">
+      <div class="mascot mid" id="finalMascot"></div>
+      <p class="kicker">תעודת חוקר/ת מוח</p>
+      <h2 id="finalTitle">השלמתם את המסע! 🏆</h2>
+      <label class="name-field">
+        <span>השם שלי:</span>
+        <input id="nameInput" type="text" maxlength="24" autocomplete="off" placeholder="כתבו כאן את השם">
+      </label>
+      <p class="cert-name" id="certName"></p>
+      <div class="cert-stats" id="certStats"></div>
+      <div class="cert-badges" id="certBadges"></div>
+      <div class="takeaway">
+        <h3>מה אני לוקח/ת איתי</h3>
+        <ul>
+          <li>חרדה היא מערכת הגנה טבעית. לפעמים היא פשוט רגישה מדי.</li>
+          <li>התחושות בגוף הן דוושת הגז, ויש לי גם בלם: נשיפה ארוכה.</li>
+          <li>צעדים קטנים מלמדים את האזעקה, הימנעות מחזקת אותה.</li>
+        </ul>
+        <p class="soft small">אם החרדה מרגישה חזקה או מפריעה הרבה, כדאי מאוד לדבר עם הורה, מורה, יועצת בית הספר או מטפל. לבקש עזרה זה צעד של אומץ.</p>
+      </div>
+      <div class="row-actions col">
+        <button class="btn primary big" id="openPackFinal" type="button">🎒 לתרמיל העוגנים שלי</button>
+        <button class="btn ghost small" id="finalMapBtn" type="button">למפה</button>
+      </div>
+      <p class="credit hfoot"><span class="hbadge-sm"><img class="hlogo-sm" src="hagit-logo-sm.png" alt="" width="132" height="119"></span><span>חגית כהן CBT | טיפול חברתי</span></p>
+    </div>
+  </section>
+</main>
+
+<!-- backpack -->
+<div class="pack" id="pack" hidden role="dialog" aria-modal="true" aria-labelledby="packTitle">
+  <div class="pack-panel">
+    <div class="pack-head">
+      <h2 id="packTitle">🎒 התרמיל שלי</h2>
+      <button class="icon-btn dark" id="packClose" type="button" aria-label="סגירת התרמיל">✕</button>
+    </div>
+    <p class="soft small">עוגנים: כלים קטנים לרגעים שהאזעקה רועשת. אפשר לחזור אליהם תמיד.</p>
+    <div class="anchors" id="anchorGrid"></div>
+    <h3 class="pack-sub">התגים שלי</h3>
+    <div class="badges" id="badgeGrid"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="burst" id="burst" aria-hidden="true"></div>
+<script src="data.js"></script>
+<script src="script.js"></script>
+<script>(function(){function z(){var w=innerWidth,h=innerHeight,s=1;if(w>=900){s=Math.max(1,Math.min(w/600,h/680,1.8));}document.documentElement.style.zoom=s;}z();addEventListener('resize',z);})();</script></body>
+</html>
