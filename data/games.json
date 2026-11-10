@@ -269,6 +269,22 @@
       "image": "games/couple-cards-v2.jpg"
     },
     {
+      "id": "track-detective",
+      "title": "בלש העקבות · תעלומה ליד הנחל",
+      "url": "games/track-detective/",
+      "desc": "מי בא לשתות בנחל בלילה? אוספים רמזים, מתבוננים בעקבות ומגלים איזו חיה הייתה כאן. משחק התבוננות וחשיבה לילדים.",
+      "age": "",
+      "audience": [
+        "ילדים"
+      ],
+      "topics": [
+        "חוסן והתמודדות"
+      ],
+      "videos": [],
+      "added": "2026-11-10",
+      "image": "games/track-detective-v1.jpg"
+    },
+    {
       "id": "breathe",
       "title": "נושמים יחד · תרגול נשימות",
       "url": "games/breathe/",
