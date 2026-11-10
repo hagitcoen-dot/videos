@@ -33,6 +33,8 @@
   let favs; try { favs = new Set(JSON.parse(localStorage.getItem("favs") || "[]")); } catch { favs = new Set(); }
   state.onlyFav = false;
   const favOk = (k) => !state.onlyFav || favs.has(k);
+  // ספירת פתיחות (GoatCounter, בלי עוגיות)
+  function gc(path, title) { try { window.goatcounter && window.goatcounter.count && window.goatcounter.count({ path, title, event: true }); } catch {} }
   function saveFavs() { try { localStorage.setItem("favs", JSON.stringify([...favs])); } catch {} }
   function favBtn(key, title) {
     const b = document.createElement("button"); b.type = "button"; b.className = "favb";
@@ -331,6 +333,7 @@
   function openVideo(id, push = true) {
     const v = state.videos.find((x) => x.id === id); if (!v) return;
     $("pFrame").src = `https://www.youtube-nocookie.com/embed/${id}?rel=0`;
+    if (push) { const t = v.title.split("|")[0].trim(); gc("צפייה/" + t, t); }
     $("pTitle").textContent = v.title;
     $("pMeta").textContent = [fmtDate(v.published), fmtDur(v.duration)].filter(Boolean).join(" · ");
     const tags = $("pTags"); tags.textContent = "";
@@ -395,6 +398,12 @@
     window.scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   }
   $("homeBtn").onclick = goHome;
+  // פתיחת משחק מכל מקום באתר (כרטיס, המלצת השבוע)
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest && e.target.closest('a[href^="games/"]'); if (!a) return;
+    const g = games.find((x) => x.url === a.getAttribute("href")); const t = g ? g.title : a.getAttribute("href");
+    gc("משחק/" + t, t);
+  }, true);
   const homeShow = () => $("homeBar").classList.toggle("on", scrollY > 350);
   addEventListener("scroll", homeShow, { passive: true }); homeShow();
   $("favOnly").onclick = () => { state.onlyFav = !state.onlyFav; $("favOnly").setAttribute("aria-pressed", String(state.onlyFav)); render(); };
