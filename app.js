@@ -29,6 +29,26 @@
   try { state.aud = localStorage.getItem("aud") || "all"; } catch { state.aud = "all"; }
   if (state.aud !== "all" && !AUD.includes(state.aud)) state.aud = "all";
   const audOk = (list) => state.aud === "all" || list.includes(state.aud);
+  // מועדפים: נשמרים רק בדפדפן של המשתמש (בלי הרשמה). מפתחות "v:<id>" לסרטון, "g:<id>" למשחק
+  let favs; try { favs = new Set(JSON.parse(localStorage.getItem("favs") || "[]")); } catch { favs = new Set(); }
+  state.onlyFav = false;
+  const favOk = (k) => !state.onlyFav || favs.has(k);
+  function saveFavs() { try { localStorage.setItem("favs", JSON.stringify([...favs])); } catch {} }
+  function favBtn(key, title) {
+    const b = document.createElement("button"); b.type = "button"; b.className = "favb";
+    const set = () => { const on = favs.has(key); b.setAttribute("aria-pressed", String(on)); b.textContent = on ? "♥" : "♡"; b.title = on ? "הסרה מהמועדפים" : "הוספה למועדפים"; b.setAttribute("aria-label", b.title + ": " + title); };
+    set();
+    b.onclick = (e) => {
+      e.preventDefault(); e.stopPropagation();
+      const add = !favs.has(key);
+      if (add) favs.add(key); else favs.delete(key);
+      saveFavs(); set(); updFavBtn();
+      if (add) { try { window.goatcounter && window.goatcounter.count && window.goatcounter.count({ path: "מועדפים/" + title, title, event: true }); } catch {} }
+      if (state.onlyFav && !add) render();
+    };
+    return b;
+  }
+  function updFavBtn() { const n = favs.size; $("favN").textContent = n ? n : ""; }
   state.topics = td.topics || [];
   state.materials = { videos: md.videos || {}, topics: md.topics || {} };
 
@@ -210,7 +230,7 @@
   }
   function renderGames(words) {
     const box = $("games"); box.textContent = "";
-    const list = games.filter((g) => audOk(g.aud)).filter((g) => words.every((w) => g.n.includes(w) || g.n.includes(stripPrefix(w))));
+    const list = games.filter((g) => audOk(g.aud) && favOk("g:" + g.id)).filter((g) => words.every((w) => g.n.includes(w) || g.n.includes(stripPrefix(w))));
     // החדשים קודם (לפי added), ובתוך אותו תאריך לפי הסדר בקובץ
     list.sort((x, y) => (y.added || "").localeCompare(x.added || ""));
     list.forEach((g) => {
@@ -221,16 +241,17 @@
         const lbl = document.createElement("span"); lbl.textContent = "סרטון מתאים:"; rel.append(lbl);
         vids.slice(0, 2).forEach((v) => { const b = document.createElement("button"); b.type = "button"; b.className = "linkish"; b.textContent = v.title.split("|")[0].trim(); b.title = b.textContent; b.onclick = () => openVideo(v.id); rel.append(b); });
       }
-      const wrap = document.createElement("div"); wrap.className = "gwrap"; wrap.append(card, rel); box.append(wrap);
+      const wrap = document.createElement("div"); wrap.className = "gwrap"; wrap.append(card, favBtn("g:" + g.id, g.title), rel); box.append(wrap);
     });
     if (words.length && !list.length) logMiss(state.q, "games"); else clearTimeout(missTimer);
-    $("status").textContent = words.length || state.aud !== "all" ? `נמצאו ${list.length} משחקים` : `${games.length} משחקים`;
+    if (state.onlyFav && !list.length) { $("status").textContent = ""; showFavEmpty("משחקים"); return; }
+    $("status").textContent = words.length || state.aud !== "all" || state.onlyFav ? `נמצאו ${list.length} משחקים` : `${games.length} משחקים`;
     $("empty").hidden = true;
   }
 
   function render() {
     const gview = state.view === "games";
-    $("feat").classList.toggle("off", !!norm(state.q).trim());
+    $("feat").classList.toggle("off", !!norm(state.q).trim() || state.onlyFav);
     $("games").hidden = !gview; $("grid").hidden = gview;
     if (gview) { $("wish").hidden = true; renderGames(norm(state.q).split(" ").filter(Boolean)); return; }
     const words = norm(state.q).split(" ").filter(Boolean);
@@ -239,7 +260,7 @@
       .filter((v) => !state.onlyMat || v.mats.length)
       .filter((v) => state.lang === "all" || v.lang === state.lang)
       .filter((v) => state.kind === "all" || v.kind === state.kind)
-      .filter((v) => audOk(v.aud))
+      .filter((v) => audOk(v.aud) && favOk("v:" + v.id))
       .map((v) => ({ v, s: words.length ? score(v, words) : 1 }))
       .filter((x) => x.s > 0);
     const byDate = (a, b) => (b.v.published || "").localeCompare(a.v.published || "") || ((a.v.order ?? 0) - (b.v.order ?? 0));
@@ -262,7 +283,8 @@
       if (v.mats.length) { const m = document.createElement("span"); m.className = "mat"; m.textContent = ` · חומרים (${v.mats.length})`; meta.append(m); }
       const tags = document.createElement("div"); tags.className = "tags";
       v.topics.slice(0, 4).forEach((t) => { const s = document.createElement("span"); s.className = "tag"; s.textContent = t; tags.append(s); });
-      body.append(h, meta, tags); c.append(th, body); frag.append(c);
+      body.append(h, meta, tags); c.append(th, body);
+      const cw = document.createElement("div"); cw.className = "cwrap"; cw.append(c, favBtn("v:" + v.id, v.title.split("|")[0].trim())); frag.append(cw);
     });
     grid.append(frag);
 
@@ -273,16 +295,22 @@
       $("status").textContent = "";
       empty.hidden = false;
       empty.innerHTML = "<h2>עוד אין כאן סרטונים</h2><p>רשימת הסרטונים מתמלאת אוטומטית מהערוץ ביוטיוב. אחרי ההרצה הראשונה של העדכון האוטומטי, כל הסרטונים יופיעו כאן.</p>";
+    } else if (!list.length && state.onlyFav) {
+      $("status").textContent = ""; showFavEmpty("סרטונים");
     } else if (!list.length) {
       $("status").textContent = "";
       empty.hidden = false;
       empty.innerHTML = "<h2>לא נמצאו סרטונים</h2><p>נסו מילה אחרת או קצרה יותר, או בטלו את סינון הנושא.</p>";
     } else {
       empty.hidden = true;
-      $("status").textContent = words.length || state.topic || state.onlyMat || state.lang !== "all" || state.kind !== "all" || state.aud !== "all" ? `נמצאו ${list.length} סרטונים מתוך ${state.videos.length}` : `${state.videos.length} סרטונים בספרייה`;
+      $("status").textContent = words.length || state.onlyFav || state.topic || state.onlyMat || state.lang !== "all" || state.kind !== "all" || state.aud !== "all" ? `נמצאו ${list.length} סרטונים מתוך ${state.videos.length}` : `${state.videos.length} סרטונים בספרייה`;
     }
   }
 
+  function showFavEmpty(what) {
+    const empty = $("empty"); empty.hidden = false;
+    empty.innerHTML = `<h2>עוד אין כאן ${what} מועדפים</h2><p>לוחצים על הלב ♡ שבפינת כל ${what === "משחקים" ? "משחק" : "סרטון"}, והוא יישמר כאן. המועדפים נשמרים בדפדפן במכשיר הזה בלבד, בלי הרשמה.</p>`;
+  }
   // משאלת דג הזהב: קישור לטופס, עם מה שחיפשו כבר ממולא
   function wishUrl(q) {
     if (q && cfg.wish_prefill && cfg.wish_prefill.includes("QUERY")) return cfg.wish_prefill.replace("QUERY", encodeURIComponent(q));
@@ -357,6 +385,8 @@
       render();
     };
   });
+  $("favOnly").onclick = () => { state.onlyFav = !state.onlyFav; $("favOnly").setAttribute("aria-pressed", String(state.onlyFav)); render(); };
+  updFavBtn();
   renderTopics();
   if (location.hash === "#games" && games.length) setView("games", false); else render();
   fromHash();
