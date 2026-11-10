@@ -177,3 +177,6 @@ body>.foot{width:100%}
 .aud .favonly{margin-inline-start:10px;color:#c2264f;border-color:#f3b6c6}
 .aud .favonly[aria-pressed="true"]{background:#e8436b;border-color:#e8436b;color:#fff}
 .favn:empty{display:none}.favn{font-size:.8em;opacity:.85}
+.homebtn{position:fixed;top:14px;left:50%;z-index:20;font:inherit;font-weight:700;font-size:1rem;padding:10px 18px;border-radius:999px;border:none;background:var(--accent);color:var(--accent-ink);box-shadow:0 4px 14px rgba(0,0,0,.25);cursor:pointer;opacity:0;pointer-events:none;transform:translate(-50%,-12px);transition:opacity .2s,transform .2s}
+.homebtn.on{opacity:1;pointer-events:auto;transform:translate(-50%,0)}
+@media (max-width:480px){.homebtn{top:10px;padding:9px 15px;font-size:.95rem}}

@@ -385,6 +385,18 @@
       render();
     };
   });
+  // כפתור "דף הבית": מנקה חיפוש וסינונים, חוזר לסרטונים ולראש העמוד
+  function goHome() {
+    state.q = ""; $("q").value = ""; state.topic = null; state.onlyMat = false; state.lang = "all"; state.kind = "all"; state.sort = "relevance"; state.onlyFav = false;
+    $("onlyMaterials").checked = false; $("lang").value = "all"; $("kind").value = "all"; $("sort").value = "relevance"; $("favOnly").setAttribute("aria-pressed", "false");
+    if (dlg.open) closeVideo();
+    renderTopics(); setView("videos");
+    history.replaceState(null, "", location.pathname);
+    window.scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  }
+  $("homeBtn").onclick = goHome;
+  const homeShow = () => $("homeBtn").classList.toggle("on", scrollY > 350);
+  addEventListener("scroll", homeShow, { passive: true }); homeShow();
   $("favOnly").onclick = () => { state.onlyFav = !state.onlyFav; $("favOnly").setAttribute("aria-pressed", String(state.onlyFav)); render(); };
   updFavBtn();
   renderTopics();
