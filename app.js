@@ -74,7 +74,7 @@
     const topics = manual ? state.topics.map((t) => t.name).filter((n) => manual.includes(n) || (APPROACH.includes(n) && auto.includes(n))) : auto;
     topics.forEach((t) => (state.materials.topics[t] || []).forEach((m) => mats.push({ ...m, fromTopic: t })));
     return {
-      ...v, topics, mats, aud: (ad.videos || {})[v.id] || ["ילדים"], kind: kindOf(v), lang: /[\u0590-\u05FF]/.test(v.title) ? "he" : "en",
+      ...v, topics, mats, aud: (ad.videos || {})[v.id] || ["ילדים"], audLabel: (ad.labels || {})[v.id] || "", kind: kindOf(v), lang: /[\u0590-\u05FF]/.test(v.title) ? "he" : "en",
       nTitle: norm(v.title), nTags: norm((v.tags || []).concat(topics, (sel.search_words || {})[v.id] || []).join(" ")),
       nDesc: norm(v.description), nMats: norm(mats.map((m) => m.title + " " + (m.note || "")).join(" ")),
     };
@@ -279,6 +279,7 @@
       if (v.duration) { const d = document.createElement("span"); d.className = "dur"; d.textContent = fmtDur(v.duration); th.append(d); }
       if (isNew(v.published)) th.append(newBadge());
       const body = document.createElement("div"); body.className = "cbody";
+      if (v.audLabel) { const s = document.createElement("span"); s.className = "adultb"; s.textContent = "👥 " + v.audLabel; body.append(s); }
       const h = document.createElement("h3"); highlight(h, v.title, words);
       const meta = document.createElement("p"); meta.className = "meta"; meta.textContent = fmtDate(v.published);
       if (gamesFor(v.id).length) { const g = document.createElement("span"); g.className = "mat"; g.textContent = " · משחק"; meta.append(g); }
