@@ -268,7 +268,8 @@
       "videos": [],
       "added": "2026-11-09",
       "image": "games/session-cards-v1.jpg",
-      "type": "tool"
+      "type": "tool",
+      "keywords": "קלפים כרטיסים קלף שאלות שיחה שיח פתיחת מפגש טיפול"
     },
     {
       "id": "couple-cards",
@@ -286,7 +287,8 @@
       "videos": [],
       "added": "2026-11-09",
       "image": "games/couple-cards-v2.jpg",
-      "type": "tool"
+      "type": "tool",
+      "keywords": "קלפים כרטיסים קלף זוגיות זוג דייט שיח שיחה שאלות"
     },
     {
       "id": "track-detective",

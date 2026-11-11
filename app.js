@@ -9,6 +9,10 @@
   const norm = (s) => (s || "").toLowerCase().replace(/[֑-ׇ]/g, "").replace(/[ךםןףץ]/g, (c) => FINALS[c]).replace(/[״"'׳`]/g, "").replace(/\s+/g, " ").trim();
   // תחיליות נפוצות (ו, ה, ב, ל, מ, ש, כ) כדי ש"בכעס" ימצא גם "כעס"
   const stripPrefix = (w) => w.replace(/^[והבלמשכ]{1,2}(?=.{3,})/, "");
+  // רבים/נסמך: "קלפים" ימצא גם "קלפי", "כרטיסים" גם "כרטיסי"
+  const stripSuffix = (w) => w.replace(/(?<=.{3,})(ימ|ות|י)$/, "");
+  const variants = (w) => [...new Set([w, stripPrefix(w), stripSuffix(w), stripSuffix(stripPrefix(w))])];
+  const hitAny = (s, w) => variants(w).some((x) => s.includes(x));
 
   async function load(path, fallback) {
     try { const r = await fetch(path, { cache: "no-cache" }); if (!r.ok) throw 0; return await r.json(); } catch { return fallback; }
@@ -120,8 +124,7 @@
   function score(v, words) {
     let total = 0;
     for (const w of words) {
-      const alt = stripPrefix(w);
-      const hit = (s) => s.includes(w) || (alt !== w && s.includes(alt));
+      const hit = (s) => hitAny(s, w);
       let sc = 0;
       if (hit(v.nTitle)) sc += 5;
       if (hit(v.nTags)) sc += 3;
@@ -156,7 +159,8 @@
   const fmtDur = (s) => { if (!s) return ""; s = Math.round(s); const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = String(s % 60).padStart(2, "0"); return h ? `${h}:${String(m).padStart(2, "0")}:${x}` : `${m}:${x}`; };
 
   // משחקים
-  const games = (gd.games || []).map((g) => ({ ...g, aud: g.audience || (g.age === "נוער" ? ["נוער"] : ["ילדים"]), n: norm([g.title, g.desc, (g.topics || []).join(" "), g.age].join(" ")) }));
+  const games = (gd.games || []).map((g) => ({ ...g, aud: g.audience || (g.age === "נוער" ? ["נוער"] : ["ילדים"]), n: norm([g.title, g.desc, (g.topics || []).join(" "), g.age, g.keywords || ""].join(" ")) }));
+  const gameHits = (words) => games.filter((g) => audOk(g.aud) && words.every((w) => hitAny(g.n, w)));
   const gamesFor = (id) => games.filter((g) => (g.videos || []).includes(id));
   renderFeatured();
   state.view = "videos";
@@ -234,7 +238,7 @@
   }
   function renderGames(words) {
     const box = $("games"); box.textContent = "";
-    const list = games.filter((g) => audOk(g.aud) && favOk("g:" + g.id) && (state.gkind === "all" || (g.type === "tool" ? "tool" : "game") === state.gkind)).filter((g) => words.every((w) => g.n.includes(w) || g.n.includes(stripPrefix(w))));
+    const list = games.filter((g) => audOk(g.aud) && favOk("g:" + g.id) && (state.gkind === "all" || (g.type === "tool" ? "tool" : "game") === state.gkind)).filter((g) => words.every((w) => hitAny(g.n, w)));
     // החדשים קודם (לפי added), ובתוך אותו תאריך לפי הסדר בקובץ
     // sort_with: משחק ישן שמוצג ליד ההמשך שלו (למשל חלק 1 ליד חלק 2 החדש)
     const addedOf = (g) => g.added || ((games.find((o) => o.id === g.sort_with) || {}).added) || "";
@@ -313,6 +317,16 @@
     } else {
       empty.hidden = true;
       $("status").textContent = words.length || state.onlyFav || state.topic || state.onlyMat || state.lang !== "all" || state.kind !== "all" || state.aud !== "all" ? `נמצאו ${list.length} סרטונים מתוך ${state.videos.length}` : `${state.videos.length} סרטונים בספרייה`;
+    }
+    // החיפוש מצא גם משחקים או עזרים? מציעים לעבור ללשונית המשחקים
+    const gh = words.length && !state.onlyFav ? gameHits(words) : [];
+    if (gh.length) {
+      const b = document.createElement("button"); b.type = "button"; b.className = "alsob";
+      const tools = gh.every((g) => g.type === "tool");
+      b.textContent = `נמצאו גם ${gh.length === 1 ? (tools ? "עזר אחד" : "משחק אחד") : gh.length + (tools ? " עזרים" : " משחקים ועזרים")}: ${gh.slice(0, 2).map((g) => g.title.split("·")[0].trim()).join(", ")}${gh.length > 2 ? "…" : ""} ←`;
+      b.onclick = () => setView("games");
+      const st = $("status"); if (st.textContent) st.append(document.createElement("br")); st.append(b);
+      if (!list.length) $("empty").hidden = true;
     }
   }
 
