@@ -236,7 +236,9 @@
     const box = $("games"); box.textContent = "";
     const list = games.filter((g) => audOk(g.aud) && favOk("g:" + g.id) && (state.gkind === "all" || (g.type === "tool" ? "tool" : "game") === state.gkind)).filter((g) => words.every((w) => g.n.includes(w) || g.n.includes(stripPrefix(w))));
     // החדשים קודם (לפי added), ובתוך אותו תאריך לפי הסדר בקובץ
-    list.sort((x, y) => (y.added || "").localeCompare(x.added || ""));
+    // sort_with: משחק ישן שמוצג ליד ההמשך שלו (למשל חלק 1 ליד חלק 2 החדש)
+    const addedOf = (g) => g.added || ((games.find((o) => o.id === g.sort_with) || {}).added) || "";
+    list.sort((x, y) => addedOf(y).localeCompare(addedOf(x)));
     list.forEach((g) => {
       const card = gameCard(g);
       const vids = (g.videos || []).map((id) => state.videos.find((v) => v.id === id)).filter(Boolean);
