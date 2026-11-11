@@ -210,6 +210,8 @@
     const now = new Date(), today = [now.getFullYear(), String(now.getMonth() + 1).padStart(2, "0"), String(now.getDate()).padStart(2, "0")].join("-");
     for (const it of fd.items || []) {
       if (!(it.from <= today && today <= it.to)) continue;
+      // tab: "games" = המלצת השבוע של לשונית המשחקים; השאר מוצגות בלשונית הסרטונים
+      if ((it.tab === "games") !== (state.view === "games")) continue;
       const v = it.kind === "video" ? state.videos.find((x) => x.id === it.id) : null;
       const g = it.kind === "game" ? games.find((x) => x.id === it.id) : null;
       if (!v && !g) continue;
@@ -251,8 +253,10 @@
     $("empty").hidden = true;
   }
 
+  let featView = null;
   function render() {
     const gview = state.view === "games";
+    if (featView !== state.view) { featView = state.view; renderFeatured(); }
     $("feat").classList.toggle("off", !!norm(state.q).trim() || state.onlyFav);
     $("games").hidden = !gview; $("grid").hidden = gview;
     if (gview) { $("wish").hidden = true; renderGames(norm(state.q).split(" ").filter(Boolean)); return; }
