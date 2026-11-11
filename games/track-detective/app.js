@@ -22,12 +22,12 @@ const sndWin=()=>tone([523,659,784,1047,1319],.16,'triangle',.11,.2);
 /* ---------- read aloud ---------- */
 let heVoice=null, readOn=LS.get('read',false);
 const synth=window.speechSynthesis;
-function pickVoice(){if(!synth)return;const vs=synth.getVoices();heVoice=vs.find(v=>/^he|^iw/i.test(v.lang))||null;$('#btnSound').hidden=!heVoice;updSound()}
+function pickVoice(){if(!synth)return;const vs=synth.getVoices();heVoice=vs.find(v=>/^he|^iw/i.test(v.lang))||null;$('#btnSound').hidden=true;updSound()}
 if(synth){pickVoice();synth.onvoiceschanged=pickVoice;}
 function updSound(){const b=$('#btnSound');b.textContent=readOn?'🔊':'🔈';b.setAttribute('aria-pressed',readOn)}
 $('#btnSound').onclick=()=>{readOn=!readOn;LS.set('read',readOn);updSound();if(readOn)say(lastSay);else synth&&synth.cancel()};
 let lastSay='';
-function say(t,force){lastSay=t;if(!synth||!heVoice||!(readOn||force)||!t)return;synth.cancel();const u=new SpeechSynthesisUtterance(t);u.voice=heVoice;u.lang=heVoice.lang;u.rate=.9;synth.speak(u)}
+function say(t,force){lastSay=t;return; /* ההקראה הוסרה לבקשת חגית */if(!synth||!heVoice||!(readOn||force)||!t)return;synth.cancel();const u=new SpeechSynthesisUtterance(t);u.voice=heVoice;u.lang=heVoice.lang;u.rate=.9;synth.speak(u)}
 
 /* ---------- confetti ---------- */
 function confetti(n=70){const box=$('#confetti');const cols=['#ef8a3a','#f4b73d','#3f8a79','#f7d58b','#fffaf1'];
