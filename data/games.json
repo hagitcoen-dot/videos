@@ -249,7 +249,8 @@
       ],
       "videos": [],
       "added": "2026-11-09",
-      "image": "games/session-cards-v1.jpg"
+      "image": "games/session-cards-v1.jpg",
+      "type": "tool"
     },
     {
       "id": "couple-cards",
@@ -266,7 +267,8 @@
       ],
       "videos": [],
       "added": "2026-11-09",
-      "image": "games/couple-cards-v2.jpg"
+      "image": "games/couple-cards-v2.jpg",
+      "type": "tool"
     },
     {
       "id": "track-detective",

@@ -195,3 +195,7 @@ body>.foot{width:100%}
   .cwrap .favb{width:30px;height:30px;font-size:1.05rem;top:5px;inset-inline-start:5px}
   .thumb .newb{font-size:.68rem;padding:4px 7px;top:5px;inset-inline-end:5px}
 }
+.gkind{display:none;gap:8px;justify-content:center;flex-wrap:wrap;margin:0 0 14px}
+body.view-games .gkind:not([hidden]){display:flex}
+.gkind button{font:inherit;font-size:.95rem;padding:6px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.gkind button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700}

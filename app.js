@@ -234,7 +234,7 @@
   }
   function renderGames(words) {
     const box = $("games"); box.textContent = "";
-    const list = games.filter((g) => audOk(g.aud) && favOk("g:" + g.id)).filter((g) => words.every((w) => g.n.includes(w) || g.n.includes(stripPrefix(w))));
+    const list = games.filter((g) => audOk(g.aud) && favOk("g:" + g.id) && (state.gkind === "all" || (g.type === "tool" ? "tool" : "game") === state.gkind)).filter((g) => words.every((w) => g.n.includes(w) || g.n.includes(stripPrefix(w))));
     // החדשים קודם (לפי added), ובתוך אותו תאריך לפי הסדר בקובץ
     list.sort((x, y) => (y.added || "").localeCompare(x.added || ""));
     list.forEach((g) => {
@@ -249,7 +249,7 @@
     });
     if (words.length && !list.length) logMiss(state.q, "games"); else clearTimeout(missTimer);
     if (state.onlyFav && !list.length) { $("status").textContent = ""; showFavEmpty("משחקים"); return; }
-    $("status").textContent = words.length || state.aud !== "all" || state.onlyFav ? `נמצאו ${list.length} משחקים` : `${games.length} משחקים`;
+    $("status").textContent = words.length || state.aud !== "all" || state.onlyFav || state.gkind !== "all" ? `נמצאו ${list.length} ${state.gkind === "tool" ? "עזרים" : "משחקים"}` : `${games.length} משחקים`;
     $("empty").hidden = true;
   }
 
@@ -411,6 +411,13 @@
   }, true);
   const homeShow = () => $("homeBar").classList.toggle("on", scrollY > 350);
   addEventListener("scroll", homeShow, { passive: true }); homeShow();
+  // משחקים / קלפים ועזרים (type: "tool" ב-games.json)
+  state.gkind = "all";
+  const hasTools = games.some((g) => g.type === "tool");
+  $("gkind").hidden = !hasTools;
+  document.querySelectorAll("#gkind button").forEach((b) => {
+    b.onclick = () => { state.gkind = b.dataset.k; document.querySelectorAll("#gkind button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); render(); };
+  });
   $("favOnly").onclick = () => { state.onlyFav = !state.onlyFav; $("favOnly").setAttribute("aria-pressed", String(state.onlyFav)); render(); };
   updFavBtn();
   renderTopics();
