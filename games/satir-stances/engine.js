@@ -48,9 +48,10 @@
   }
   function artFor(key) {
     switch (key) {
-      case "stances": return '<div class="art four"><span>🙇<small>מרצה</small></span><span>👉<small>מאשים</small></span><span>🤖<small>שכלתני</small></span><span>🌀<small>מסיח</small></span></div>';
-      case "congruent": return '<div class="art four two"><span>🙋<small>אני</small></span><span>🫶<small>את/ה</small></span><span>🧭<small>המצב</small></span></div>';
-      case "keys": return '<div class="art four five"><span>👀</span><span>🗣️</span><span>💗</span><span>🙋</span><span>🚀</span></div>';
+      case "stances": return '<div class="art four"><span>🍯<small>ריצוי</small></span><span>👉<small>האשמה</small></span><span>🤖<small>שכלתנות</small></span><span>🌀<small>הסחה</small></span></div>';
+      case "responses": return '<div class="art four two"><span>🌧️<small>לחץ</small></span><span>🔄<small>תגובה</small></span><span>🧭<small>בחירה</small></span></div>';
+      case "congruent": return '<div class="art four two"><span>💭<small>אני</small></span><span>🤝<small>האחר</small></span><span>🧭<small>המצב</small></span></div>';
+      case "keys": return '<div class="art four five"><span>👀</span><span>💬</span><span>💗</span><span>🤲</span><span>🚀</span></div>';
       case "pot": return '<div class="art pot-art">' + potSVG(0.62) + '</div>';
       case "potmove": return '<div class="art two-pots"><div>' + potSVG(0.9) + '<b class="up">⬆ מתמלא</b></div><div>' + potSVG(0.22) + '<b class="down">⬇ מתרוקן</b></div></div>';
       case "unique": return '<div class="art"><svg class="fp" viewBox="0 0 120 120" aria-hidden="true"><g fill="none" stroke="#ffb648" stroke-width="4" stroke-linecap="round"><path d="M30 80 Q28 40 60 34 Q92 40 90 74"/><path d="M40 88 Q36 50 60 46 Q82 50 80 78"/><path d="M50 94 Q46 60 60 58 Q72 60 70 84"/><path d="M60 70 V100"/><path d="M22 66 Q22 22 60 18 Q98 22 98 60"/></g><text x="60" y="116" text-anchor="middle" fill="#ffe08a" font-size="12" font-weight="800">1 OF 1</text></svg></div>';
@@ -58,7 +59,7 @@
       case "keep": return '<div class="art keepgo"><div class="k">✋<b>שומר/ת</b><small>מה שמתאים</small></div><div class="g">🍃<b>משחרר/ת</b><small>מה שלא</small></div></div>';
       case "triangle": return '<div class="art"><svg class="tri" viewBox="0 0 240 170" aria-hidden="true"><path d="M120 18 L218 150 H22 Z" fill="rgba(255,182,72,.12)" stroke="#ffb648" stroke-width="4" stroke-linejoin="round"/>' +
         '<g font-weight="800" text-anchor="middle"><circle cx="120" cy="22" r="20" fill="#ff6a3d" stroke="#1a0b14" stroke-width="3"/><text x="120" y="28" fill="#fff" font-size="15">אני</text>' +
-        '<circle cx="24" cy="148" r="20" fill="#5fd4c4" stroke="#1a0b14" stroke-width="3"/><text x="24" y="154" fill="#1a0b14" font-size="14">אתה</text>' +
+        '<circle cx="24" cy="148" r="20" fill="#5fd4c4" stroke="#1a0b14" stroke-width="3"/><text x="24" y="154" fill="#1a0b14" font-size="13">האחר</text>' +
         '<circle cx="216" cy="148" r="20" fill="#ffd06a" stroke="#1a0b14" stroke-width="3"/><text x="216" y="154" fill="#1a0b14" font-size="13">המצב</text>' +
         '<text x="120" y="112" fill="#ffe9b0" font-size="15">תואם ✔</text><text x="120" y="130" fill="#ffe9b0" font-size="11" opacity=".8">Congruent</text></g></svg></div>';
       case "shield": return '<div class="art shield-art">' + potSVG(0.2) + '<span class="sh">🛡️</span></div>';
@@ -158,7 +159,7 @@
   }
 
   /* ---------- save ---------- */
-  function fresh() { return { done: S.map(function () { return false; }), stars: S.map(function () { return 0; }), bonus: S.map(function () { return false; }), fill: 0, best: 0, badges: [], name: "", lines: [], g: "f", secret: false }; }
+  function fresh() { return { done: S.map(function () { return false; }), stars: S.map(function () { return 0; }), bonus: S.map(function () { return false; }), fill: 0, best: 0, badges: [], name: "", lines: [], g: "f", secret: false, task: "" }; }
   var save = fresh();
   try { var raw = localStorage.getItem(STORE); if (raw) { var o = JSON.parse(raw); if (o && o.done && o.done.length === N) save = Object.assign(fresh(), o); } } catch (e) {}
   function persist() { try { localStorage.setItem(STORE, JSON.stringify(save)); } catch (e) {} }
@@ -175,8 +176,8 @@
     $("hudStars").textContent = "⭐ " + totalStars();
     $("hudStreak").textContent = "🔥 " + streak;
     $("hudStreak").classList.toggle("hot", streak >= 3);
-    $("mFill").style.width = Math.round(potLevel() * 100) + "%";
-    $("mPct").textContent = Math.round(potLevel() * 100) + "%";
+    $("mFill").style.width = Math.round(doneCount() / N * 100) + "%";
+    $("mPct").textContent = doneCount() + "/" + N;
     if (pop) restart($(pop), "pop");
   }
 
@@ -202,7 +203,7 @@
   /* ---------- intro ---------- */
   function intro() {
     var w = screen("intro");
-    w.appendChild(el("div", "hero", '<div class="hero-ember" id="introEmber">' + emberSVG(save.secret ? "gold" : "") + '</div><div class="hero-pot">' + potSVG(Math.max(0.35, potLevel())) + "</div>"));
+    w.appendChild(el("div", "hero", '<div class="hero-ember" id="introEmber">' + emberSVG(save.secret ? "gold" : "") + '</div><div class="hero-pot">' + potSVG(0.62) + "</div>"));
     w.appendChild(el("p", "kicker", G.en + " · חלק " + G.part + " מתוך 2"));
     w.appendChild(el("h1", "", G.title));
     w.appendChild(el("p", "lead", G.pitch));
@@ -239,7 +240,7 @@
     var allDone = nx === -1;
     var fin = el("button", "tile final" + (allDone ? " next" : " locked"));
     fin.type = "button"; fin.disabled = !allDone;
-    fin.innerHTML = '<span class="t-ic">' + (allDone ? (G.finale === "card" ? "🪪" : "📜") : "🔒") + '</span><span class="t-tx"><b>' + (G.finale === "card" ? "הכרטיס שלי + תעודה" : "התעודה שלי") + '</b><small class="en">' + (G.finale === "card" ? "I Am Me card" : "Certificate") + '</small></span><span class="t-st">' + (allDone ? "▶" : "") + "</span>";
+    fin.innerHTML = '<span class="t-ic">' + (allDone ? (G.finale === "card" ? "🪪" : "📜") : "🔒") + '</span><span class="t-tx"><b>' + (G.finale === "card" ? "הכרטיס שלי + תעודה" : "משימה לשבוע + תעודה") + '</b><small class="en">' + (G.finale === "card" ? "I Am Me card" : "Certificate") + '</small></span><span class="t-st">' + (allDone ? "▶" : "") + "</span>";
     fin.onclick = finale;
     grid.appendChild(fin);
     w.appendChild(grid);
@@ -249,7 +250,7 @@
     if (allDone) action(G.finale === "card" ? "לכרטיס ״אני זה אני״ 🪪" : "לתעודה שלי 📜", finale);
     else action("לתחנה: " + S[nx].icon + " " + S[nx].title + " ←", function () { SFX.whoosh(); play(nx, false); });
   }
-  function finale() { SFX.whoosh(); if (G.finale === "card") cardPick(); else cert(); }
+  function finale() { SFX.whoosh(); if (G.finale === "card") cardPick(); else if (G.task) weekTask(); else cert(); }
 
   /* ---------- play ---------- */
   var run = null;
@@ -289,7 +290,7 @@
       });
       box.appendChild(col);
     } else if (c.t === "stance") {
-      box.innerHTML = '<p class="who">' + c.who + '</p><div class="bubble">' + c.line + '</div><p class="q">איזו עמדה זו?</p>';
+      box.innerHTML = '<p class="who">' + c.who + '</p><div class="bubble">' + c.line + '</div><p class="q">איזו עמדה מופיעה בתגובה הזאת?</p>';
       var grid = el("div", "opts four");
       shuffle(Object.keys(G.ST)).forEach(function (k) {
         var st = G.ST[k], b = el("button", "opt", st.icon + " " + st.he + ' <small class="en">' + st.en + "</small>"); b.type = "button"; b.dataset.k = k;
@@ -311,12 +312,12 @@
       SFX.clunk(); setTimeout(function () { SFX.combo(streak); }, 90);
       sparks(btn, 22); floater(btn, (run.bonus ? "+2⭐ " : "+1⭐ ") + pick(G.BURST));
       if (streak === 3 || streak === 5 || streak === 8 || streak === 12) { confetti(false); toast("🔥 רצף של " + streak + "!"); }
-      fb.innerHTML = '<p class="fb-h">✅ ' + pick(G.BURST) + "</p><p>" + why + "</p>";
+      fb.innerHTML = '<p class="fb-h">✅ זיהוי נכון!</p><p>' + why + "</p>";
     } else {
       streak = 0; SFX.soft();
       btn.classList.add("wrong"); restart(btn, "shake");
       var right = correctBtn ? strip(correctBtn.innerHTML.replace(/<small[\s\S]*?<\/small>/, "")) : "";
-      fb.innerHTML = '<p class="fb-h">💡 כמעט! התשובה: <b>' + right + "</b></p><p>" + why + "</p>";
+      fb.innerHTML = '<p class="fb-h">💡 לא בדיוק. התשובה: <b>' + right + "</b></p><p>" + why + "</p>";
     }
     if (correctBtn) correctBtn.classList.add("right");
     // collapse: keep only the picked and the right option so the explanation fits
@@ -341,7 +342,7 @@
     w.appendChild(el("div", "badge-big", '<span class="bb-ic">' + b.icon + "</span>"));
     w.appendChild(el("h2", "", "תג חדש: " + b.name));
     w.appendChild(el("p", "lead", (bonus ? "מתיחה הושלמה! " : "") + "⭐ " + stars + " כוכבים" + (bonus ? " (כפול!)" : "") + " · " + run.right + " מתוך " + run.qs + " נכונות"));
-    w.appendChild(el("div", "pot-mini", potSVG(potLevel())));
+    w.appendChild(el("p", "soft prog-line", "🗺️ תחנות שהושלמו: " + doneCount() + " מתוך " + N));
     SFX.fanfare(); setTimeout(function () { confetti(true); }, 350);
     if (!bonus && !save.bonus[si] && s.bonus && s.bonus.length) {
       var off = el("div", "stretch");
@@ -358,7 +359,7 @@
   /* ---------- secret ---------- */
   function secret() {
     var first = !save.secret;
-    save.secret = true; addBadge({ icon: "🕵️", name: "מגלה סודות" }); persist();
+    save.secret = true; addBadge({ icon: "🤫", name: "מגלה סודות" }); persist();
     $("secretArt").innerHTML = emberSVG("gold");
     $("secretTitle").textContent = G.secret.title;
     $("secretText").innerHTML = G.secret.html;
@@ -408,6 +409,20 @@
     action("לתעודה שלי 📜", cert, { alt: ["✏️ לשנות", cardPick] });
   }
 
+  /* ---------- weekly task (no score, kept locally) ---------- */
+  function weekTask() {
+    var T = G.task, w = screen("task", "final");
+    w.appendChild(el("h2", "", T.title));
+    w.appendChild(el("p", "soft", T.sub));
+    w.appendChild(el("p", "lead task-q", T.prompt));
+    var ta = el("textarea", "task-in"); ta.id = "taskInput"; ta.maxLength = 400; ta.rows = 4; ta.placeholder = T.ph; ta.value = save.task || "";
+    ta.setAttribute("aria-label", T.prompt);
+    ta.oninput = function () { save.task = ta.value; persist(); };
+    w.appendChild(ta);
+    w.appendChild(el("p", "soft small", "💡 אני (מה קורה אצלי) · האחר (מה הוא צריך) · המצב (מה מתאים עכשיו)"));
+    action("לתעודה שלי 📜", cert, { alt: ["🗺️ מפה", map] });
+  }
+
   /* ---------- certificate ---------- */
   function cert() {
     var w = screen("cert", "final");
@@ -415,7 +430,7 @@
     var inp = el("input"); inp.id = "nameInput"; inp.maxLength = 24; inp.placeholder = "כתבו כאן את השם"; inp.value = save.name; inp.autocomplete = "off";
     f.appendChild(inp); w.appendChild(f);
     var c = el("div", "cert");
-    c.innerHTML = '<p class="kicker">CERTIFICATE · ' + G.en + "</p><h2>📜 " + G.certTitle + '</h2><p class="cname" id="certName">' + (save.name || "_____") + "</p><p>" + G.certLine + '</p><p class="cmeta">⭐ ' + totalStars() + " כוכבים · " + save.badges.length + " תגים · רצף שיא " + save.best + '</p><div class="cbadges">' + save.badges.map(function (b) { return "<span>" + b.icon + "</span>"; }).join("") + '</div><p class="cr">חגית כהן CBT | טיפול חברתי · ' + new Date().toLocaleDateString("he-IL") + "</p>";
+    c.innerHTML = '<p class="kicker">CERTIFICATE · ' + G.en + "</p><h2>📜 " + G.certTitle + '</h2><p class="cname" id="certName">' + (save.name || "_____") + "</p><p>" + G.certLine + '</p><p class="cmeta">🗺️ ' + doneCount() + " מתוך " + N + " תחנות · " + save.badges.length + " תגים" + '</p><div class="cbadges">' + save.badges.map(function (b) { return "<span>" + b.icon + "</span>"; }).join("") + '</div><p class="cr hfoot"><img class="hlogo-sm" src="hagit-logo-sm.png" alt="" width="132" height="119"><span>חגית כהן CBT | טיפול חברתי · ' + new Date().toLocaleDateString("he-IL") + "</span></p>";
     w.appendChild(c);
     inp.oninput = function () { save.name = inp.value.trim(); persist(); $("certName").textContent = save.name || "_____"; };
     var o = el("div", "other");

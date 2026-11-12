@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>הסביבון של המחשבות</title>
+<meta property="og:title" content="הסביבון של המחשבות 🕎">
+<meta property="og:description" content="משחק CBT לחנוכה: מסובבים סביבון, מזהים רגשות ומחשבות, ומדליקים חנוכייה. חגית כהן CBT | טיפול חברתי">
+<meta property="og:image" content="https://hagitcoen-dot.github.io/videos/games/hanukkah-dreidel/og.jpg">
+<meta property="og:url" content="https://hagitcoen-dot.github.io/videos/games/hanukkah-dreidel/">
+<meta name="description" content="משחק CBT לחנוכה: מסובבים סביבון, מזהים רגשות ומחשבות, ומדליקים חנוכייה.">
+<meta name="theme-color" content="#0b1a3a">
+<link rel="preload" as="image" href="img/hk-dim.webp?v=9"><link rel="preload" as="image" href="img/hk-lit.webp?v=9">
+<link rel="preload" as="image" href="img/oh-dim.webp?v=9"><link rel="preload" as="image" href="img/oh-lit.webp?v=9">
+<link rel="stylesheet" href="style.css?v=9">
+</head>
+<body>
+<div class="sky" aria-hidden="true"></div>
+<div id="app" class="card">
+  <header class="top">
+    <div class="brand" id="brandTitle">הסביבון של המחשבות</div>
+    <div class="coins" id="coins" hidden></div>
+    <div class="score" id="score" hidden></div>
+    <button class="mute" id="muteBtn" type="button" aria-label="השתקת צלילים">🔊</button>
+  </header>
+  <div class="jars-row" id="jarsRow" hidden></div>
+  <div class="menorah-wrap" id="menorahWrap" hidden></div>
+  <main id="screen" class="screen" aria-live="polite"></main>
+  <footer class="bar" id="bar"></footer>
+  <div class="credit" id="credit"><img src="img/logo-small.png?v=9" alt="" width="28" height="25"><span>חגית כהן · פסיכותרפיסטית · CBT | טיפול חברתי</span></div>
+</div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+<div id="printArea" aria-hidden="true"></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<radialGradient id="cgY" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#fff6c2"/><stop offset=".45" stop-color="#ffd447"/><stop offset="1" stop-color="#e09a12"/></radialGradient>
+<linearGradient id="crY" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe680"/><stop offset="1" stop-color="#b56f00"/></linearGradient>
+<radialGradient id="cgO" cx="35%" cy="30%" r="85%"><stop offset="0" stop-color="#f7e7bb"/><stop offset=".5" stop-color="#d9b462"/><stop offset="1" stop-color="#9d7428"/></radialGradient>
+<linearGradient id="crO" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3dc9c"/><stop offset=".5" stop-color="#b48a3c"/><stop offset="1" stop-color="#6e4f1a"/></linearGradient>
+</defs></svg>
+<script src="data.js?v=9"></script>
+<script src="challenge.js?v=9"></script>
+<script src="app.js?v=9"></script>
+</body>
+</html>

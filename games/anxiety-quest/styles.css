@@ -272,11 +272,11 @@ h2.q{font-size:21px; color:#fff}
 .boss-svg .waves path{stroke:#ff4d6d; animation:blinkn .3s infinite alternate}
 .boss-wrap{animation:bossShake .35s infinite}
 @keyframes bossShake{25%{transform:translateX(-2px) rotate(-1deg)}75%{transform:translateX(2px) rotate(1deg)}}
-.boss-wrap.calm-1{transform:scale(.95)} .boss-wrap.calm-2{transform:scale(.9)} .boss-wrap.calm-3{transform:scale(.85)} .boss-wrap.calm-4{transform:scale(.8)} .boss-wrap.calm-5{transform:scale(.75)}
+
 .boss-wrap.calm-3 .bc2,.boss-wrap.calm-4 .bc2,.boss-wrap.calm-5 .bc2{stop-color:#e0732a} .boss-wrap.calm-3 .bc1,.boss-wrap.calm-4 .bc1,.boss-wrap.calm-5 .bc1{stop-color:#ffb36b}
 .boss-wrap.calm-3 .lamp,.boss-wrap.calm-4 .lamp,.boss-wrap.calm-5 .lamp{fill:#ffb347}
 .boss-wrap.calm-3 .waves path,.boss-wrap.calm-4 .waves path{stroke:#ffb347} .boss-wrap.calm-5 .waves path{opacity:.3}
-.boss-wrap.calm-6{animation:bob 3s ease-in-out infinite; transform:scale(.72)}
+.boss-wrap.calm-6{animation:bob 3s ease-in-out infinite}
 .boss-wrap.calm-6 .bc2{stop-color:#1f9e8a} .boss-wrap.calm-6 .bc1{stop-color:#7dffd9}
 .boss-wrap.calm-6 .lamp{fill:#5dffb0; animation:none} .boss-wrap.calm-6 .beams,.boss-wrap.calm-6 .waves{display:none}
 .boss-wrap.calm-6 .brows{display:none}
@@ -357,3 +357,83 @@ h2.q{font-size:21px; color:#fff}
 .hfoot .hbadge-sm{display:inline-block;line-height:0;background:rgba(255,255,255,.92);border-radius:9px;padding:2px 5px}
 @media (max-height:640px){.hfoot .hlogo-sm{height:32px}}
 @media (min-width:900px) and (min-height:760px){.hfoot .hlogo-sm{height:42px}}
+
+/* v2: practised-tools meter (replaces the alarm-strength bar) */
+.tools-meter{display:flex; flex-wrap:wrap; align-items:center; gap:4px 8px; margin:6px 0 2px; font-size:14px}
+.tm-l{color:var(--ink-soft); white-space:nowrap}
+.tools-meter b{color:#5dffb0; white-space:nowrap}
+.tm-segs{flex:1 1 100%; display:grid; grid-template-columns:repeat(6,1fr); gap:5px}
+.tm-segs i{height:12px; border-radius:8px; background:rgba(255,255,255,.12); transition:background .4s, box-shadow .4s}
+.tm-segs i.on{background:linear-gradient(90deg,#5dffb0,#4fd8ff); box-shadow:0 0 10px rgba(93,255,176,.7)}
+.tools-meter.pop{animation:pop .4s}
+
+/* v2 layout: no page scroll on phones; sticky bottom action bar */
+main{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+.bbar{position:fixed; z-index:60; left:50%; transform:translateX(-50%); bottom:0; width:100%; max-width:520px; display:flex; gap:10px; align-items:center; justify-content:center; padding:10px 14px calc(10px + env(safe-area-inset-bottom)); background:linear-gradient(to top,rgba(6,8,30,.96) 60%,rgba(6,8,30,0)); }
+.bbar .btn{margin:0; flex:1 1 auto; max-width:340px}
+.bbar .btn.ghost{flex:0 0 auto}
+.bbar .next-btn{margin:0}
+#barHold{display:none}
+.toast{bottom:calc(84px + env(safe-area-inset-bottom))}
+.credit{margin-top:8px}
+/* answered card: the question gives way to the explanation */
+.qcard.answered > :not(.explain):not(.kicker):not(h2.q):not(.arena):not(.boss-stage){display:none}
+.qcard.answered h2.q{font-size:18px}
+.boss-stage .opts.done .opt:not(.right){display:none}
+.boss-stage .opts.done ~ .hint, .boss-stage:has(.opts.done) > .hint{display:none}
+.explain{margin-top:10px; padding:12px 14px}
+.ex-ans{font-weight:700; color:#5dffb0; font-size:16px}
+/* order: show filled slots plus the next one */
+.slot:not(.filled):not(.next){display:none}
+.slots.loop .slot{display:flex}
+@media (max-height:760px){
+  main{padding-top:6px}
+  .card{padding:14px 14px}
+  h2{font-size:20px}
+  .play-head{gap:5px; margin-bottom:6px}
+  .art{max-width:190px}
+  .explain p{font-size:15.5px; line-height:1.45}
+  .mini-neuro{width:34px}
+  .ex-head{font-size:16px}
+  .fact{font-size:14px; padding:6px 10px}
+  .opt{padding:10px 12px; font-size:16px}
+  .chip{min-height:42px; padding:8px 12px; font-size:15px}
+  .mi{min-height:50px; font-size:14px; padding:7px 6px}
+  .sort-item{min-height:72px; font-size:17px; padding:10px}
+  .breath{height:196px} .bcirc{width:128px; height:128px} .vline{height:170px; top:12px}
+  .boss-wrap{width:118px}
+  .attack{font-size:16.5px; padding:10px; margin:6px 0}
+  .stars .star{font-size:34px}
+  .done-card h2{margin:.1em 0}
+  .anchor-get{margin-top:6px}
+  .acard p{font-size:14.5px; margin:.2em 0}
+  .orb{width:48px; height:48px; font-size:22px}
+  .nlabel small{display:none}
+  .nlabel{padding:2px 8px; font-size:14px}
+  .mascot.mid{width:64px}
+  .cert-name{font-size:22px}
+  .cert-badges{display:none}
+  .takeaway{padding:8px 12px; margin-top:6px}
+  .takeaway li{font-size:14px}
+  .takeaway .small{font-size:13px}
+  .name-field{margin:4px 0}
+  .slides{min-height:110px}
+}
+@media (max-height:760px) and (min-height:0px){ .nlabel .nstars{display:inline} }
+/* desktop: one centred ~720px card */
+@media (min-width:900px){
+  main{max-width:640px}
+  .bbar{max-width:640px}
+}
+
+@media all{
+  .mapwrap{aspect-ratio:auto; height:calc(var(--vh,100dvh) - 232px); max-height:820px; min-height:360px; margin-bottom:4px}
+  #map.complete .mapwrap{height:calc(var(--vh,100dvh) - 290px)}
+  .map-head .cert-btn{margin:8px auto 0; min-height:44px; padding:8px 20px}
+}
+
+.cert-badges{display:none}
+.cert .mascot.mid{width:70px}
+.cert h2{margin:.1em 0}
+.qcard.answered .boss-stage > :not(.explain){display:none}
+.qcard.answered .boss-wrap{width:96px}

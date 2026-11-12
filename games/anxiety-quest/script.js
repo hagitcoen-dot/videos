@@ -10,14 +10,41 @@
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   function center(node) { var r = node.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; }
   function restart(node, cls) { node.classList.remove(cls); void node.offsetWidth; node.classList.add(cls); }
-  function show(id) { SCREENS.forEach(function (s) { $(s).hidden = s !== id; }); window.scrollTo(0, 0); }
-  function scrollToNode(node) { requestAnimationFrame(function () { var r = node.getBoundingClientRect(); var y = window.scrollY + r.top - 70; window.scrollTo({ top: Math.max(0, y), behavior: reduceMotion ? "auto" : "smooth" }); }); }
+  var BARS = { intro: ["skipBtn", "nextSlideBtn"], map: ["packBtn2", "resetBtn"], done: ["toMapBtn", "nextRegionBtn"], final: ["finalMapBtn", "openPackFinal"], play: [] };
+  function bar(nodes) {
+    var bb = $("bbar"), hold = $("barHold");
+    while (bb.firstChild) { var ch = bb.firstChild; if (ch.id) hold.appendChild(ch); else bb.removeChild(ch); }
+    nodes.forEach(function (n) { if (n) bb.appendChild(n); });
+    bb.hidden = !bb.children.length;
+  }
+  function show(id) { SCREENS.forEach(function (s) { $(s).hidden = s !== id; }); bar((BARS[id] || []).map($)); window.scrollTo(0, 0); fitSoon(); }
+  /* no-scroll fit on phones: if a screen is taller than the viewport, scale main down a little */
+  var fitQ = 0;
+  function fit() {
+    fitQ = 0; var m = $("main"), tb = document.querySelector(".topbar"), bb = $("bbar");
+    var W = innerWidth, V = innerHeight;
+    var base = W >= 900 ? Math.max(1, Math.min(W / 600, V / 680, 1.8)) : 1;
+    [m, tb, bb].forEach(function (n) { n.style.zoom = base; });
+    document.documentElement.style.setProperty("--vh", (V / base) + "px");
+    var H = document.documentElement.scrollHeight;
+    if (H <= V + 1) return;
+    var top = tb.offsetHeight * base;
+    var z = base * Math.max(0.72, (V - top) / (H - top));
+    m.style.zoom = z;
+    H = document.documentElement.scrollHeight;
+    if (H > V + 1) m.style.zoom = Math.max(base * 0.72, z * (V - top) / (H - top));
+  }
+  function fitSoon() { if (!fitQ) fitQ = requestAnimationFrame(fit); }
+  addEventListener("resize", fitSoon);
+  try { new MutationObserver(fitSoon).observe(document.getElementById("main"), { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ["hidden", "class"] }); } catch (e) {}
+  function scrollToNode(node) { fitSoon(); return; requestAnimationFrame(function () { var r = node.getBoundingClientRect(); var y = window.scrollY + r.top - 70; window.scrollTo({ top: Math.max(0, y), behavior: reduceMotion ? "auto" : "smooth" }); }); }
   function toast(msg) { var t = $("toast"); t.textContent = msg; restart(t, "show"); clearTimeout(toast._t); toast._t = setTimeout(function () { t.classList.remove("show"); }, 1900); }
 
   /* ---------- save ---------- */
   function fresh() { return { xp: 0, stars: R.map(function () { return 0; }), anchors: [], badges: [], egg: false, name: "", seenPack: true, bestStreak: 0 }; }
   var save = fresh();
   try { var raw = localStorage.getItem(STORE); if (raw) { var sv = JSON.parse(raw); if (sv && sv.stars && sv.stars.length === N) save = Object.assign(save, sv); } } catch (e) {}
+  save.anchors = save.anchors.map(function (a) { return a === "water" ? "step" : a; }).filter(function (a, i, arr) { return arr.indexOf(a) === i; });
   function persist() { try { localStorage.setItem(STORE, JSON.stringify(save)); } catch (e) {} }
   function doneCount() { var n = 0; while (n < N && save.stars[n] > 0) n++; return n; }
 
@@ -194,7 +221,7 @@
     $("lvlNum").textContent = li + 1; $("lvlName").textContent = L[li].name;
     $("xpFill").style.width = Math.min(100, Math.round((save.xp - cur) / (nxt - cur) * 100)) + "%";
     $("lvlBox").setAttribute("aria-label", "רמה " + (li + 1) + ": " + L[li].name + ", " + save.xp + " XP");
-    var sp = $("streakPill"); sp.hidden = run.streak < 2; $("streakNum").textContent = run.streak; sp.classList.toggle("hot", run.streak >= 5);
+    $("streakPill").hidden = true;
     if (pop) restart($("lvlBox"), "pop");
   }
   function addXP(node, pts) {
@@ -217,15 +244,13 @@
   var CHEERS = ["מעולה!", "בול!", "יש!", "גאוני!", "סינפסה נדלקה!", "מדויק!", "כל הכבוד!"];
   function good(node, base) {
     run.streak++; if (run.streak > save.bestStreak) save.bestStreak = run.streak;
-    var pts = base != null ? base : (run.cardMistakes === 0 ? 20 : run.cardMistakes === 1 ? 10 : 5);
-    SFX.good(run.streak); buzz(18); sparks(node, 22);
+    var pts = base != null ? base : 15;
+    SFX.good(Math.min(run.streak, 4)); buzz(18); sparks(node, 22);
     addXP(node, pts);
-    if (run.streak === 3) { setTimeout(function () { toast("⚡ רצף x3! בונוס +10"); addXP(null, 10); }, 350); }
-    else if (run.streak === 5) { setTimeout(function () { burst("רצף x5!"); SFX.solved(); confetti(true); addXP(null, 25); giveBadge("streak5"); }, 350); }
-    else if (run.streak > 5 && run.streak % 4 === 1) { setTimeout(function () { toast("🔥 רצף x" + run.streak + "! +15"); addXP(null, 15); }, 350); }
+    if (run.cardMistakes > 0 && giveBadge("fixed")) { setTimeout(function () { burst("תיקנתם אחרי משוב!"); }, 300); }
     else setTimeout(function () { confetti(false); }, 120);
   }
-  function bad(node) { run.mistakes++; run.cardMistakes++; run.streak = 0; SFX.soft(); buzz([12, 50, 12]); if (node) restart(node, "shake"); updateHud(); }
+  function bad(node) { run.mistakes++; run.cardMistakes++; run.streak = 0; if (run.cardMistakes >= 2) giveBadge("retry"); SFX.soft(); buzz([12, 50, 12]); if (node) restart(node, "shake"); updateHud(); }
 
   /* ---------- intro ---------- */
   var slideIdx = 0;
@@ -252,7 +277,7 @@
       var b = el("button", "node " + st + (rg.boss ? " boss" : ""));
       b.type = "button"; b.style.left = POS[i][0] + "%"; b.style.top = (POS[i][1] / 2) + "%"; b.style.setProperty("--c", rg.color);
       b.dataset.i = i;
-      var stars = save.stars[i] > 0 ? '<span class="nstars">' + "★★★".slice(0, save.stars[i]) + '<em>' + "★★★".slice(save.stars[i]) + "</em></span>" : "";
+      var stars = save.stars[i] > 0 ? '<span class="nstars">✔</span>' : "";
       b.innerHTML = '<span class="orb">' + (st === "locked" ? "🔒" : rg.icon) + '</span><span class="nlabel"><b>' + esc(rg.name) + '</b><small>' + esc(rg.sub) + '</small><small class="en" dir="ltr">' + esc(rg.en) + "</small>" + stars + "</span>";
       b.setAttribute("aria-label", rg.name + " (" + rg.en + ")" + (st === "locked" ? ", נעול" : st === "done" ? ", הושלם" : ", פתוח"));
       b.addEventListener("click", function () {
@@ -273,7 +298,8 @@
     $("mapSub").textContent = open >= N ? "השלמתם את כל המסע! 🏆 אפשר לשחק שוב בכל אזור" : open === 0 ? "מתחילים באזעקה של המוח. לחצו על האזור הזוהר" : "השלמתם " + open + " מתוך " + N + " אזורים. ממשיכים!";
     $("egg").hidden = !(open >= 2 && !save.egg);
     var oldC = document.querySelector(".cert-btn"); if (oldC) oldC.remove();
-    if (open >= N) { var f = el("button", "btn primary big cert-btn", "🏆 לתעודה שלי"); f.type = "button"; f.addEventListener("click", function () { SFX.tap(); openFinal(); }); document.querySelector(".map-foot").before(f); }
+    $("map").classList.toggle("complete", open >= N);
+    if (open >= N) { var f = el("button", "btn primary cert-btn", "🏆 לתעודה שלי"); f.type = "button"; f.addEventListener("click", function () { SFX.tap(); openFinal(); }); document.querySelector(".map-head").appendChild(f); }
   }
   $("egg").addEventListener("click", function () {
     if (save.egg) return; save.egg = true; persist();
@@ -293,7 +319,7 @@
   /* ---------- region play ---------- */
   var run = { ri: 0, ci: 0, mistakes: 0, cardMistakes: 0, streak: 0, xp: 0 };
   function startRegion(i) {
-    run.ri = i; run.ci = 0; run.mistakes = 0; run.xp = 0;
+    run.ri = i; run.ci = 0; run.mistakes = 0; run.xp = 0; if (save.stars[i] > 0) giveBadge("retry");
     theme(R[i].id); $("regionChip").innerHTML = '<span>' + R[i].icon + "</span> " + esc(R[i].name) + ' <small>' + esc(R[i].en) + "</small>";
     var st = $("steps"); st.innerHTML = ""; R[i].cards.forEach(function () { st.appendChild(el("i")); });
     show("play"); renderCard();
@@ -301,7 +327,7 @@
   function setSteps() { [].forEach.call($("steps").children, function (s, k) { s.className = k < run.ci ? "on" : k === run.ci ? "cur" : ""; }); }
   function renderCard() {
     stopBreath();
-    var c = R[run.ri].cards[run.ci]; run.cardMistakes = 0; setSteps();
+    var c = R[run.ri].cards[run.ci]; run.cardMistakes = 0; setSteps(); bar([]);
     var host = $("cardHost"); host.innerHTML = "";
     var card = el("div", "card qcard t-" + c.t); card.dataset.t = c.t; host.appendChild(card);
     ({ learn: cLearn, choice: cChoice, sort: cSort, match: cMatch, multi: cMulti, order: cOrder, breath: cBreath, boss: cBoss })[c.t](card, c);
@@ -311,12 +337,12 @@
     SFX.tap(); run.ci++;
     if (run.ci >= R[run.ri].cards.length) finishRegion(); else { renderCard(); window.scrollTo(0, 0); }
   }
-  function explain(card, c, title) {
-    var ex = el("div", "explain");
-    ex.innerHTML = '<div class="ex-head"><span class="mini-neuro">' + neuro("wow") + '</span><b>' + esc(title || pick(["נכון! הנה למה:", "בול! ההסבר המלא:", "יש! למה זה ככה?"])) + "</b></div><p>" + esc(c.exp) + "</p>" +
+  function explain(card, c, title, text, ans) {
+    var ex = el("div", "explain"); var qc = card.closest ? (card.closest(".qcard") || card) : card; qc.classList.add("answered");
+    ex.innerHTML = '<div class="ex-head"><span class="mini-neuro">' + neuro("wow") + '</span><b>' + esc(title || pick(["נכון! הנה למה:", "בול! ההסבר המלא:", "יש! למה זה ככה?"])) + "</b></div>" + (ans ? '<p class="ex-ans">✔ ' + esc(ans) + "</p>" : "") + "<p>" + esc(text || c.exp) + "</p>" +
       (c.fact ? '<p class="fact">🧠 ידעתם? ' + esc(c.fact) + "</p>" : "");
     var b = el("button", "btn primary big next-btn", "ממשיכים ➜"); b.type = "button"; b.addEventListener("click", nextCard);
-    ex.appendChild(b); card.appendChild(ex); scrollToNode(ex);
+    card.appendChild(ex); bar([b]); fitSoon();
     return ex;
   }
   function qhead(card, kicker, q) { card.appendChild(el("p", "kicker", esc(kicker))); card.appendChild(el("h2", "q", esc(q))); }
@@ -331,7 +357,7 @@
     if (c.fact) card.appendChild(el("p", "fact", "🧠 ידעתם? " + esc(c.fact)));
     var b = el("button", "btn primary big next-btn", "הבנתי ➜"); b.type = "button";
     b.addEventListener("click", function () { if (b.disabled) return; b.disabled = true; SFX.learn(); addXP(b, 5); setTimeout(nextCard, 280); });
-    card.appendChild(b);
+    bar([b]);
   }
   function cChoice(card, c) {
     qhead(card, "שאלה", c.q);
@@ -342,7 +368,7 @@
       b.addEventListener("click", function () {
         if (done || b.disabled) return;
         if (o.ok) {
-          done = true; b.classList.add("right"); [].forEach.call(list.children, function (x) { x.disabled = true; }); good(b); explain(card, c);
+          done = true; b.classList.add("right"); [].forEach.call(list.children, function (x) { x.disabled = true; }); good(b); explain(card, c, null, null, o.x);
         } else {
           b.classList.add("wrong"); b.disabled = true; bad(b); b.appendChild(el("span", "why", esc(o.why || "לא בדיוק. נסו שוב!")));
         }
@@ -369,9 +395,9 @@
         if (o.k === bn.k) {
           meter.children[k].className = mistakesHere ? "half" : "on";
           setFeed(feed, true, o.x + ": " + o.why);
-          run.cardMistakes = mistakesHere ? 1 : 0; good(b, mistakesHere ? 4 : 8); mistakesHere = 0;
+          run.cardMistakes = mistakesHere ? 1 : 0; good(b, 8); mistakesHere = 0;
           k++;
-          if (k < items.length) showItem(); else { item.textContent = "🎉 מיינתם הכול!"; item.className = "sort-item fin"; [].forEach.call(bins.children, function (x) { x.disabled = true; }); SFX.solved(); explain(card, c, "מיון מושלם! עכשיו ההסבר:"); }
+          if (k < items.length) showItem(); else { item.textContent = "🎉 מיינתם הכול!"; item.className = "sort-item fin"; [].forEach.call(bins.children, function (x) { x.disabled = true; }); SFX.solved(); explain(card, c, "מיינתם הכול! עכשיו ההסבר:"); }
         } else { mistakesHere++; bad(b); restart(item, "shake"); setFeed(feed, false, "לא בדיוק. " + o.why); }
       });
       bins.appendChild(b);
@@ -395,7 +421,7 @@
         if (!sel) { SFX.soft(); setFeed(feed, false, "קודם בוחרים תחושה מהעמודה הימנית"); return; }
         if (+sel.dataset.i === q[1]) {
           sel.classList.remove("sel"); sel.classList.add("ok"); b.classList.add("ok"); sel.disabled = b.disabled = true;
-          setFeed(feed, true, c.pairs[q[1]][0] + " ← " + q[0][1]); good(b, run.cardMistakes ? 5 : 10); run.cardMistakes = 0; sel = null; matched++;
+          setFeed(feed, true, c.pairs[q[1]][0] + " ← " + q[0][1]); good(b, 10); run.cardMistakes = 0; sel = null; matched++;
           if (matched === c.pairs.length) { SFX.solved(); explain(card, c, "כל ההתאמות נכונות! ההסבר:"); }
         } else { bad(b); setFeed(feed, false, "לא זה. נסו תפקיד אחר"); }
       });
@@ -411,7 +437,7 @@
       var o = p[0], b = el("button", "chip", esc(o.x)); b.type = "button"; b.dataset.i = p[1];
       b.addEventListener("click", function () {
         if (b.disabled) return; b.disabled = true;
-        if (o.ok) { found++; b.classList.add("right"); cnt.textContent = "נמצאו " + found + " מתוך " + c.need; setFeed(feed, true, "נכון! זה עוזר."); good(b, run.cardMistakes ? 6 : 10);
+        if (o.ok) { found++; b.classList.add("right"); cnt.textContent = "נמצאו " + found + " מתוך " + c.need; setFeed(feed, true, "נכון! זה עוזר."); good(b, 10);
           if (found === c.need) { [].forEach.call(list.children, function (x) { x.disabled = true; }); SFX.solved(); explain(card, c, "מצאתם את שלושתם! למה הם עוזרים:"); } }
         else { b.classList.add("wrong"); bad(b); setFeed(feed, false, o.why); }
       });
@@ -424,14 +450,16 @@
     c.steps.forEach(function (s, i) { slots.appendChild(el("li", "slot", '<span class="sn">' + (i + 1) + '</span><span class="st">?</span>')); });
     var pool = el("div", "pool"); card.appendChild(pool);
     var feed = feedLine(card), k = 0;
-    var HINTS = ["מה קורה ממש בהתחלה?", "מה האזעקה עושה מיד אחרי?", "ואז מה עושים כדי שהלחץ ייעלם?", "ואיך מרגישים ברגע הראשון אחרי?", "מה האזעקה מסיקה מזה?", "ומה קורה בפעם הבאה?"];
+    function markNext() { [].forEach.call(slots.children, function (sl, j) { sl.classList.toggle("next", j === k); }); }
+    markNext();
+    var HINTS = ["מה קורה ממש בהתחלה?", "מה האזעקה עושה מיד אחרי?", "ואז מה עושים כדי להתחמק?", "ואיך מרגישים ברגע הראשון אחרי?", "מה האזעקה מסיקה מזה?", "ומה קורה בפעם הבאה?"];
     shuffle(c.steps.map(function (s, i) { return [s, i]; })).forEach(function (p) {
       var b = el("button", "chip step", esc(p[0])); b.type = "button"; b.dataset.i = p[1];
       b.addEventListener("click", function () {
         if (b.disabled) return;
         if (p[1] === k) {
           var sl = slots.children[k]; sl.classList.add("filled"); sl.querySelector(".st").textContent = p[0]; restart(sl, "pop");
-          b.disabled = true; b.classList.add("gone"); SFX.slot(k); setFeed(feed, true, "שלב " + (k + 1) + " במקום!"); good(sl, run.cardMistakes ? 4 : 8); run.cardMistakes = 0; k++;
+          b.disabled = true; b.classList.add("gone"); SFX.slot(k); setFeed(feed, true, "שלב " + (k + 1) + " במקום!"); good(sl, 8); run.cardMistakes = 0; k++; markNext();
           if (k === c.steps.length) { slots.classList.add("loop"); SFX.solved(); explain(card, c, "המעגל שלם! מה רואים כאן?"); }
         } else { bad(b); setFeed(feed, false, "עוד לא. רמז: " + HINTS[k]); }
       });
@@ -449,7 +477,7 @@
     wrap.innerHTML = '<svg class="vline" viewBox="0 0 60 200" aria-hidden="true"><path d="M30 6 Q18 50 34 80 Q50 112 26 140 Q12 164 30 196"/></svg>';
     var circ = el("button", "bcirc"); circ.type = "button"; circ.innerHTML = '<span class="bring"></span><span class="btxt">החזיקו<br>לשאיפה</span><span class="bnum"></span>';
     wrap.appendChild(circ);
-    var meter = el("div", "brake-meter", '<span class="bm-l">מד הבלם</span>'); var segs = el("div", "segs"); meter.appendChild(segs); card.appendChild(meter);
+    var meter = el("div", "brake-meter", '<span class="bm-l">נשימות</span>'); var segs = el("div", "segs"); meter.appendChild(segs); card.appendChild(meter);
     for (var i = 0; i < c.rounds; i++) segs.appendChild(el("i"));
     var feed = feedLine(card);
     var txt = circ.querySelector(".btxt"), num = circ.querySelector(".bnum");
@@ -466,16 +494,16 @@
     function up() {
       if (!S || S.phase !== "in") return; clearInterval(S.iv);
       var held = Date.now() - S.t0;
-      if (held < 1200) { setPhase("idle"); circ.style.transitionDuration = ".4s"; num.textContent = ""; txt.innerHTML = "החזיקו<br>לשאיפה"; setFeed(feed, false, "שאיפה קצת יותר ארוכה 🙂 נסו להחזיק עד 3 או 4"); return; }
-      setPhase("out"); circ.style.transitionDuration = c.exhale + "s"; txt.innerHTML = "נשיפה<br>ארוכה…"; SFX.exhale();
+      if (held < 1200) { setPhase("idle"); circ.style.transitionDuration = ".4s"; num.textContent = ""; txt.innerHTML = "החזיקו<br>לשאיפה"; setFeed(feed, false, "אפשר להחזיק עוד קצת 🙂 בלי להתאמץ, בקצב שנוח לכם"); giveBadge("retry"); return; }
+      setPhase("out"); circ.style.transitionDuration = c.exhale + "s"; txt.innerHTML = "נשיפה<br>איטית…"; SFX.exhale();
       var t1 = Date.now(); num.textContent = c.exhale;
       S.iv = setInterval(function () { num.textContent = Math.max(1, c.exhale - Math.floor((Date.now() - t1) / 1000)); }, 200);
       S.to = setTimeout(function () {
         clearInterval(S.iv); segs.children[S.done].className = "on"; S.done++; num.textContent = "";
         run.cardMistakes = 0; good(segs.children[S.done - 1], 10);
         wrap.querySelector(".vline").style.setProperty("--lit", S.done / c.rounds);
-        if (S.done >= c.rounds) { setPhase("fin"); txt.innerHTML = "הבלם<br>פועל! 🛑"; circ.disabled = true; skip.hidden = true; setFeed(feed, true, "שלוש נשיפות ארוכות. הבלם בפעולה!"); giveBadge("lungs"); SFX.solved(); explain(card, c, "וואו, נשיפות של אלופים! מה קרה בגוף?"); stopBreath(); }
-        else { setPhase("idle"); txt.innerHTML = "עוד אחת!<br>החזיקו"; setFeed(feed, true, "נשיפה " + S.done + " מתוך " + c.rounds + ". הלב מאט קצת בכל נשיפה"); }
+        if (S.done >= c.rounds) { setPhase("fin"); txt.innerHTML = "תרגלתם!<br>🌬️"; circ.disabled = true; skip.hidden = true; setFeed(feed, true, "שלוש נשימות איטיות. תרגלתם!"); giveBadge("lungs"); SFX.solved(); explain(card, c, "תרגלתם נשימה! מה שמתם לב?"); stopBreath(); }
+        else { setPhase("idle"); txt.innerHTML = "עוד אחת!<br>החזיקו"; setFeed(feed, true, "נשימה " + S.done + " מתוך " + c.rounds + ". ממשיכים בקצב שנוח לכם"); }
       }, c.exhale * 1000);
     }
     S.up = up;
@@ -484,14 +512,14 @@
     circ.addEventListener("keydown", function (e) { if ((e.key === " " || e.key === "Enter") && !e.repeat) down(e); });
     circ.addEventListener("keyup", function (e) { if (e.key === " " || e.key === "Enter") up(); });
     circ.addEventListener("contextmenu", function (e) { e.preventDefault(); });
-    skip.addEventListener("click", function () { stopBreath(); skip.hidden = true; circ.disabled = true; setPhase("fin"); txt.innerHTML = "אפשר גם<br>בלי ללחוץ"; explain(card, c, "אפשר לתרגל גם בלי משחק:"); });
+    skip.addEventListener("click", function () { stopBreath(); skip.hidden = true; circ.disabled = true; setPhase("fin"); txt.innerHTML = "אפשר גם<br>בלי ללחוץ"; feed.className = "feed"; feed.innerHTML = ""; explain(card, c, "דילגתם, וזה בסדר", c.skipExp); });
   }
 
   /* ---------- boss ---------- */
   function cBoss(card, c) {
     var k = 0, total = c.rounds.length;
     card.innerHTML = '<div class="arena"><div class="boss-wrap calm-0" id="bossWrap">' + bossSVG() + '</div>' +
-      '<div class="hp"><span class="hp-l">עוצמת האזעקה</span><div class="hpbar"><i id="hpFill"></i></div><b id="hpTxt">100%</b></div></div>';
+      '<div class="tools-meter" id="toolsMeter"><span class="tm-l">כלים שתרגלתי:</span><b id="tmTxt">0 מתוך ' + total + '</b><div class="tm-segs" id="tmSegs">' + c.rounds.map(function () { return "<i></i>"; }).join("") + '</div></div></div>';
     var stage = el("div", "boss-stage"); card.appendChild(stage);
     SFX.siren();
     function round() {
@@ -507,17 +535,17 @@
           if (done || b.disabled) return;
           var bw = $("bossWrap");
           if (o.ok) {
-            done = true; b.classList.add("right"); [].forEach.call(list.children, function (x) { x.disabled = true; });
-            k++; SFX.hit(); restart(bw, "hit"); bw.className = "boss-wrap calm-" + k; restart(bw, "hit");
-            var pct = Math.round((1 - k / total) * 100); $("hpFill").style.width = pct + "%"; $("hpTxt").textContent = pct + "%";
-            floater(bw, "-" + Math.round(100 / total) + "%"); good(b, 30); burst(pick(["פגיעה!", "בום!", "כיול!", "יש!"]));
+            done = true; b.classList.add("right"); list.classList.add("done"); [].forEach.call(list.children, function (x) { x.disabled = true; });
+            k++; SFX.anchor && SFX.anchor(); restart(bw, "hit"); bw.className = "boss-wrap calm-" + k; restart(bw, "hit");
+            var seg = $("tmSegs").children[k - 1]; seg.className = "on"; seg.title = r.tool || ""; $("tmTxt").textContent = k + " מתוך " + total; restart($("toolsMeter"), "pop");
+            floater(bw, "🧰 " + (r.tool || "כלי")); good(b, 30); burst(pick(["כלי נוסף!", "תרגלתם!", "יש!", "כיול!"]));
             b.appendChild(el("span", "why ok", esc(o.why)));
             if (k >= total) {
-              setTimeout(function () { bw.classList.add("won"); SFX.fanfare(); confetti(true); setTimeout(function () { confetti(true); }, 700); burst("כיול הושלם!"); }, 500);
-              explain(stage, c, "ניצחון! מה בעצם עשיתם?");
+              setTimeout(function () { bw.classList.add("won"); SFX.fanfare(); confetti(true); setTimeout(function () { confetti(true); }, 700); burst("6 כלים תורגלו!"); }, 500);
+              explain(stage, c, "תרגלתם את כל הכלים! מה בעצם עשיתם?");
             } else {
               var nb = el("button", "btn primary big next-btn", "להתקפה הבאה ⚔️"); nb.type = "button";
-              nb.addEventListener("click", function () { SFX.siren(); round(); scrollToNode($("bossWrap")); }); stage.appendChild(nb); scrollToNode(nb);
+              nb.addEventListener("click", function () { SFX.siren(); bar([]); round(); }); bar([nb]);
             }
           } else {
             b.classList.add("wrong"); b.disabled = true; bad(b); restart(bw, "louder"); SFX.siren();
@@ -534,16 +562,16 @@
   function finishRegion() {
     stopBreath();
     var i = run.ri, rg = R[i], m = run.mistakes;
-    var stars = m === 0 ? 3 : m <= 3 ? 2 : 1, first = save.stars[i] === 0;
-    save.stars[i] = Math.max(save.stars[i], stars); persist();
+    var stars = 3, first = save.stars[i] === 0;
+    save.stars[i] = 3; persist();
     theme("done"); show("done");
     $("doneKicker").textContent = rg.boss ? "הבוס כויל! 🏆" : "אזור הושלם!";
     $("doneTitle").textContent = rg.icon + " " + rg.name;
-    var sw = $("doneStars"); sw.innerHTML = ""; for (var s = 0; s < 3; s++) sw.appendChild(el("span", "star" + (s < stars ? " on" : ""), "★"));
-    [].forEach.call(sw.children, function (st, si) { if (si < stars) setTimeout(function () { st.classList.add("pop"); SFX.star(si); sparks(st, 14); }, 400 + si * 300); });
-    addXP(null, 50); var bonus = 50;
-    if (m === 0) { addXP(null, 30); bonus += 30; giveBadge("perfect"); }
-    $("doneXp").innerHTML = "⚡ צברתם <b>" + run.xp + " XP</b> באזור הזה" + (m === 0 ? " · 💎 בונוס בלי טעויות!" : "") + "<br><small>כולל בונוס סיום +" + bonus + "</small>";
+    var sw = $("doneStars"); sw.innerHTML = ""; for (var s = 0; s < 3; s++) sw.appendChild(el("span", "star on", "★"));
+    [].forEach.call(sw.children, function (st, si) { setTimeout(function () { st.classList.add("pop"); SFX.star(si); sparks(st, 14); }, 400 + si * 300); });
+    addXP(null, 50);
+    if (m > 0) giveBadge("learned");
+    $("doneXp").innerHTML = "⚡ צברתם <b>" + run.xp + " XP</b> באזור הזה<br><small>" + (m > 0 ? "🌱 טעיתם, קיבלתם משוב ותיקנתם. ככה לומדים!" : "כולל בונוס סיום +50") + "</small>";
     var newBadge = giveBadge("r" + i), bd = D.BADGES["r" + i];
     $("doneBadge").innerHTML = '<span class="bchip">' + bd.icon + " תג: " + esc(bd.name) + (newBadge ? ' <em>חדש!</em>' : "") + "</span>";
     var aid = rg.anchor || (!save.egg && save.anchors.indexOf("place") < 0 ? "place" : null);
@@ -556,7 +584,7 @@
     }
     setTimeout(function () { SFX.fanfare(); confetti(true); }, 150);
     var nb = $("nextRegionBtn");
-    nb.textContent = i < N - 1 ? "לאזור הבא: " + R[i + 1].name + " ➜" : "לתעודה שלי 🏆";
+    nb.textContent = i < N - 1 ? "לאזור הבא ➜" : "לתעודה שלי 🏆";
     nb.onclick = function () { SFX.zap(); if (i < N - 1) startRegion(i + 1); else openFinal(); };
   }
   $("toMapBtn").addEventListener("click", function () { SFX.tap(); openMap(); });
@@ -566,7 +594,7 @@
     theme("final"); show("final");
     var li = levelOf(save.xp);
     $("nameInput").value = save.name || ""; renderCertName();
-    $("certStats").innerHTML = '<div><b>' + (li + 1) + '</b><span>רמה: ' + esc(D.LEVELS[li].name) + '</span></div><div><b>' + save.xp + '</b><span>XP</span></div><div><b>' + save.anchors.length + "/6</b><span>עוגנים</span></div><div><b>" + save.badges.length + "</b><span>תגים</span></div>";
+    $("certStats").innerHTML = '<div><b>' + (li + 1) + '</b><span>רמה: ' + esc(D.LEVELS[li].name) + '</span></div><div><b>' + save.xp + '</b><span>XP</span></div><div><b>' + save.anchors.length + "/6</b><span>עוגנים</span></div><div><b>" + save.badges.filter(function (id) { return D.BADGES[id]; }).length + "</b><span>תגים</span></div>";
     $("certBadges").innerHTML = save.badges.map(function (id) { var b = D.BADGES[id]; return b ? '<span class="bchip sm">' + b.icon + " " + esc(b.name) + "</span>" : ""; }).join("");
     setTimeout(function () { SFX.fanfare(); confetti(true); setTimeout(function () { confetti(true); }, 800); }, 200);
   }
@@ -576,7 +604,7 @@
   $("finalMapBtn").addEventListener("click", function () { SFX.tap(); openMap(); });
 
   /* ---------- backpack ---------- */
-  var ORDER = ["alarm", "muscle", "senses", "breath", "water", "place"], lastFocus = null;
+  var ORDER = ["alarm", "muscle", "senses", "breath", "step", "place"], lastFocus = null;
   function openPack() {
     lastFocus = document.activeElement; SFX.zap();
     var g = $("anchorGrid"); g.innerHTML = "";

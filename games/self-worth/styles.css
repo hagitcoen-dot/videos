@@ -236,3 +236,28 @@ b,strong{color:#ffe1a8}
 @keyframes speed{0%{opacity:0}15%{opacity:1}100%{opacity:0}}
 @keyframes burst{0%{opacity:0; transform:scale(.3) rotate(-20deg)}25%{opacity:1; transform:scale(1.05) rotate(4deg)}70%{opacity:1; transform:scale(1)}100%{opacity:0; transform:scale(1.15)}}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---- Hagit logo: small footer credit on the ending screen only (Nov 9, v2) ---- */
+.hfoot{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:nowrap}
+.hfoot .hlogo-sm{display:block;height:36px;width:auto}
+.hfoot .hbadge-sm{display:inline-block;line-height:0;background:rgba(255,255,255,.92);border-radius:9px;padding:2px 5px}
+@media (max-height:640px){.hfoot .hlogo-sm{height:32px}}
+@media (min-width:900px) and (min-height:760px){.hfoot .hlogo-sm{height:42px}}
+
+/* v4: journey progress, 3-option sort, practice line */
+.opts.three{flex-direction:column}
+.opts.three .opt{text-align:center; font-size:1rem; padding:.6rem .5rem}
+.opts.answered.three .opt.gone{display:none}
+.journey{display:flex; flex-direction:column; align-items:center; gap:.3rem; font-weight:700; color:var(--ink)}
+.j-dots{display:flex; gap:.5rem}
+.j-dots i{width:1.6rem; height:1.6rem; border-radius:50%; border:2px solid var(--line); background:#120810; display:flex; align-items:center; justify-content:center; font-style:normal; font-size:.8rem; color:#1a0b14}
+.j-dots i.on{background:var(--gold)}
+.line.practice{grid-column:1 / -1; text-align:center; border-style:dashed}
+.pinput{font:inherit; font-size:1rem; width:100%; margin-top:.4rem; padding:.45rem .6rem; border-radius:12px; border:2px solid var(--gold); background:#fff6e6; color:#1a0b14}
+.iam li.prac small{display:block; font-size:.72rem; font-weight:700; opacity:.7}
+@media (min-width:700px) and (max-height:820px){
+  .tile{padding:.4rem .8rem} .tile .t-ic{font-size:1.5rem} .tiles{gap:.45rem}
+  .card{padding:.9rem 1.3rem} .wrap{gap:.55rem}
+  .likes{width:clamp(100px, 19vh, 200px)}
+  .opts.three .opt{padding:.45rem .5rem}
+}

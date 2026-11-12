@@ -158,7 +158,8 @@
   }
 
   /* ---------- save ---------- */
-  function fresh() { return { done: S.map(function () { return false; }), stars: S.map(function () { return 0; }), bonus: S.map(function () { return false; }), fill: 0, best: 0, badges: [], name: "", lines: [], g: "f", secret: false }; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (ch) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]; }); }
+  function fresh() { return { done: S.map(function () { return false; }), stars: S.map(function () { return 0; }), bonus: S.map(function () { return false; }), fill: 0, best: 0, badges: [], name: "", lines: [], practice: "", g: "f", secret: false }; }
   var save = fresh();
   try { var raw = localStorage.getItem(STORE); if (raw) { var o = JSON.parse(raw); if (o && o.done && o.done.length === N) save = Object.assign(fresh(), o); } } catch (e) {}
   function persist() { try { localStorage.setItem(STORE, JSON.stringify(save)); } catch (e) {} }
@@ -175,8 +176,8 @@
     $("hudStars").textContent = "⭐ " + totalStars();
     $("hudStreak").textContent = "🔥 " + streak;
     $("hudStreak").classList.toggle("hot", streak >= 3);
-    $("mFill").style.width = Math.round(potLevel() * 100) + "%";
-    $("mPct").textContent = Math.round(potLevel() * 100) + "%";
+    $("mFill").style.width = Math.round(doneCount() / N * 100) + "%";
+    $("mPct").textContent = doneCount() + "/" + N;
     if (pop) restart($(pop), "pop");
   }
 
@@ -202,7 +203,7 @@
   /* ---------- intro ---------- */
   function intro() {
     var w = screen("intro");
-    w.appendChild(el("div", "hero", '<div class="hero-ember" id="introEmber">' + emberSVG(save.secret ? "gold" : "") + '</div><div class="hero-pot">' + potSVG(Math.max(0.35, potLevel())) + "</div>"));
+    w.appendChild(el("div", "hero", '<div class="hero-ember" id="introEmber">' + emberSVG(save.secret ? "gold" : "") + '</div><div class="hero-pot">' + potSVG(0.62) + "</div>"));
     w.appendChild(el("p", "kicker", G.en + " · חלק " + G.part + " מתוך 2"));
     w.appendChild(el("h1", "", G.title));
     w.appendChild(el("p", "lead", G.pitch));
@@ -272,7 +273,7 @@
     }
     if (c.t === "sort") {
       box.innerHTML = '<p class="q">' + c.q + '</p><div class="item">' + c.item + "</div>";
-      var row = el("div", "opts two");
+      var row = el("div", c.set.length > 2 ? "opts three" : "opts two");
       shuffle(c.set).forEach(function (o) {
         var b = el("button", "opt", o[1]); b.type = "button"; b.dataset.k = o[0];
         b.onclick = function () { answer(b, o[0] === c.ans, c.why, row); };
@@ -307,7 +308,6 @@
     var fb = el("div", "fb " + (ok ? "good" : "bad"));
     if (ok) {
       run.right++; streak++; if (streak > save.best) save.best = streak;
-      if (!run.bonus) save.fill++;
       SFX.clunk(); setTimeout(function () { SFX.combo(streak); }, 90);
       sparks(btn, 22); floater(btn, (run.bonus ? "+2⭐ " : "+1⭐ ") + pick(G.BURST));
       if (streak === 3 || streak === 5 || streak === 8 || streak === 12) { confetti(false); toast("🔥 רצף של " + streak + "!"); }
@@ -316,14 +316,14 @@
       streak = 0; SFX.soft();
       btn.classList.add("wrong"); restart(btn, "shake");
       var right = correctBtn ? strip(correctBtn.innerHTML.replace(/<small[\s\S]*?<\/small>/, "")) : "";
-      fb.innerHTML = '<p class="fb-h">💡 כמעט! התשובה: <b>' + right + "</b></p><p>" + why + "</p>";
+      fb.innerHTML = '<p class="fb-h">💡 לא בדיוק. התשובה: <b>' + right + "</b></p><p>" + why + "</p>";
     }
     if (correctBtn) correctBtn.classList.add("right");
     // collapse: keep only the picked and the right option so the explanation fits
     Array.prototype.forEach.call(group.children, function (b) { if (b !== btn && b !== correctBtn) b.classList.add("gone"); });
     group.classList.add("answered");
     group.parentNode.appendChild(fb);
-    persist(); hud(ok ? "hudStars" : null); if (ok) restart($("potMeter"), "pop");
+    persist(); hud(ok ? "hudStars" : null);
     action(run.i === run.list.length - 1 ? "סיום התחנה 🎉" : "הבא ←", next);
   }
   function next() { run.i++; if (run.i >= run.list.length) stationDone(); else card(); }
@@ -334,14 +334,14 @@
     var stars = bonus ? run.right * 2 : run.right;
     if (bonus) { save.bonus[si] = true; save.stars[si] += stars; addBadge(s.bonusBadge); }
     else { if (!save.done[si]) save.stars[si] = stars; else save.stars[si] = Math.max(save.stars[si], stars); save.done[si] = true; addBadge(s.badge); }
-    persist(); hud("hudStars");
+    persist(); hud("hudStars"); if (!bonus) restart($("potMeter"), "pop");
     var b = bonus ? s.bonusBadge : s.badge;
     var w = screen("done", bonus ? "bonus" : s.theme);
     w.appendChild(el("p", "kicker", bonus ? "STRETCH COMPLETE" : "STATION CLEAR"));
     w.appendChild(el("div", "badge-big", '<span class="bb-ic">' + b.icon + "</span>"));
     w.appendChild(el("h2", "", "תג חדש: " + b.name));
     w.appendChild(el("p", "lead", (bonus ? "מתיחה הושלמה! " : "") + "⭐ " + stars + " כוכבים" + (bonus ? " (כפול!)" : "") + " · " + run.right + " מתוך " + run.qs + " נכונות"));
-    w.appendChild(el("div", "pot-mini", potSVG(potLevel())));
+    w.appendChild(el("div", "journey", '<span class="j-dots">' + S.map(function (x, k) { return '<i class="' + (save.done[k] ? "on" : "") + '">' + (save.done[k] ? "✔" : "") + "</i>"; }).join("") + '</span><span>המסע: ' + doneCount() + " מתוך " + N + " תחנות</span>"));
     SFX.fanfare(); setTimeout(function () { confetti(true); }, 350);
     if (!bonus && !save.bonus[si] && s.bonus && s.bonus.length) {
       var off = el("div", "stretch");
@@ -358,7 +358,7 @@
   /* ---------- secret ---------- */
   function secret() {
     var first = !save.secret;
-    save.secret = true; addBadge({ icon: "🕵️", name: "מגלה סודות" }); persist();
+    save.secret = true; addBadge({ icon: "🔎", name: "מגלה סודות" }); persist();
     $("secretArt").innerHTML = emberSVG("gold");
     $("secretTitle").textContent = G.secret.title;
     $("secretText").innerHTML = G.secret.html;
@@ -372,7 +372,7 @@
   function cardPick() {
     var w = screen("cardpick", "final");
     w.appendChild(el("h2", "", "🪪 הכרטיס שלי: ״אני זה אני״"));
-    w.appendChild(el("p", "soft", "בחרו עד 4 משפטים שמתאימים לכם"));
+    w.appendChild(el("p", "soft", "בחרו עד 4 משפטים שמתאימים לכם, או משפט לתרגול 🌱"));
     var g = el("div", "gtoggle");
     [["f", "בלשון נקבה"], ["m", "בלשון זכר"]].forEach(function (o) {
       var b = el("button", "gbtn" + (save.g === o[0] ? " on" : ""), o[1]); b.type = "button";
@@ -393,15 +393,30 @@
       };
       list.appendChild(b);
     });
-    w.appendChild(list);
-    function upd() { action(save.lines.length ? "ליצור את הכרטיס (" + save.lines.length + "/4) ✨" : "בחרו לפחות משפט אחד", save.lines.length ? cardView : null, { disabled: !save.lines.length }); }
+    var PR = -1;
+    var pb = el("button", "line practice" + (save.lines.indexOf(PR) >= 0 ? " on" : ""), "🌱 " + G.PRACTICE); pb.type = "button";
+    pb.setAttribute("aria-pressed", save.lines.indexOf(PR) >= 0 ? "true" : "false");
+    var pin = el("input", "pinput"); pin.id = "practiceInput"; pin.maxLength = 60; pin.autocomplete = "off";
+    pin.placeholder = save.g === "m" ? "כתוב כאן את המשפט שלך" : "כתבי כאן את המשפט שלך"; pin.value = save.practice || "";
+    pin.hidden = save.lines.indexOf(PR) < 0;
+    pin.oninput = function () { save.practice = pin.value.trim(); persist(); upd(); };
+    pb.onclick = function () {
+      var k = save.lines.indexOf(PR);
+      if (k >= 0) { save.lines.splice(k, 1); pin.hidden = true; }
+      else { if (save.lines.length >= 4) { toast("עד 4 משפטים 🙂"); return; } save.lines.push(PR); pin.hidden = false; pin.focus(); SFX.piece(1); sparks(pb, 8); }
+      persist(); pb.classList.toggle("on"); pb.setAttribute("aria-pressed", pb.classList.contains("on") ? "true" : "false"); upd();
+    };
+    list.appendChild(pb);
+    w.appendChild(list); w.appendChild(pin);
+    function ready() { return save.lines.filter(function (i) { return i !== PR || (save.practice || "").length; }).length; }
+    function upd() { var n = ready(); action(n ? "ליצור את הכרטיס (" + save.lines.length + "/4) ✨" : (save.lines.indexOf(PR) >= 0 ? "כתבו את המשפט לתרגול ✍️" : "בחרו לפחות משפט אחד"), n ? cardView : null, { disabled: !n }); }
     upd();
   }
   function cardView() {
     var w = screen("cardview", "final");
     var cd = el("div", "iam");
     cd.innerHTML = '<div class="iam-top">' + emberSVG(save.secret ? "gold" : "") + '<div><p class="kicker">I AM ME</p><h2>' + (save.g === "m" ? "אני זה אני" : "אני זו אני") + "</h2></div></div><ul>" +
-      save.lines.map(function (i) { return "<li>" + G.CARD_LINES[i][save.g === "m" ? 0 : 1] + "</li>"; }).join("") + '</ul><p class="iam-cr">בהשראת וירג׳יניה סאטיר · חגית כהן CBT | טיפול חברתי</p>';
+      save.lines.filter(function (i) { return i >= 0; }).map(function (i) { return "<li>" + G.CARD_LINES[i][save.g === "m" ? 0 : 1] + "</li>"; }).join("") + (save.lines.indexOf(-1) >= 0 && save.practice ? '<li class="prac">' + esc(save.practice) + '<small>🌱 משפט לתרגול</small></li>' : "") + '</ul><p class="iam-cr">בהשראת וירג׳יניה סאטיר · חגית כהן CBT | טיפול חברתי</p>';
     w.appendChild(cd);
     w.appendChild(el("p", "soft center", "📸 אפשר לצלם מסך ולשמור"));
     SFX.solved(); confetti(false);
@@ -415,7 +430,7 @@
     var inp = el("input"); inp.id = "nameInput"; inp.maxLength = 24; inp.placeholder = "כתבו כאן את השם"; inp.value = save.name; inp.autocomplete = "off";
     f.appendChild(inp); w.appendChild(f);
     var c = el("div", "cert");
-    c.innerHTML = '<p class="kicker">CERTIFICATE · ' + G.en + "</p><h2>📜 " + G.certTitle + '</h2><p class="cname" id="certName">' + (save.name || "_____") + "</p><p>" + G.certLine + '</p><p class="cmeta">⭐ ' + totalStars() + " כוכבים · " + save.badges.length + " תגים · רצף שיא " + save.best + '</p><div class="cbadges">' + save.badges.map(function (b) { return "<span>" + b.icon + "</span>"; }).join("") + '</div><p class="cr">חגית כהן CBT | טיפול חברתי · ' + new Date().toLocaleDateString("he-IL") + "</p>";
+    c.innerHTML = '<p class="kicker">CERTIFICATE · ' + G.en + "</p><h2>📜 " + G.certTitle + '</h2><p class="cname" id="certName">' + (save.name || "_____") + "</p><p>" + G.certLine + '</p><p class="cmeta">🗺️ ' + doneCount() + " מתוך " + N + " תחנות · " + save.badges.length + " תגים</p>" + '<div class="cbadges">' + save.badges.map(function (b) { return "<span>" + b.icon + "</span>"; }).join("") + '</div><p class="cr hfoot"><img class="hlogo-sm" src="hagit-logo-sm.png" alt="" width="132" height="119"><span>חגית כהן CBT | טיפול חברתי · ' + new Date().toLocaleDateString("he-IL") + "</span></p>";
     w.appendChild(c);
     inp.oninput = function () { save.name = inp.value.trim(); persist(); $("certName").textContent = save.name || "_____"; };
     var o = el("div", "other");
