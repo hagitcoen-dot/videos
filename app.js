@@ -225,7 +225,7 @@
       if (v) { btn.type = "button"; btn.onclick = () => openVideo(v.id); } else { btn.href = g.url; btn.target = "_blank"; btn.rel = "noopener"; }
       btn.setAttribute("aria-label", (v ? "לצפייה: " : "לשחק: ") + (v ? v.title : g.title)); btn.append(pic);
       const body = document.createElement("div"); body.className = "fbody";
-      const lb = document.createElement("span"); lb.className = "flabel"; lb.textContent = it.label || "המלצת השבוע";
+      const lb = document.createElement("span"); lb.className = "flabel"; lb.textContent = it.label || "ההמלצה שלי";
       const h = document.createElement("h2"); h.textContent = (v ? v.title : g.title).split("|")[0].split("#")[0].trim();
       body.append(lb, h);
       if (it.why) { const p = document.createElement("p"); p.textContent = it.why; body.append(p); }
