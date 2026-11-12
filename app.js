@@ -419,6 +419,26 @@
     window.scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   }
   $("homeBtn").onclick = goHome;
+  // חלונית תגובות
+  (async () => {
+    let q; try { q = ((await (await fetch("data/testimonials.json", { cache: "no-cache" })).json()).items || []).filter((x) => x.text); } catch { return; }
+    if (!q.length) return;
+    const box = $("quotes"), card = box.querySelector(".qcard"); let i = Math.floor(Math.random() * q.length), timer = null, paused = false;
+    const show = (n) => {
+      i = (n + q.length) % q.length; const it = q[i];
+      $("qText").textContent = it.text; $("qWho").textContent = "— " + (it.who || "");
+      if (it.video) { const l = document.createElement("a"); l.href = "#v-" + it.video; l.textContent = "לסרטון"; $("qWho").append(l); }
+      $("qDots").innerHTML = q.map((_, k) => `<i class="${k === i ? "on" : ""}"></i>`).join("");
+    };
+    const go = (d) => { if (matchMedia("(prefers-reduced-motion: reduce)").matches) return show(i + d); card.classList.add("fade"); setTimeout(() => { show(i + d); card.classList.remove("fade"); }, 400); };
+    show(i); box.hidden = false;
+    if (q.length > 1) {
+      $("qNav").hidden = false; $("qPrev").onclick = () => go(-1); $("qNext").onclick = () => go(1);
+      box.addEventListener("mouseenter", () => paused = true); box.addEventListener("mouseleave", () => paused = false);
+      box.addEventListener("focusin", () => paused = true); box.addEventListener("focusout", () => paused = false);
+      timer = setInterval(() => { if (!paused && !document.hidden) go(1); }, 8000);
+    }
+  })();
   // שיתוף האתר
   const shareMenu = $("shareMenu");
   const shareUrl = () => location.origin + location.pathname;
