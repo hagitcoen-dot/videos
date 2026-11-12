@@ -221,3 +221,6 @@ body.view-games .gkind:not([hidden]){display:flex}
 #qDots{display:flex;gap:6px}#qDots i{width:7px;height:7px;border-radius:50%;background:var(--line)}#qDots i.on{background:var(--accent)}
 @media (max-width:640px){.quotes{padding:10px 12px}.qcard blockquote{font-size:.97rem}}
 @media (prefers-reduced-motion:reduce){.qcard{transition:none}}
+.vquotes{margin:12px 0;background:var(--chip);border-radius:12px;padding:10px 14px}
+.vquotes h3{margin:0 0 6px;font-size:1rem;color:var(--accent)}
+.vquotes blockquote{margin:6px 0;padding-inline-start:10px;border-inline-start:3px solid var(--accent);line-height:1.55}

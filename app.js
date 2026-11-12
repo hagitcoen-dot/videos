@@ -352,8 +352,17 @@
 
   // נגן
   const dlg = $("player");
+  let allQuotes = [], curVid = null;
+  function fillVidQuotes(id) {
+    const w = $("pQuotes"); w.textContent = ""; const qs = allQuotes.filter((x) => x.video === id); if (!qs.length) return;
+    const box = document.createElement("div"); box.className = "vquotes";
+    const h = document.createElement("h3"); h.textContent = "💬 מה אמרו על הסרטון"; box.append(h);
+    qs.forEach((x) => { const b = document.createElement("blockquote"); b.textContent = x.text; box.append(b); });
+    w.append(box);
+  }
   function openVideo(id, push = true) {
     const v = state.videos.find((x) => x.id === id); if (!v) return;
+    curVid = id; fillVidQuotes(id);
     $("pFrame").src = `https://www.youtube-nocookie.com/embed/${id}?rel=0`;
     if (push) { const t = v.title.split("|")[0].trim(); gc("צפייה/" + t, t); }
     $("pTitle").textContent = v.title;
@@ -422,7 +431,9 @@
   $("homeBtn").onclick = goHome;
   // חלונית תגובות
   (async () => {
-    let q; try { q = ((await (await fetch("data/testimonials.json", { cache: "no-cache" })).json()).items || []).filter((x) => x.text); } catch { return; }
+    try { allQuotes = ((await (await fetch("data/testimonials.json", { cache: "no-cache" })).json()).items || []).filter((x) => x.text); } catch { return; }
+    if (dlg.open && curVid) fillVidQuotes(curVid);
+    const q = allQuotes.filter((x) => !x.only_video);
     if (!q.length) return;
     const box = $("quotes"), card = box.querySelector(".qcard"); let i = Math.floor(Math.random() * q.length), timer = null, paused = false;
     const show = (n) => {
