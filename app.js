@@ -419,6 +419,21 @@
     window.scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   }
   $("homeBtn").onclick = goHome;
+  // שיתוף האתר
+  const shareMenu = $("shareMenu");
+  const shareUrl = () => location.origin + location.pathname;
+  const shareText = "מרחב לצמיחה רגשית חברתית: סרטונים, שירים, סיפורים ומשחקים של חגית כהן";
+  document.querySelectorAll("[data-share]").forEach((b) => b.onclick = async (e) => {
+    e.stopPropagation(); gc("שיתוף/", "שיתוף האתר");
+    if (navigator.share) { try { await navigator.share({ title: document.title, text: shareText, url: shareUrl() }); return; } catch (err) { if (err && err.name === "AbortError") return; } }
+    const u = encodeURIComponent(shareUrl()), t = encodeURIComponent(shareText);
+    $("shWa").href = "https://wa.me/?text=" + t + "%20" + u;
+    $("shFb").href = "https://www.facebook.com/sharer/sharer.php?u=" + u;
+    $("shMail").href = "mailto:?subject=" + t + "&body=" + u;
+    $("shCopy").textContent = "העתקת קישור"; shareMenu.hidden = !shareMenu.hidden;
+  });
+  $("shCopy").onclick = async (e) => { e.stopPropagation(); try { await navigator.clipboard.writeText(shareUrl()); $("shCopy").textContent = "✓ הועתק"; } catch { prompt("הקישור לאתר:", shareUrl()); } };
+  document.addEventListener("click", (e) => { if (!shareMenu.hidden && !shareMenu.contains(e.target)) shareMenu.hidden = true; });
   // פתיחת משחק מכל מקום באתר (כרטיס, המלצת השבוע)
   document.addEventListener("click", (e) => {
     const a = e.target.closest && e.target.closest('a[href^="games/"]'); if (!a) return;
