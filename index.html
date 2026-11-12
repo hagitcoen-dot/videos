@@ -18,7 +18,7 @@
 <meta property="og:locale" content="he_IL">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="logo.png">
-<link rel="stylesheet" href="style.css?v=20261112c">
+<link rel="stylesheet" href="style.css?v=20261112d">
 </head>
 <body>
 <div class="homebar" id="homeBar"><div class="wrap"><span class="hbname">מרחב לצמיחה רגשית חברתית</span><span class="hbbtns"><button type="button" class="sharebtn" data-share>🔗 שיתוף</button><button type="button" class="homebtn" id="homeBtn">🏠 דף הבית</button></span></div></div>
@@ -74,7 +74,14 @@
 </header>
 
 <main class="wrap">
+  <div class="toprow">
   <aside class="feat" id="feat" hidden></aside>
+  <section class="quotes" id="quotes" aria-label="מה אומרים על הסרטונים" hidden>
+    <h2>💬 מה אומרים</h2>
+    <figure class="qcard"><blockquote id="qText"></blockquote><figcaption id="qWho"></figcaption></figure>
+    <div class="qnav" id="qNav" hidden><button type="button" id="qPrev" aria-label="התגובה הקודמת">›</button><span id="qDots"></span><button type="button" id="qNext" aria-label="התגובה הבאה">‹</button></div>
+  </section>
+  </div>
   <div class="gkind" id="gkind" role="group" aria-label="סוג" hidden><button type="button" data-k="all" aria-pressed="true">הכל</button><button type="button" data-k="game" aria-pressed="false">🎮 משחקים</button><button type="button" data-k="tool" aria-pressed="false">🃏 קלפים ועזרים</button></div>
   <p class="status" id="status" aria-live="polite">טוען את רשימת הסרטונים…</p>
   <section class="games" id="games" hidden></section>
@@ -90,11 +97,6 @@
   </aside>
 </main>
 
-<section class="wrap quotes" id="quotes" aria-label="מה אומרים על הסרטונים" hidden>
-  <h2>💬 מה אומרים</h2>
-  <figure class="qcard"><blockquote id="qText"></blockquote><figcaption id="qWho"></figcaption></figure>
-  <div class="qnav" id="qNav" hidden><button type="button" id="qPrev" aria-label="התגובה הקודמת">›</button><span id="qDots"></span><button type="button" id="qNext" aria-label="התגובה הבאה">‹</button></div>
-</section>
 
 <footer class="wrap foot">
   <p id="updated"></p>
@@ -120,7 +122,7 @@
   </div>
 </dialog>
 
-<script src="app.js?v=20261112c"></script>
+<script src="app.js?v=20261112d"></script>
 <script data-goatcounter="https://hagitcbt.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

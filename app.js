@@ -264,6 +264,7 @@
     const gview = state.view === "games";
     if (featView !== state.view) { featView = state.view; renderFeatured(); }
     $("feat").classList.toggle("off", !!norm(state.q).trim() || state.onlyFav);
+    $("quotes").classList.toggle("off", !!norm(state.q).trim() || state.onlyFav);
     $("games").hidden = !gview; $("grid").hidden = gview;
     if (gview) { $("wish").hidden = true; renderGames(norm(state.q).split(" ").filter(Boolean)); return; }
     const words = norm(state.q).split(" ").filter(Boolean);
