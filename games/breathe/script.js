@@ -8,15 +8,17 @@ var store={get:function(k,d){ try{ var v=localStorage.getItem("breathe."+k); ret
            set:function(k,v){ try{ localStorage.setItem("breathe."+k,String(v)); }catch(e){} }};
 var V=window.VIS;
 var PACES=[
+  {id:"kids", name:"קצר ונוח", nums:"3-4", ph:[["in",3],["out",4]]},
   {id:"calm", name:"רגוע", nums:"4-6", ph:[["in",4],["out",6]]},
   {id:"easy", name:"קל", nums:"4-4", ph:[["in",4],["out",4]]},
-  {id:"sleep", name:"לפני שינה", nums:"4-7-8", ph:[["in",4],["hold",7],["out",8]]},
-  {id:"box", name:"קופסה", nums:"4-4-4-4", ph:[["in",4],["hold",4],["out",4],["holdE",4]]}
+  {id:"sleep", name:"לפני שינה (עם עצירה)", nums:"4-7-8", ph:[["in",4],["hold",7],["out",8]]},
+  {id:"box", name:"קופסה (עם עצירות)", nums:"4-4-4-4", ph:[["in",4],["hold",4],["out",4],["holdE",4]]}
 ];
 var DURS=[[1,"דקה"],[2,"2 דקות"],[3,"3 דקות"]];
-var WORDS={ready:"מתכוננים…", in:"שואפים מהאף…", hold:"מחזיקים…", out:"נושפים לאט מהפה…", holdE:"מחזיקים…"};
+var WORDS={ready:"מתכוננים…", in:"שואפים מהאף…", hold:"עוצרים רגע, אם נוח…", out:"נושפים לאט מהפה…", holdE:"עוצרים רגע, אם נוח…"};
 var FEELS=[["calm","😌","רגוע","איזה יופי, הגוף רגוע 💚"],["light","🍃","קליל","נהדר! קליל כמו עלה ברוח"],
-           ["same","😐","אותו דבר","גם זה בסדר. כל נשימה עוזרת לגוף 💙"],["tense","😟","עוד קצת לחוץ","זה בסדר. אפשר לנשום עוד סיבוב ביחד 💙"]];
+           ["same","😐","אותו דבר","גם זה בסדר. כל נשימה עוזרת לגוף 💙"],["tense","😟","עוד קצת לחוץ","זה בסדר. אפשר לנשום עוד סיבוב ביחד 💙"],
+           ["worse","😣","פחות נעים לי","תודה שסיפרת. לא כל תרגיל מתאים לכל אחד ולכל רגע. אפשר לנסות קצב קצר בלי עצירות, לנשום רגיל ולנוח, או לספר למבוגר 💙"]];
 var READY=3;
 function paceBy(id){ for (var i=0;i<PACES.length;i++) if (PACES[i].id===id) return PACES[i]; return PACES[0]; }
 var S={vis:null, pace:paceBy(store.get("pace","calm")).id, dur:[1,2,3].indexOf(+store.get("dur","2"))>=0?+store.get("dur","2"):2, muted:store.get("muted","0")==="1"};

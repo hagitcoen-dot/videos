@@ -73,3 +73,5 @@ body[data-screen="s-choose"] .credit{padding-bottom:calc(6px + env(safe-area-ins
   #card{height:min(calc(100dvh - 48px),880px);border-radius:30px;box-shadow:0 20px 60px rgba(38,64,74,.14);overflow:hidden}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.gentle{margin:0 0 6px;font-size:.92rem;line-height:1.45;text-align:center;opacity:.85}

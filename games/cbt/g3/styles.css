@@ -145,3 +145,5 @@ h2{font-size:30px;margin:0;font-weight:800;text-align:center;line-height:1.15}
 .opt.both{background:linear-gradient(135deg,var(--needbg),var(--feelbg));color:#7a3d8c;box-shadow:0 6px 0 #e0c6e6}
 .opts.three .opt{font-size:19px;min-height:104px}
 [hidden]{display:none!important}
+
+.opts.locked{display:none}

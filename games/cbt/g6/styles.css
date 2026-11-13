@@ -136,3 +136,8 @@ main{flex:1;display:flex;flex-direction:column;width:100%;max-width:520px;margin
 .tl-word.go{color:#bfffd9;animation:tlIn .35s}
 @keyframes tlIn{from{transform:scale(.5);opacity:0}}
 @keyframes fade{from{opacity:0}}
+
+.thought.hidec.red:not(.no),.thought.hidec.green:not(.yes){background:#fff;border-color:#c9cfd6}
+.thought.hidec .dot::before{content:"💭"}
+.thought.hidec.red.no .dot::before{content:"🔴"}
+.thought.hidec.green.yes .dot::before{content:"🟢"}

@@ -144,7 +144,7 @@ function showThought(){
   var r=rounds[ri], q="✋ עוצרים רגע. איזו מחשבה עוזרת?";
   var order=shuffle(["red","green"]);
   render(head(q)+sceneMini()+'<div class="opts thoughts">'+order.map(function(c){
-    return '<button class="opt thought '+c+'" type="button"><span class="dot">'+(c==="red"?"🔴":"🟢")+'</span><b>'+esc(r[c])+'</b>'+sb(r[c],"corner")+'</button>';}).join("")+'</div>','thought');
+    return '<button class="opt thought hidec '+c+'" type="button"><span class="dot" aria-hidden="true"></span><b>'+esc(r[c])+'</b>'+sb(r[c],"corner")+'</button>';}).join("")+'</div>','thought');
   say("איזו מחשבה עוזרת? "+r[order[0]]+" או: "+r[order[1]]);
   choice(order.map(function(c){return {right:c==="green"};}),"זאת מחשבה אדומה. היא מגדילה את הרגש הקשה. עוצרים, ומנסים את השנייה?",function(){return "מחשבה ירוקה! "+r.green+" ➡️ עכשיו בוחרים צעד.";},true);
 }

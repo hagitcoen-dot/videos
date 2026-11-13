@@ -322,12 +322,12 @@
           meter.children[found - 1].classList.add("on");
           good(b);
           var info = D.WORDS[b.textContent];
-          say("hunt", "🔒 <b>״" + b.textContent + "״</b> " + (info ? info : "סוגרת את המחשבה") , "good");
+          say("hunt", "🔒 <b>״" + b.textContent + "״</b>: " + (info ? info : "סוגרת את המחשבה") , "good");
           if (found === need) {
             $("hintBtn").hidden = true;
             setTimeout(function () {
               $("huntCard").classList.add("solved"); SFX.solved(); sparks($("huntCard"), 40, { speed: 8, life: 60 });
-              say("hunt", pick(D.GOOD_TAPS) + " " + (need > 1 ? "מצאתם את כל " + need + " המנעולים!" : "נעלתם את המילה החוסמת!") + (info && need === 1 ? "<br><small>״" + b.textContent + "״ " + info + "</small>" : ""), "good");
+              say("hunt", pick(D.GOOD_TAPS) + " " + (need > 1 ? "מצאתם את כל " + need + " המנעולים!" : "נעלתם את המילה החוסמת!") + (info && need === 1 ? "<br><small>״" + b.textContent + "״: " + info + "</small>" : ""), "good");
               $("huntNext").hidden = false; $("huntNext").textContent = run.idx === run.items.length - 1 ? "סיום הרמה 🏁" : "למחשבה הבאה ⬅"; reveal($("huntNext"));
             }, 380);
           }
@@ -384,7 +384,7 @@
         c.classList.remove("pending"); restart(c, "slammed"); found++;
         SFX.clunk(); buzz(35); sparks(c, 20, { colors: ["#ffd75e", "#ffb31f", "#fff3b0", "#9b6bff"] }); good(c);
         var info = D.WORDS[c.textContent.split(" ")[0]] || D.WORDS[c.textContent.split(" ").slice(0, 2).join(" ")];
-        say("keys", "🔒 תפסתם! <b>״" + c.textContent + "״</b> " + (info || "סוגרת את המחשבה"), "good");
+        say("keys", "🔒 תפסתם! <b>״" + c.textContent + "״</b>: " + (info || "סוגרת את המחשבה"), "good");
         if (found === item.locks.length) setTimeout(askLock, 900);
       });
     });
