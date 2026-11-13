@@ -14,7 +14,7 @@
     var t = document.createElement("span");
     t.textContent = "חגית כהן · פסיכותרפיסטית · CBT | טיפול חברתי";
     var h = document.createElement("a");
-    h.href = base + "../"; h.textContent = "🏠 לדף הבית"; h.target = "_top";
+    h.href = base + "../#games"; h.textContent = "🎮 כל המשחקים"; h.target = "_top";
     h.style.cssText = "color:#1f5f5b;font-weight:700;text-decoration:none;border-inline-start:1px solid rgba(36,72,74,.3);padding-inline-start:8px;margin-inline-start:2px;white-space:nowrap";
     d.append(img, t, h);
     var into = me && me.getAttribute("data-into") && document.querySelector(me.getAttribute("data-into"));

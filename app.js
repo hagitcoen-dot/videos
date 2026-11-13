@@ -169,6 +169,8 @@
     $("tabVideos").setAttribute("aria-pressed", String(v === "videos"));
     $("tabGames").setAttribute("aria-pressed", String(v === "games"));
     document.body.classList.toggle("view-games", v === "games");
+    document.querySelector('label[for="q"]').textContent = v === "games" ? "חיפוש משחקים ועזרים" : "חיפוש סרטונים";
+    $("q").placeholder = v === "games" ? "למשל: נשימה, חרדה, גמישות, קלפים" : "למשל: כעס, ויסות רגשי, חברות, מחשבות אוטומטיות";
     if (push) history.replaceState(null, "", v === "games" ? "#games" : location.pathname + location.search);
     render();
   }
