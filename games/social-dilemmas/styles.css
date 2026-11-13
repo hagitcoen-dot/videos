@@ -174,3 +174,6 @@ h2{font-size:clamp(23px,3.4vw,32px);font-weight:800;margin-bottom:6px}
   #app{padding:0}
   .screen{box-shadow:none}
 }
+
+.out-kick{margin:0 0 2px;font-size:.85em;opacity:.75;font-weight:700}
+.out-note{margin:4px 0 0;font-size:.8em;opacity:.7}

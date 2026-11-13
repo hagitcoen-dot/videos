@@ -153,7 +153,7 @@ function outcome(o){
   var moods={}; d.roles.forEach(function(r,ri){ moods[r]=MOODS[o.m[ri]]; });
   $("outArt").innerHTML = A.scene(d, moods);
   $("outText").textContent = o.out;
-  $("meters").innerHTML = '<p class="m-head">מה כל אחד מרגיש?</p>' + d.roles.map(function(r,ri){
+  $("meters").innerHTML = '<p class="m-head">מה כל אחד אולי מרגיש?</p>' + d.roles.map(function(r,ri){
     var v=o.m[ri];
     return '<div class="meter"><div class="m-who">'+A.headSVG(r, MOODS[v])+'<span>'+esc(M.castShort[r])+'</span></div><div class="m-track" role="img" aria-label="'+esc(M.castShort[r])+': '+(v+1)+' מתוך 5"><div class="m-fill lv'+v+'" style="--w:'+((v+1)*20)+'%"></div><span class="m-face" style="--p:'+(v*25)+'%">'+FACES[v]+'</span></div></div>';
   }).join("");
@@ -162,7 +162,7 @@ function outcome(o){
   var earn = skill && fresh;
   $("b-out").textContent = earn ? "קיבלנו תג! ▶" : "ומה עוד אפשר? ▶";
   $("b-out").onclick = function(){ SND.tap(); if (earn) badgeScreen(d.skill); else reflectScreen(); };
-  title("מה קורה אחר כך?"); show("s-out", ["b-out"]);
+  title("מה יכול לקרות אחר כך?"); show("s-out", ["b-out"]);
   if (first) addStar(1); else if (fresh) addStar(1);
   setTimeout(function(){ [].forEach.call(document.querySelectorAll("#meters .meter"), function(m,ix){ setTimeout(function(){ m.classList.add("go"); }, 120*ix); }); }, 80);
 }
