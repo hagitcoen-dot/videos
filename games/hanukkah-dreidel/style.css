@@ -286,3 +286,11 @@ body.multi .d3{--w:min(calc(var(--avh,1vh)*13.2),112px)}
 .star-card .ex{margin:0;font-size:var(--fsS);opacity:.9}
 .star-in{width:100%;resize:none;min-height:64px;font:inherit;font-size:var(--fs);line-height:1.35}
 @media (max-height:680px){.meter .dots i{width:26px;height:26px;font-size:13px}.star-in{min-height:52px}}
+
+/* ערכה להדפסה במסך הפתיחה */
+.print-kit{margin-top:14px;border:1px dashed var(--line);border-radius:16px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;text-align:center;color:var(--cream)}
+.print-kit span{font-size:.85em;opacity:.8}
+.pk-links{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:4px}
+.pk-links a{flex:1;min-width:130px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:12px;background:rgba(255,255,255,.08);border:1px solid var(--line);color:var(--gold2);font-weight:700;text-decoration:none}
+.pk-links a:focus-visible{outline:3px solid #fff;outline-offset:2px}
+body[data-screen=start] .screen{overflow-y:auto;justify-content:safe center}
