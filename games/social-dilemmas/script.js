@@ -158,8 +158,8 @@ function outcome(o){
     return '<div class="meter"><div class="m-who">'+A.headSVG(r, MOODS[v])+'<span>'+esc(M.castShort[r])+'</span></div><div class="m-track" role="img" aria-label="'+esc(M.castShort[r])+': '+(v+1)+' מתוך 5"><div class="m-fill lv'+v+'" style="--w:'+((v+1)*20)+'%"></div><span class="m-face" style="--p:'+(v*25)+'%">'+FACES[v]+'</span></div></div>';
   }).join("");
   $("outWhy").innerHTML = '<span class="why-ic">💡</span>'+esc(o.why);
-  var skill = o.k==="skill";
-  var earn = skill && fresh;
+  var skill = o.k==="skill"||o.k==="alt";
+  var earn = skill && fresh && !(S.tried[d.id].filter(function(k){return k!==o.k&&(k==="skill"||k==="alt");}).length);
   $("b-out").textContent = earn ? "קיבלנו תג! ▶" : "ומה עוד אפשר? ▶";
   $("b-out").onclick = function(){ SND.tap(); if (earn) badgeScreen(d.skill); else reflectScreen(); };
   title("מה יכול לקרות אחר כך?"); show("s-out", ["b-out"]);
@@ -190,7 +190,7 @@ function worldDone(w){
   $("worldDoneArt").innerHTML = ["dubi","me","nuni"].map(function(k){ return A.charSVG(k,"happy"); }).join("");
   $("worldDoneTitle").textContent = "עולם "+M.worlds[w].name;
   var s=""; for (var k=0;k<4;k++) s+='<span style="--d:'+(k*0.15)+'s">★</span>'; $("worldStars").innerHTML=s;
-  var got=ds.filter(function(d){ return (S.tried[d.id]||[]).indexOf("skill")>=0; }).length;
+  var got=ds.filter(function(d){ var t=S.tried[d.id]||[]; return t.indexOf("skill")>=0||t.indexOf("alt")>=0; }).length;
   $("worldDoneSub").textContent = got ? ("בעולם הזה אספנו "+(got===1?"תג אחד":got+" תגים")+" לארגז הכלים.") : "חשבנו יחד על 4 מצבים. זה כבר המון!";
   $("b-world").textContent = w===2 ? "לארגז הכלים ▶" : "למפה ▶";
   title("כל הכבוד!"); show("s-world", ["b-world"]); SND.fanfare(); confetti(140, true);

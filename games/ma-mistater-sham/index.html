@@ -383,7 +383,7 @@ function panelHTML(){
   if(R.after){
    const L=faceLabels();
    let msg;
-   if(R.after>=3||R.after>R.before) msg='עדיין קצת מפחיד? זה בסדר. הגוף לפעמים צריך עוד זמן להירגע.';
+   if(R.after>=3||R.after>R.before) msg='עדיין מפחיד? זה בסדר. הגוף לפעמים צריך עוד זמן להירגע, ואפשר לספר למבוגר.';
    else if(R.after<R.before) msg='שמת לב? אחרי שבדקת, הפחד נהיה קטן יותר.';
    else msg=g('היית רגוע קודם וגם עכשיו. בלש שקט ובודק!','היית רגועה קודם וגם עכשיו. בלשית שקטה ובודקת!');
    res=`<div class="beforeafter"><figure>${face(R.before)}<figcaption>לפני: ${L[R.before-1]}</figcaption></figure><span class="arrow" aria-hidden="true">←</span><figure>${face(R.after)}<figcaption>עכשיו: ${L[R.after-1]}</figcaption></figure></div><p class="sub">${msg}</p>

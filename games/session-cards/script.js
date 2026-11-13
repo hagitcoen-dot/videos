@@ -78,7 +78,9 @@ function setFace(c){
   var L=q.length;$("#q").style.fontSize=L>70?"clamp(16px,6.4cqi,56px)":L>52?"clamp(17px,7cqi,60px)":"";
 }
 function setBack(){$("#backCat").textContent=catName(state.cat);card.dataset.cat=state.cat==="random"?"general":state.cat}
-function updateBtn(){$("#nextBtn").textContent=state.open?"קלף הבא":"פתיחת קלף";card.setAttribute("aria-label",state.open?"קלף פתוח":"פתיחת הקלף")}
+function prevIdx(){var d=getDeck();return state.open?d.pos-2:d.pos-1}
+function prev(){if(state.busy)return;var i=prevIdx();if(i<0)return;var d=getDeck();d.pos=i+1;var c=d.order[i];state.current=c;setFace(c);state.open=true;card.className="card open";flipSound();updateBtn();meta()}
+function updateBtn(){$("#nextBtn").textContent=state.open?"קלף הבא":"פתיחת קלף";$("#prevBtn").hidden=prevIdx()<0;card.setAttribute("aria-label",state.open?"קלף פתוח":"פתיחת הקלף")}
 function openDeck(cat){
   state.cat=cat;state.open=false;card.className="card";$("#deckName").textContent=catName(cat);setBack();show("deck");updateBtn();meta();
 }
@@ -99,6 +101,7 @@ function doShuffle(){
 }
 card.addEventListener("click",function(){if(!state.open)flipOpen();else next()});
 $("#nextBtn").addEventListener("click",next);
+$("#prevBtn").addEventListener("click",prev);
 $("#shuffleBtn").addEventListener("click",doShuffle);
 $("#homeBtn").addEventListener("click",goHome);
 $("#backBtn").addEventListener("click",goHome);

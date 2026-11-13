@@ -67,6 +67,7 @@
   </div>
 
   <div class="bar deck-bar">
+    <button class="btn ghost" id="prevBtn" hidden><span aria-hidden="true">→</span> הקודם</button>
     <button class="btn ghost" id="homeBtn">לקטגוריות</button>
     <button class="btn ghost" id="shuffleBtn"><span aria-hidden="true">🔀</span> ערבוב</button>
     <button class="btn primary" id="nextBtn">פתיחת קלף</button>
@@ -75,7 +76,7 @@
 
 </div>
 <script src="data.js"></script>
-<script src="script.js"></script>
-<script src="../back.js" data-pos="top" defer></script>
+<script src="script.js?v=2"></script>
+<script src="../back.js" data-pos="top" data-hide="#deck.active" defer></script>
 </body>
 </html>

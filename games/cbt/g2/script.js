@@ -118,7 +118,7 @@
   /* ---------- stages ---------- */
   function openStage() {
     var st = D.STAGES[state.stageIndex];
-    $("stageBadge").textContent = "שלב " + (state.stageIndex + 1) + " מתוך " + D.STAGES.length;
+    $("stageBadge").textContent = D.STAGES[state.stageIndex].type === "guided" ? "תרגול משותף" : "שלב " + state.stageIndex + " מתוך " + (D.STAGES.length - 1);
     $("stageTitle").textContent = st.title;
     $("stageSubtitle").textContent = st.subtitle || "";
     $("stageChar").src = st.img || "img/kami.svg";
@@ -314,7 +314,7 @@
     state._unlock = wasNew ? state.stageIndex + 1 : null;
     $("linkEarned").innerHTML = '<span class="mini int">🔗</span> מצאתם חוליה ' + (state.stageIndex + 1) + " מתוך " + D.STAGES.length + "!";
     $("doneTitle").textContent = stars === 3 ? "וואו, איזה דיוק! 🌟" : stars === 2 ? "יפה מאוד! 💫" : "התחלה טובה! 🌱";
-    $("doneText").textContent = "זיהיתם נכון " + state.stageRight + " מתוך " + state.stageTotal + ". " +
+    $("doneText").textContent = (D.STAGES[state.stageIndex].type === "guided" ? "הכרתם את שלושת החלקים: מצב, פרשנות ורגש. " : "זיהיתם נכון " + state.stageRight + " מתוך " + state.stageTotal + ". ") +
       (stars === 3 ? "קמי, בועי ולבבי גאים בכם." : "כל טעות היא עוד צעד באימון. ממשיכים!");
     var last = prog.stars.filter(Boolean).length >= D.STAGES.length;
     $("doneNextBtn").textContent = last ? "לשרשרת הקסם 🔗✨" : "חזרה למפה 🗺️";

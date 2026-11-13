@@ -22,6 +22,7 @@
   <header class="home-head">
     <h1 id="ttl">קלפים זוגיים</h1>
     <p class="sub">שאלה טובה פותחת לב</p>
+    <p class="sub" style="font-size:.9em;opacity:.8">אפשר לדלג על שאלה, ולענות בתורות.</p>
   </header>
   <div class="mode" role="radiogroup" aria-label="מצב">
     <button role="radio" data-mode="dates" aria-checked="true">דייטים / היכרות</button>
@@ -50,6 +51,7 @@
 
 <nav class="bar" id="bar">
   <div class="bar-in">
+    <button class="btn ghost" id="prevBtn" hidden><span aria-hidden="true">→</span> הקודם</button>
     <button class="btn ghost" id="homeBtn">לקטגוריות</button>
     <button class="btn ghost" id="shuffleBtn">ערבוב</button>
     <button class="btn main" id="nextBtn">פתיחת קלף</button>
@@ -59,7 +61,7 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </div>
 <script src="data.js"></script>
-<script src="script.js"></script>
-<script src="../back.js" data-pos="top" defer></script>
+<script src="script.js?v=2"></script>
+<script src="../back.js" data-pos="top" data-hide="#deck.active" defer></script>
 </body>
 </html>

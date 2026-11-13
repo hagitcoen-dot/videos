@@ -560,7 +560,7 @@ const NAME={fact:'עובדה',thought:'מחשבה',exp:'חוויה אישית'},
 const HINT={fact:'מה קמי המצלמה הייתה קולטת? האם זה משהו שקרה, שנאמר, או משהו נכון עליי, כמו מה אני אוהב?',thought:'האם זה בועי שמדבר? ניחוש מה מישהו חושב, למה משהו קרה, מה יקרה, או דעה?',exp:'האם זה משהו שאני מרגיש בפנים, או שם לב אליו בגוף שלי?'};
 function startStation(k){
   stIdx=k;const s=cur();
-  deck=[];s.qs.forEach(g=>{g.it.forEach((q,j)=>deck.push(Object.assign({kind:'c',sc:g.sc,firstInScene:j===0},q)));(g.f||[]).forEach((f,j)=>deck.push(Object.assign({kind:'f',sc:g.sc,firstInScene:!g.it.length&&j===0},f)))});
+  deck=[];s.qs.forEach(g=>{(k>=0&&Math.random()<.5?g.it.slice().reverse():g.it).forEach((q,j)=>deck.push(Object.assign({kind:'c',sc:g.sc,firstInScene:j===0},q)));(g.f||[]).forEach((f,j)=>deck.push(Object.assign({kind:'f',sc:g.sc,firstInScene:!g.it.length&&j===0},f)))});
   qi=0;right=0;missed=[];hinted=0;
   streak=0;earned=0;$('combo').hidden=true;setPts();SFX.whoosh();
   $('stTitle').textContent=`${s.icon} ${s.name}`;

@@ -11,6 +11,8 @@
       "font:700 12px/1 system-ui,-apple-system,'Segoe UI',Arial,sans-serif;color:#1f5f5b;background:rgba(255,255,255,.9);" +
       "border:1px solid rgba(31,95,91,.35);border-radius:999px;padding:7px 11px;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.12)";
     document.body.appendChild(a);
+    var hide = me && me.getAttribute("data-hide");
+    if (hide) { var upd = function () { a.style.display = document.querySelector(hide) ? "none" : ""; }; upd(); new MutationObserver(upd).observe(document.body, { attributes: true, subtree: true, attributeFilter: ["class", "hidden"] }); }
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", add); else add();
 })();

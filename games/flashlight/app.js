@@ -93,7 +93,7 @@ function Lamp(frame,s,interactive){
 var lamp=null;
 function silHTML(s){return window.SIL&&SIL[s.id]?'<svg class="sil" viewBox="0 0 900 675" preserveAspectRatio="xMidYMid slice" aria-hidden="true">'+SILDEFS+SIL[s.id]+'</svg>':''}
 function zoomT(s,on){var z=s.zoom;if(!on||!z)return "none";var h=.5/z.s,px=Math.max(h,Math.min(1-h,z.x)),py=Math.max(h,Math.min(1-h,z.y));return "scale("+z.s+") translate("+((.5-px)*100).toFixed(2)+"%,"+((.5-py)*100).toFixed(2)+"%)"}
-function frameHTML(s,opt){opt=opt||{};return '<div class="frame" id="fr"><div class="stage" style="transform:'+zoomT(s,opt.zoom)+'"><img src="img/'+s.id+'-dark.webp?v=3" alt="תמונה חשוכה">'+(opt.lit?'':silHTML(s))+'<canvas aria-hidden="true"></canvas></div>'+(opt.torch?TORCH+'<div class="drag">👆 גררו את הפנס בכל החדר</div>':'')+(s.snd&&opt.snd?'<button class="sndbtn" id="snd" type="button">🔊 שוב</button>':'')+'</div>'}
+function frameHTML(s,opt){opt=opt||{};return '<div class="frame" id="fr"><div class="stage" style="transform:'+zoomT(s,opt.zoom)+'"><img src="img/'+s.id+'-dark.webp?v=3" alt="'+(opt.lit?'החדר מואר. מה רואים עכשיו?':'תמונה חשוכה')+'">'+(opt.lit?'':silHTML(s))+'<canvas aria-hidden="true"></canvas></div>'+(opt.torch?TORCH+'<div class="drag">👆 גררו את הפנס בכל החדר</div>':'')+(s.snd&&opt.snd?'<button class="sndbtn" id="snd" type="button">🔊 שוב</button>':'')+'</div>'}
 function mountLamp(s,interactive,fullNow){if(lamp)lamp.alive=false;var fr=$("#fr");lamp=new Lamp(fr,s,interactive);if(fullNow)lamp.setFull();var sb=$("#snd");if(sb)sb.onclick=function(){play(s.snd)};return lamp}
 
 /* ---------- screens ---------- */
@@ -118,7 +118,7 @@ function feel1(){var s=sc(),g=s.opts[R().g1];
 function torch(){var s=sc();
  show('<div class="q">מתרחקים צעד… 👀<br>עכשיו יש לכם פנס! הזיזו אותו בכל החדר.</div>'+frameHTML(s,{torch:1,zoom:1}),{prog:P(),hint:"👆 שימו אצבע על התמונה וטיילו איתה בחדר"});
  var L=mountLamp(s,true);var fr=$("#fr"),stg=fr.querySelector(".stage");void stg.offsetWidth;L.lock=true;setTimeout(function(){stg.classList.add("back");stg.style.transform="none"},450);setTimeout(function(){L.lock=false},2050);fr.querySelector(".torch").style.left="72%";fr.querySelector(".torch").style.top="58%";
- var b=btn("💡 הדליקו את האור",function(bb){bb.disabled=true;bb.classList.remove("pulse");clearTimeout(tm);play("light");hint.textContent="";L.reveal(function(){setTimeout(guess2,700)})},"light");
+ var b=btn("💡 הדליקו את האור",function(bb){bb.disabled=true;bb.classList.remove("pulse");clearTimeout(tm);play("light");hint.textContent="";L.reveal(function(){var im=document.querySelector("#fr img");if(im)im.alt="החדר מואר. מה רואים עכשיו?";setTimeout(guess2,700)})},"light");
  function ready(){if(b.classList.contains("pulse")||b.disabled)return;b.classList.add("pulse");hint.textContent="👇 גיליתם קצת? עכשיו לחצו על ״הדליקו את האור״"}
  L.onprogress=function(x){if((x.dragMs>3500&&x.cells>=9)||x.cells>=20)ready()};
  var tm=setTimeout(ready,16000);
@@ -129,7 +129,7 @@ function guess2(){var s=sc();
  var o=$("#opts");shuffle([0,1,2]).forEach(function(k){var b=document.createElement("button");b.type="button";b.className="opt";b.textContent=s.after[k];b.onclick=function(){
   [].forEach.call(o.children,function(c){c.disabled=true;if(c!==b)c.classList.add("dim")});
   if(k===0){play("win");b.classList.add("ok");b.textContent="✓ "+s.after[0]}else{play("pick");b.classList.add("sel");var okb=[].filter.call(o.children,function(c){return c.textContent===s.after[0]})[0];if(okb){okb.classList.remove("dim");okb.classList.add("ok");okb.textContent="✓ "+s.after[0]}}
-  o.style.display="none";$("#rv").innerHTML='<div class="fb fade">'+(k===0?"נכון! ":"בואו נסתכל שוב: ")+esc(s.reveal)+'</div>';
+  o.style.display="none";(function(){var im=document.querySelector("#fr img");if(im)im.alt=s.reveal;})();$("#rv").innerHTML='<div class="fb fade">'+(k===0?"נכון! ":"בואו נסתכל שוב: ")+esc(s.reveal)+'</div>';
   hint.textContent="👇 לחצו ״המשך״";btn("המשך",feel2)};o.appendChild(b)});
 }
 function feel2(){var s=sc();
