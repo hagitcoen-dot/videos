@@ -54,6 +54,8 @@
   document.addEventListener("toggle", queueFit, true);
   function show(id) {
     SCREENS.forEach(function (s) { $(s).hidden = s !== id; });
+    var tt = $("toast"); if (tt) { clearTimeout(toast._t); tt.classList.remove("show"); tt.textContent = ""; }
+    if (id !== "screen-play" && id !== "screen-boss") { var spl = $("streakPill"); if (spl) spl.hidden = true; }
     if (typeof applyHero === "function") applyHero();
     var B = {
       "screen-intro": [$("skipBtn"), $("nextSlideBtn")],
@@ -73,7 +75,7 @@
   }
   function toast(msg) {
     var t = $("toast"); t.textContent = msg; t.classList.add("show");
-    clearTimeout(toast._t); toast._t = setTimeout(function () { t.classList.remove("show"); }, 1600);
+    clearTimeout(toast._t); toast._t = setTimeout(function () { t.classList.remove("show"); setTimeout(function () { if (!t.classList.contains("show")) t.textContent = ""; }, 350); }, 1600);
   }
 
   /* ---------- progress (saved on this device only) ---------- */
@@ -412,7 +414,7 @@
       b.setAttribute("aria-label", p[0] + ": הקישו כדי להחליף");
       b.addEventListener("click", function () {
         if (b.classList.contains("flipped")) return;
-        b.classList.add("flipped"); flipped++; SFX.slot(i); sparks(b, 14, { colors: ["#ffb07f", "#ffffff", "#7ef0cf"] });
+        b.classList.add("flipped"); b.setAttribute("aria-label", p[1] + " (במקום: " + p[0] + ")"); flipped++; SFX.slot(i); sparks(b, 14, { colors: ["#ffb07f", "#ffffff", "#7ef0cf"] });
         if (flipped === D.SWAPS.length) { toast("כל הלבנים התחלפו! ⚡"); confetti(false); }
       });
       w.appendChild(b);
