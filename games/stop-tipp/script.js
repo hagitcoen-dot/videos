@@ -452,10 +452,11 @@
       var b = el("button", "skill-tile", '<span class="sk-icon">' + s.icon + '</span><b>' + s.l + " · " + s.he + '</b><small>' + s.en + '</small>'); b.type = "button";
       b.addEventListener("click", function () {
         if (run.solved || b.disabled) return;
-        if (s.k === c.ans) {
-          var all = D.TIPP.filter(function (x) { return x.k !== c.ans; }).map(function (x) { return { key: x.k, label: x.icon + " " + x.he, text: c.no[x.k] }; });
+        var alt = c.also && c.also[s.k];
+        if (s.k === c.ans || alt) {
+          var all = D.TIPP.filter(function (x) { return x.k !== s.k && !(c.also && c.also[x.k]); }).map(function (x) { return { key: x.k, label: x.icon + " " + x.he, text: x.k === c.ans ? "גם זו בחירה טובה כאן." : c.no[x.k] }; });
           [].forEach.call(grid.children, function (x) { x.disabled = true; });
-          solve(b, c.yes, lessList(run.lastWrong, all), { collapse: collapseOthers(grid, b) });
+          solve(b, alt || c.yes, lessList(run.lastWrong, all), { collapse: collapseOthers(grid, b) });
         } else { run.lastWrong = s.k; wrongAnswer(b, c.no[s.k]); }
       });
       grid.appendChild(b);
@@ -550,7 +551,7 @@
     if (firstTime) justDone = si;
     $("playBar").style.width = "100%";
     var last = si === N - 1;
-    $("doneTitle").textContent = stars === 3 ? "מושלם! 🤩" : stars === 2 ? "כל הכבוד! 🎉" : "עשיתם את זה! 💪";
+    $("doneTitle").textContent = stars === 3 ? "הכרתם את הכלים! 🤩" : stars === 2 ? "כל הכבוד! 🎉" : "עשיתם את זה! 💪";
     $("doneSub").textContent = "סיימתם את " + run.stage.name + ". " + (stars === 3 ? "שלושה כוכבים!" : "אפשר תמיד לחזור ולשפר כוכבים ⭐");
     $("doneScore").textContent = run.score; $("doneStreak").textContent = run.bestStreak;
     $("stageBadge").innerHTML = "🎁 קיבלתם: <b>" + run.stage.badge + "</b>";

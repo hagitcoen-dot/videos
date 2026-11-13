@@ -15,7 +15,7 @@
 <meta property="og:locale" content="he_IL">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="img/tipi.svg" type="image/svg+xml">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=2">
 </head>
 <body class="theme-stop">
 <div class="sky" aria-hidden="true"><div class="stars"></div><div class="glow g1"></div><div class="glow g2"></div><div class="rain"></div></div>
@@ -124,17 +124,17 @@
     <div class="card cert" id="cert">
       <div class="cert-ribbon">🏆</div>
       <p class="kicker">עברתם את כל המסלול!</p>
-      <h2 id="finalTitle">שולטים בסערה</h2>
+      <h2 id="finalTitle">עוצרים את הסערה</h2>
       <label class="name-field"><span class="sr">השם שלך</span><input id="nameInput" type="text" maxlength="24" placeholder="כתבו כאן את השם ✍️" autocomplete="off"></label>
       <p class="fin-line">צברתם <b id="finScore">0</b> נקודות, <b id="finStars">0</b> כוכבים מתוך 9, ורצף שיא של <b id="finStreak">0</b> 🔥</p>
       <div class="summary">
         <p class="sum-title">כרטיס הכלים שלי 🧰</p>
         <div class="sum-block thermo-sum"><p class="sum-h">🌡️ מד הרגש</p><ul id="sumZones"></ul></div>
-        <div class="sum-block"><p class="sum-h">✋ STOP <small>כשהרגש עולה</small></p><ul id="sumStop"></ul></div>
-        <div class="sum-block"><p class="sum-h">🧊 TIPP <small>כשהרגש רותח</small></p><ul id="sumTipp"></ul></div>
+        <div class="sum-block"><p class="sum-h">✋ STOP <small>בכל עוצמה</small></p><ul id="sumStop"></ul></div>
+        <div class="sum-block"><p class="sum-h">🧊 TIPP <small>כשקשה לחשוב</small></p><ul id="sumTipp"></ul></div>
         <p class="sum-note">זה לא עובד מושלם בכל פעם, וזה בסדר. כל ניסיון הוא אימון 💪</p>
       </div>
-      <p class="soft shot-tip">📸 צלמו מסך ושמרו את הכרטיס</p>
+      <p class="soft shot-tip">📸 צלמו מסך, או <button type="button" class="linkbtn" id="printBtn" onclick="window.print()">🖨️ הדפיסו או שמרו כ-PDF</button></p>
       <div class="cert-sign"><img src="img/tipi.svg" alt="" width="46" height="51"><span>חתום: טיפי, המדריך הרגוע</span></div>
       <div class="row-actions">
         <button class="btn ghost" id="mapAgainBtn" type="button">למפה</button>
@@ -159,8 +159,8 @@
 </main>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script src="data.js"></script>
-<script src="script.js"></script>
+<script src="data.js?v=2"></script>
+<script src="script.js?v=2"></script>
 <script src="../brand.js" defer></script>
 </body>
 </html>

@@ -343,3 +343,12 @@ body.og-mode main{max-width:none; padding:0}
 .why-cheer img{filter:none}
 @keyframes mangaPop{0%{transform:scale(.3) rotate(-8deg); opacity:0}100%{transform:none; opacity:1}}
 .sit-card::before{content:""; position:absolute; top:-10px; inset-inline-end:14px; width:34px; height:34px; background:url(img/tipi.svg) center/contain no-repeat; transform:rotate(8deg)}
+
+.linkbtn{font:inherit;background:none;border:0;padding:0;color:inherit;text-decoration:underline;cursor:pointer;font-weight:700}
+@media print{
+  body *{visibility:hidden!important}
+  #cert,#cert *{visibility:visible!important}
+  #cert{position:absolute;top:0;left:0;right:0;margin:0 auto;box-shadow:none!important;max-width:none}
+  #cert .row-actions,#cert .shot-tip{display:none!important}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
