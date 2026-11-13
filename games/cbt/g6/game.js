@@ -135,7 +135,10 @@ function showFeel(){
   render(head(q)+sceneMini()+'<div class="opts three">'+keys.map(function(k){
     return '<button class="opt card" type="button"><img src="'+fimg(k,r.g)+'" alt="'+F(k,r.g)+'"><b>'+F(k,r.g)+'</b>'+sb(F(k,r.g),"corner")+'</button>';}).join("")+'</div>','feel');
   say("איזה רגש יכול להתאים? "+keys.map(function(k){return F(k,r.g);}).join(", או "));
-  choice(keys.map(function(k){return {right:k===r.feel};}),null,function(){return "אפשר להרגיש "+F(r.feel,r.g)+". זה בסדר להרגיש ככה 💛 ויש ילדים שירגישו משהו אחר, וגם זה בסדר.";});
+  r.chosen=r.feel;
+  choice(keys.map(function(k){return {right:k===r.feel||(r.also||[]).indexOf(k)>=0,k:k};}),null,function(o){
+    if(o.k!==r.feel){r.chosen=o.k;return "גם זה יכול להתאים! אפשר להרגיש "+F(o.k,r.g)+" 💛 ויש ילדים שירגישו "+F(r.feel,r.g)+", וגם זה בסדר.";}
+    return "אפשר להרגיש "+F(r.feel,r.g)+". זה בסדר להרגיש ככה 💛 ויש ילדים שירגישו משהו אחר, וגם זה בסדר.";});
 }
 function showThought(){
   var r=rounds[ri], q="✋ עוצרים רגע. איזו מחשבה עוזרת?";
@@ -151,7 +154,7 @@ function showDo(){
   render(head(q)+sceneMini()+'<div class="opts two">'+order.map(function(k){var R=G.RESP[k];
     return '<button class="opt card resp" type="button"><img src="img/r_'+k+'.webp" alt="'+esc(R[0])+'"><b>'+esc(R[0])+'</b>'+sb(R[0],"corner")+'</button>';}).join("")+'</div>','do');
   say("מה כדאי לעשות? "+G.RESP[order[0]][0]+", או "+G.RESP[order[1]][0]);
-  choice(order.map(function(k){return {right:k===r.good};}),"זאת תגובה לא עוזרת. ננסה את השנייה?",function(){return "תגובה עוזרת! עדיין "+F(r.feel,r.g)+"? זה בסדר 💛 גם כשמרגישים ככה, אפשר לבחור צעד שעוזר: "+r.tip;});
+  choice(order.map(function(k){return {right:k===r.good};}),"זאת תגובה לא עוזרת. ננסה את השנייה?",function(){return "תגובה עוזרת! עדיין "+F(r.chosen||r.feel,r.g)+"? זה בסדר 💛 גם כשמרגישים ככה, אפשר לבחור צעד שעוזר: "+r.tip;});
 }
 var NEXT=[null,showThought,showDo,null];
 
