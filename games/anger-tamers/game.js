@@ -31,8 +31,8 @@
     LV = null; hud();
     app.innerHTML = '<h1 class="hero-title">מאלפי הכעס</h1><p class="sub">משחק על כעס: מה הוא מספר, איך שמים לב אליו, ומה בוחרים לעשות איתו</p>' +
       '<div class="pick">' +
-      '<button class="pick-card" data-lv="young" type="button"><span class="mnt" data-k="elephant"></span><h2>פרדי הפיל</h2><p>לקטנים. משפטים קצרים ושתי אפשרויות בכל שאלה.</p><span class="tag">לקטנים 🐘</span></button>' +
-      '<button class="pick-card" data-lv="old" type="button"><span class="mnt" data-k="dragon"></span><h2>שלהבי הדרקון</h2><p>לגדולים. יותר אפשרויות, מחשבות לבדוק ומשפטים לבנות.</p><span class="tag">לגדולים 🐉</span></button>' +
+      '<button class="pick-card" data-lv="young" type="button"><span class="mnt" data-k="elephant"></span><h2>פרדי הפיל</h2><p>משפטים קצרים ושתי אפשרויות בכל שאלה.</p><span class="tag">לשחק עם פרדי הפיל 🐘</span></button>' +
+      '<button class="pick-card" data-lv="old" type="button"><span class="mnt" data-k="dragon"></span><h2>שלהבי הדרקון</h2><p>יותר אפשרויות, מחשבות לבדוק ומשפטים לבנות.</p><span class="tag">לשחק עם שלהבי הדרקון 🐉</span></button>' +
       '</div><p class="credit">חגית כהן CBT</p>';
     $$(".mnt").forEach(function (m) { mount(m, m.dataset.k); });
     $$(".pick-card").forEach(function (b) {
@@ -93,7 +93,7 @@
       if (!n.dataset.final) n.querySelector(".fun-node-ball").insertAdjacentHTML("beforeend", '<i class="nb">' + (k + 1) + '</i>');
     });
     var b = document.createElement("div"); b.className = "row mt";
-    b.innerHTML = '<button class="btn ghost small" type="button" id="story">📖 הסיפור</button><button class="btn ghost small" type="button" id="swap">🔄 החלפת רמה</button>';
+    b.innerHTML = '<button class="btn ghost small" type="button" id="story">📖 הסיפור</button><button class="btn ghost small" type="button" id="swap">🔄 החלפת דמות</button>';
     app.appendChild(b);
     $("#story").addEventListener("click", function () { intro(0); });
     $("#swap").addEventListener("click", start);
