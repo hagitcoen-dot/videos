@@ -175,7 +175,7 @@
     var allDone = pr.stars.filter(Boolean).length >= n;
     html += '<button type="button" class="fun-node final ' + (allDone ? "open current" : "locked") + '" data-final="1" style="' + pos(n) + '">' +
       '<span class="fun-node-ball">' + (allDone ? (opts.finalIcon || "🏆") : "🔒") + '</span><span class="fun-node-name">' + (opts.finalName || "התעודה") + '</span></button>';
-    html += '</div><div class="fun-map-total">⭐ ' + totalStars + ' / ' + (n * 3) + '</div></div>';
+    html += '</div><div class="fun-map-total">⭐ ' + totalStars + ' מתוך ' + (n * 3) + ' כוכבים</div></div>';
     el.innerHTML = html;
     Array.prototype.forEach.call(el.querySelectorAll(".fun-node"), function (b) {
       b.addEventListener("click", function () {
@@ -223,7 +223,7 @@
       '<label class="fun-cert-name"><span>השם שלי:</span><input id="funName" maxlength="20" placeholder="כתבו כאן את השם" value="' + name.replace(/"/g, "") + '"></label>' +
       '<p class="fun-cert-line">' + opts.line + '</p>' +
       '<div class="fun-cert-skill">' + opts.skill + '</div>' +
-      '<div class="fun-cert-stars">⭐ ' + opts.stars + ' / ' + opts.maxStars + '</div>' +
+      '<div class="fun-cert-stars">⭐ ' + opts.stars + ' מתוך ' + opts.maxStars + ' כוכבים</div>' +
       '<p class="fun-cert-credit">חגית כהן CBT | חברתי</p>' +
       '</div><div class="fun-cert-actions">' +
       '<button type="button" class="btn primary" id="funPrint">🖨️ הדפסת התעודה</button>' +

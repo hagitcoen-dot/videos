@@ -104,7 +104,7 @@
         '<span class="app-name">' + s.name + "</span></button>";
     }).join("");
     apps += '<button type="button" class="app final' + (allDone ? " current" : " locked") + '" data-final="1"><span class="app-ic">' + (allDone ? "💛" : "🔒") + '</span><span class="app-name">הפנס שלי</span></button>';
-    app.innerHTML = '<div class="phone-home"><div class="ph-widget"><img src="' + GUIDE + '" alt=""><div><b>פנס הקשב</b><span>' + total + " / " + (n * 3) + " ★ · " + P.stars.filter(Boolean).length + " מתוך " + n + " הושלמו</span></div></div>" +
+    app.innerHTML = '<div class="phone-home"><div class="ph-widget"><img src="' + GUIDE + '" alt=""><div><b>פנס הקשב</b><span>' + "★ " + total + " מתוך " + (n * 3) + " · " + P.stars.filter(Boolean).length + " מתוך " + n + " הושלמו</span></div></div>" +
       '<div class="apps">' + apps + '</div><div class="dock"><span>🔍</span><span>🔔</span><span>🎧</span><span>📷</span></div></div>';
     app.querySelectorAll(".app").forEach(function (b) {
       b.addEventListener("click", function () {
@@ -231,7 +231,7 @@
     var root = app.querySelector(".play"), vp = root.querySelector(".viewport"), tray = root.querySelector(".tray");
     var temo = root.querySelector(".temo"), tq = root.querySelector(".tq b"), tsm = root.querySelector(".tq small"), prog = root.querySelector(".prog");
     var hintBtn = root.querySelector(".hint-btn"), nightEl = root.querySelector(".night");
-    var hints = 0, ti = 0, clean = 0, combo = 0, wrong = 0, hinted = false, t0 = 0, busy = false, recentMiss = [], found = [], cloudsSeen = 0;
+    var hints = 0, ti = 0, clean = 0, combo = 0, wrong = 0, hinted = false, t0 = 0, busy = false, recentMiss = [], found = [], cloudsSeen = 0, spawned = 0;
     var timers = [], cloudTimer = null, nudgeTimer = null;
     var traySlots = [];
     st.tasks.forEach(function () { var d = document.createElement("div"); d.className = "crop empty"; tray.appendChild(d); traySlots.push(d); });
@@ -339,7 +339,7 @@
         var N = NOTIFS[(Math.random() * NOTIFS.length) | 0];
         c.innerHTML = '<span class="nc-ic">' + N[0] + '</span><span><b>' + N[1] + '</b>' + N[2] + "</span>";
         c.style.left = (sz.w / 2 + (Math.random() - .5) * Math.max(0, sz.w - 300)) + "px"; c.style.top = (40 + Math.random() * Math.max(10, sz.h - 80)) + "px";
-        vp.appendChild(c); FUN.sfx("whoosh");
+        vp.appendChild(c); spawned++; FUN.sfx("whoosh");
         var gone = false;
         function bye() { if (gone) return; gone = true; c.classList.add("bye"); setTimeout(function () { c.remove(); }, 600); }
         c.addEventListener("click", function (e) {
@@ -387,7 +387,7 @@
       var unlockedBefore = P.unlocked; P.unlocked = Math.max(P.unlocked, si + 2); save();
       clearInterval(cloudTimer);
       vp.querySelectorAll(".cloud").forEach(function (c) { c.remove(); });
-      var extra = mode === "clouds" ? "<p>🔔 " + cloudsSeen + " התראות קפצו, ובכל זאת חזרת למשימה. זה בדיוק האימון.</p>" : "";
+      var extra = mode === "clouds" ? "<p>🔔 " + (spawned === 1 ? "קפצה התראה אחת" : "קפצו " + spawned + " התראות") + (cloudsSeen ? " (" + (cloudsSeen === 1 ? "סגרת אחת" : "סגרת " + cloudsSeen) + ")" : "") + ", ובכל זאת חזרת למשימה. זה בדיוק האימון.</p>" : "";
       var m = modal('<div class="big-emo">🎉</div><h2>התחנה הושלמה!</h2><div class="stars-row" id="srow"></div>' +
         "<p>מצאת את כל " + st.tasks.length + " הדברים" + (hints ? ", עם " + (hints === 1 ? "רמז אחד" : hints + " רמזים") + ". גם להשתמש בעזרה זו אסטרטגיה טובה." : ".") + "</p>" + extra +
         '<div class="found-row">' + found.map(function (it) { return cropHtml(it.x, it.y, it.r, 62); }).join("") + "</div>" +
@@ -412,7 +412,7 @@
     document.body.classList.add("playing"); hud(true); scrollTo(0, 0);
     var picks = [];
     app.innerHTML = '<div class="play">' +
-      '<div class="taskbar"><div class="temo">💛</div><div class="tq"><small>הפנס שלי · בחירה חופשית</small><b>מצאו בתמונה דבר שמעניין אתכם</b><div class="prog"></div></div></div>' +
+      '<div class="taskbar"><div class="temo">💛</div><div class="tq"><small>הפנס שלי · בחירה 1 מתוך 3</small><b>בחרו דבר שמעניין, מרגיע או משמח אתכם</b><div class="prog"></div></div></div>' +
       '<div class="viewport"><div class="world"><img src="' + ROOM.src + '" alt="חדר היצירה" draggable="false"></div>' +
       '<div class="zoom-ctl"><button class="zin" type="button" aria-label="הגדלה">➕</button><button class="zout" type="button" aria-label="הקטנה">➖</button><button class="zfit" type="button" aria-label="כל התמונה">⤢</button></div>' +
       '</div><div class="tray"><span class="lbl">הבחירות שלי:</span></div></div>';
@@ -445,7 +445,7 @@
           var f = FEELS[+b.dataset.k];
           picks.push({ x: it.x, y: it.y, r: it.r, name: it.name, e: f.e, t: f.t });
           slots[picks.length - 1].className = "crop"; slots[picks.length - 1].setAttribute("style", cropStyle(it.x, it.y, Math.max(it.r, 28) * 1.15, 40));
-          paintProg(); closeModal(); addXp(10); FUN.sfx("star", picks.length - 1); FUN.floatText(f.e + " +10", vp);
+          paintProg(); if (picks.length < 3) root.querySelector(".tq small").textContent = "הפנס שלי · בחירה " + (picks.length + 1) + " מתוך 3"; closeModal(); addXp(10); FUN.sfx("star", picks.length - 1); FUN.floatText(f.e + " +10", vp);
           busy = false;
           if (picks.length >= 3) { P.mine = picks; save(); setTimeout(mineSummary, 700); }
         });
