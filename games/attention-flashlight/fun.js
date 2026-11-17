@@ -227,7 +227,7 @@
       '<p class="fun-cert-credit">חגית כהן CBT | חברתי</p>' +
       '</div><div class="fun-cert-actions">' +
       '<button type="button" class="btn primary" id="funPrint">🖨️ הדפסת התעודה</button>' +
-      (opts.onMap ? '<button type="button" class="btn ghost" id="funMap">🗺️ חזרה למפה</button>' : "") +
+      (opts.onMap ? '<button type="button" class="btn ghost" id="funMap">' + (opts.mapLabel || "🗺️ חזרה למפה") + '</button>' : "") +
       '<button type="button" class="btn ghost" id="funAgain">🔄 משחקים מההתחלה</button></div>';
     el.querySelector("#funName").addEventListener("input", function () { store("fun-name", this.value); });
     el.querySelector("#funPrint").addEventListener("click", function () { window.print(); });

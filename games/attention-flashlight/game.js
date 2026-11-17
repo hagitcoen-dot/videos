@@ -11,6 +11,7 @@
   var xpEl = document.getElementById("xp"), xpPill = document.getElementById("xpPill"), mapBtn = document.getElementById("mapBtn");
   FUN.bindMute(document.getElementById("soundBtn"));
   document.getElementById("homeBtn").addEventListener("click", function () { leavePlay(); home(); });
+  mapBtn.textContent = "📱"; mapBtn.setAttribute("aria-label", "למסך הבית");
   mapBtn.addEventListener("click", function () { leavePlay(); map(); });
   function hud(show) { xpPill.hidden = mapBtn.hidden = !show; xpEl.textContent = P.xp; }
   function addXp(n) { P.xp += n; xpEl.textContent = P.xp; FUN.bounce(xpPill); save(); }
@@ -34,46 +35,58 @@
   function home() {
     hud(false); scrollTo(0, 0);
     var started = P.stars.some(Boolean) || P.unlocked > 1;
-    app.innerHTML =
-      '<h1 class="hero-title">פנס הקשב</h1><p class="sub">חפשו ומצאו בחדר היצירה 🔎</p>' +
-      '<div class="peek"><img src="' + ROOM.src + '" alt="חדר יצירה מלא בחפצים"><div class="sweep"></div></div>' +
-      '<div class="row mt">' + (started
-        ? '<button class="btn" id="go">🗺️ ממשיכים במסע</button><button class="btn ghost small" id="restart">🔄 מהתחלה</button>'
-        : '<button class="btn" id="go">▶ מתחילים</button>') + "</div>" +
+    var now = new Date(), hh = String(now.getHours()).padStart(2, "0"), mm = String(now.getMinutes()).padStart(2, "0");
+    var days = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
+    app.innerHTML = '<div class="lock" style="background-image:linear-gradient(180deg,rgba(10,8,30,.82),rgba(10,8,30,.6) 45%,rgba(10,8,30,.88)),url(' + ROOM.src + ')">' +
+      '<div class="lock-date">יום ' + days[now.getDay()] + ", " + now.getDate() + "." + (now.getMonth() + 1) + '</div><div class="lock-time">' + hh + ":" + mm + "</div>" +
+      '<div class="notif-card"><div class="nc-head"><span class="nc-ic">🔦</span><b>פנס הקשב</b><small>עכשיו</small></div>' +
+      "<p>" + (started ? "יש לך משימות חיפוש פתוחות. ממשיכים מאיפה שעצרת?" : "יש לך " + STATIONS.length + " משימות חיפוש חדשות. מוכנים לבדוק איך הקשב שלך עובד?") + "</p></div>" +
+      '<div class="notif-card dim"><div class="nc-head"><span class="nc-ic">🧠</span><b>המוח שלך</b><small>לפני 2 דק׳</small></div><p>סיננתי בשבילך 11 מיליון פרטים בשנייה האחרונה. בבקשה.</p></div>' +
+      '<button class="unlock" id="go" type="button"><span>' + (started ? "החליקו כדי להמשיך" : "החליקו כדי לפתוח") + '</span><i>›</i></button>' +
+      (started ? '<button class="btn ghost small" id="restart" type="button" style="margin-top:10px">🔄 מהתחלה</button>' : "") + "</div>" +
       '<details class="adult home-only"><summary>👩‍🏫 להורים ולמטפלים</summary>' +
       "<p><b>על מה המשחק?</b> אימון קשב בהשראת מחקרי \"שינוי הטיית קשב\" (Attention Bias Modification). ילדים עם חרדה או דאגנות נוטים לשים לב מהר יותר לדברים מאיימים ולהתקשות להסיט מהם את הקשב. באימון \"חיפוש חיובי\" (Positive Search Training, Waters ועמיתים) ילדים חיפשו שוב ושוב את הפרצוף השמח בין פרצופים כועסים, וזה עזר לחלקם להפחית חרדה.</p>" +
       "<ul><li>כאן החיפוש הוא אחר דברים מרגיעים, מעניינים ומשמחים, בתוך תמונה עשירה, כדי לתרגל בחירה פעילה של מוקד הקשב.</li>" +
-      "<li>תחנת \"ענני ההסחה\" מתרגלת שחרור קשב ממסיחים: שמים לב לענן ומחזירים את הפנס למשימה, בלי להילחם בו.</li>" +
+      "<li>תחנת \"התראות\" מתרגלת שחרור קשב ממסיחים: קופצות התראות ומחשבות מטרידות, שמים לב אליהן ומחזירים את הקשב למשימה, בלי להילחם בהן.</li>" +
       "<li>המסר: כל הרגשות לגיטימיים, והמוח שם לב לסכנות כדי לשמור עלינו. אנחנו לא מעלימים דאגות, רק מאמנים גמישות של הקשב.</li>" +
       "<li>תחנת \"ניסוי הפנס\" ממחישה שהקשב מסנן: מחפשים צהוב ואז מגלים כמה דברים כחולים פספסנו. כמו חיפוש בגוגל, מצב הרוח ומה שאנחנו מחפשים קובעים מה נמצא. אפשר להחליט לשנות את מילות החיפוש.</li>" +
       "<li>בסיום מופיע תרגיל 5-4-3-2-1 להסטת קשב דרך החושים. כדאי לתרגל אותו יחד גם מחוץ למשחק.</li>" +
       "<li>אחרי כל מציאה יש שאלה קצרה לשיחה. כדאי לעצור ולשאול את הילד.</li></ul>" +
       "<p><b>להרחבה במפגש:</b> ספרי \"אני מגלה\", צורות מתחבאות בקשקוש, חיפוש חפצים לפי צבע או צורה בזמן קצוב, ותרגול קולי של הקשבה לצליל אחד מתוך כמה.</p>" +
       "<p>זהו משחק תרגול ופתיחת שיחה, לא תחליף לטיפול. האפקטים במחקר מתונים ומעורבים, ועובדים טוב יותר יחד עם טיפול.</p></details>" +
-      '<p class="credit">חגית כהן CBT</p>';
-    app.querySelector("#go").addEventListener("click", function () { FUN.sfx("whoosh"); started ? map() : story(0); });
+            '<p class="credit">חגית כהן CBT</p>';
+    var go = app.querySelector("#go"), knob = go.querySelector("i"), sx = null, done = false;
+    function open() { if (done) return; done = true; FUN.sfx("whoosh"); started ? map() : story(0); }
+    go.addEventListener("click", open);
+    go.addEventListener("pointerdown", function (e) { sx = e.clientX; go.setPointerCapture(e.pointerId); });
+    go.addEventListener("pointermove", function (e) { if (sx == null) return; var dx = Math.max(0, sx - e.clientX); knob.style.transform = "translateX(" + (-dx) + "px)"; if (dx > go.clientWidth * 0.55) open(); });
+    go.addEventListener("pointerup", function () { sx = null; knob.style.transform = ""; });
     var rs = app.querySelector("#restart");
     if (rs) rs.addEventListener("click", function () { P = { stars: [], unlocked: 1, xp: 0, mine: [] }; save(); story(0); });
   }
 
   /* ---------------- סיפור פתיחה ---------------- */
   var SLIDES = [
-    { emo: "🏠✨", t: "ברוכים הבאים לחדר היצירה! מסתתרים בו מאות דברים: צעצועים, ספרים, צבעים ואוצרות." },
-    { guide: 1, t: "לכל אחד מאיתנו יש בראש פנס קשב 🔦. הוא מאיר על מה שאנחנו שמים לב אליו." },
-    { emo: "🔎💻", t: "הפנס עובד קצת כמו חיפוש בגוגל: מה שמחפשים, זה מה שמוצאים. מי שמחפש \"כל הסיבות שאני כועס\" יקבל עוד ועוד סיבות לכעוס.", box: "החדשות הטובות: אפשר להחליט לשנות את מילות החיפוש! 🔄" },
-    { emo: "☁️🔦", t: "לפעמים הפנס נתקע על דברים מדאיגים או מעצבנים. זה בסדר, המוח מנסה לשמור עלינו.", box: "אבל אפשר לאמן את הפנס להאיר גם על דברים מרגיעים, מעניינים ומשמחים. כמו שריר! 💪" },
-    { emo: "🗺️⭐", t: "במסע מחכות לכם " + STATIONS.length + " תחנות. בכל אחת תקבלו משימות חיפוש. כשתמצאו, הדבר יגדל ויזהר!", box: "מוכנים לאמן את הפנס?" }
+    { q: "כל הסיבות שאני כועס", n: "4,280,000", res: ["10 דברים שמוכיחים שכולם נגדך", "למה תמיד זה קורה דווקא לי?", "עוד סיבה טובה להתעצבן היום"], t: "הקשב עובד כמו מנוע חיפוש: מה שמקלידים, זה מה שמוצאים. מי שמחפש סיבות לכעוס יקבל עוד ועוד סיבות לכעוס." },
+    { q: "מה לא בסדר בי", n: "9,100,000", res: ["כל הטעויות שעשית השבוע", "מה כולם חושבים עליך באמת", "עוד דבר שלא הצלחת בו"], t: "וזה לא רק כעס. כשמצב הרוח ירוד, המוח \"משלים\" את החיפוש לבד ומציע עוד תוצאות באותו כיוון. זה טבעי: המוח מנסה להגן עלינו." },
+    { q: "מה כן עבד לי היום", n: "3,650,000", res: ["רגע אחד שצחקת בו", "משהו קטן שהצלחת בו", "מישהו שהיה נחמד אליך"], t: "החדשות הטובות: אפשר לשנות את מילות החיפוש. זה לא קורה בבת אחת, זה מתאמן. כמו שריר." },
+    { q: "איך מאמנים את הקשב", n: "8 משימות", res: [], t: "בכל משימה תופיע שורת חיפוש, ואת הדבר צריך למצוא בתמונה. יהיה גם ניסוי קטן, התראות שמנסות להסיח את הדעת, ומצב לילה." }
   ];
   function story(i) {
     hud(false); scrollTo(0, 0);
     var s = SLIDES[i], dots = "";
     for (var k = 0; k < SLIDES.length; k++) dots += '<i class="' + (k === i ? "on" : "") + '"></i>';
-    app.innerHTML = '<div class="slide">' +
-      (s.guide ? '<img class="guide-big" src="' + GUIDE + '" alt="">' : '<div class="big-emo">' + s.emo + "</div>") +
-      "<p>" + s.t + "</p>" + (s.box ? '<div class="msg-box">' + s.box + "</div>" : "") +
+    app.innerHTML = '<div class="search-page"><div class="sbar"><span>🔍</span><b class="typed"></b><i class="caret"></i></div>' +
+      '<p class="snum">כ־' + s.n + " תוצאות</p>" +
+      '<div class="sres">' + s.res.map(function (r) { return '<div class="sr"><b>' + r + "</b><span>www.המוח-שלך.co.il</span></div>"; }).join("") + "</div>" +
+      '<div class="msg-box">' + s.t + "</div>" +
       '<div class="dots">' + dots + '</div><div class="row">' +
       (i > 0 ? '<button class="btn ghost small" id="back">→ הקודם</button>' : "") +
-      '<button class="btn" id="next">' + (i < SLIDES.length - 1 ? "הבא ←" : "🗺️ למפה!") + "</button></div></div>";
+      '<button class="btn" id="next">' + (i < SLIDES.length - 1 ? "הבא ←" : "📱 למסך הבית") + "</button></div></div>";
+    var el = app.querySelector(".typed"), k2 = 0, res = app.querySelectorAll(".sr, .snum");
+    res.forEach(function (r) { r.style.opacity = 0; });
+    (function type() { if (!el.isConnected) return; if (k2 <= s.q.length) { el.textContent = s.q.slice(0, k2++); setTimeout(type, reduce ? 0 : 55); }
+      else res.forEach(function (r, j) { setTimeout(function () { r.style.opacity = 1; }, 150 + j * 180); }); })();
     app.querySelector("#next").addEventListener("click", function () { FUN.sfx("pop"); i < SLIDES.length - 1 ? story(i + 1) : map(); });
     var b = app.querySelector("#back"); if (b) b.addEventListener("click", function () { story(i - 1); });
   }
@@ -81,18 +94,30 @@
   /* ---------------- מפה ---------------- */
   function map(justUnlocked) {
     leavePlay(); hud(true); scrollTo(0, 0);
-    FUN.renderMap({
-      el: app, title: "מסע פנס הקשב", story: "בכל תחנה הפנס שלכם מתחזק. בסוף: תעודה!", guide: GUIDE,
-      stations: STATIONS.map(function (s) { return { icon: s.icon, name: s.name, place: s.place }; }),
-      progress: P, finalIcon: "💛", finalName: "הפנס שלי", justUnlocked: justUnlocked,
-      onPick: function (i) { stationIntro(i); }, onFinal: function () { finalStart(); }
+    var total = 0, n = STATIONS.length, allDone = true;
+    var apps = STATIONS.map(function (s, i) {
+      var st = P.stars[i] || 0; total += st; if (!st) allDone = false;
+      var locked = i >= P.unlocked, cur = !locked && !st && (i === 0 || P.stars[i - 1]);
+      return '<button type="button" class="app' + (locked ? " locked" : "") + (cur ? " current" : "") + (justUnlocked === i ? " unlocking" : "") + '" data-i="' + i + '">' +
+        '<span class="app-ic">' + (locked ? "🔒" : s.icon) + (st ? '<em class="badge">' + "★".repeat(st) + "</em>" : (cur ? '<em class="badge new">חדש</em>' : "")) + "</span>" +
+        '<span class="app-name">' + s.name + "</span></button>";
+    }).join("");
+    apps += '<button type="button" class="app final' + (allDone ? " current" : " locked") + '" data-final="1"><span class="app-ic">' + (allDone ? "💛" : "🔒") + '</span><span class="app-name">הפנס שלי</span></button>';
+    app.innerHTML = '<div class="phone-home"><div class="ph-widget"><img src="' + GUIDE + '" alt=""><div><b>פנס הקשב</b><span>' + total + " / " + (n * 3) + " ★ · " + P.stars.filter(Boolean).length + " מתוך " + n + " הושלמו</span></div></div>" +
+      '<div class="apps">' + apps + '</div><div class="dock"><span>🔍</span><span>🔔</span><span>🎧</span><span>📷</span></div></div>';
+    app.querySelectorAll(".app").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (b.classList.contains("locked")) { FUN.shake(b); FUN.sfx("soft"); return; }
+        FUN.sfx("pop"); b.dataset.final ? finalStart() : stationIntro(+b.dataset.i);
+      });
     });
+    if (justUnlocked != null) { var u = app.querySelector('.app[data-i="' + justUnlocked + '"]') || (justUnlocked >= n ? app.querySelector(".app.final") : null); if (u) setTimeout(function () { FUN.sfx("unlock"); FUN.confettiAt(u, 22); }, 400); }
   }
 
   function stationIntro(si) {
     var st = STATIONS[si];
     var m = modal('<div class="big-emo">' + st.icon + "</div><h2>" + st.name + "</h2><p>" + st.intro + "</p>" +
-      '<div class="row"><button class="btn" id="mgo">▶ יוצאים לחפש</button><button class="btn ghost small" id="mx">למפה</button></div>');
+      '<div class="row"><button class="btn" id="mgo">▶ מתחילים</button><button class="btn ghost small" id="mx">חזרה</button></div>');
     m.querySelector("#mgo").addEventListener("click", function () { closeModal(); FUN.sfx("whoosh"); play(si); });
     m.querySelector("#mx").addEventListener("click", closeModal);
   }
@@ -191,6 +216,7 @@
     '<circle cx="48" cy="48" r="4" fill="#2d2a40"/><circle cx="74" cy="48" r="4" fill="#2d2a40"/><path d="M50 62q11-7 22 0" stroke="#2d2a40" stroke-width="3" fill="none" stroke-linecap="round"/>' +
     '<path d="M42 38l10 3M80 38l-10 3" stroke="#2d2a40" stroke-width="3" stroke-linecap="round"/><text x="98" y="26" font-size="22" font-weight="800" fill="#ffd23f">?!</text></svg>';
 
+  var NOTIFS = [["💬", "קבוצת הכיתה", "47 הודעות חדשות"], ["😟", "מחשבה", "ומה אם לא אצליח במבחן?"], ["📸", "סטורי חדש", "כולם נפגשו בלעדיך"], ["⏰", "תזכורת", "שכחת משהו?"], ["😬", "מחשבה", "מה הם חשבו עליי?"], ["🎮", "משחק", "החברים שלך אונליין"], ["📉", "מחשבה", "אני תמיד מפשל"]];
   function play(si) {
     var st = STATIONS[si], mode = st.mode;
     document.body.classList.add("playing"); hud(true); scrollTo(0, 0);
@@ -215,7 +241,7 @@
     function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
     function showTask() {
       var t = st.tasks[ti]; wrong = 0; hinted = false; t0 = Date.now(); busy = false;
-      temo.textContent = t.e; tq.textContent = t.q; tsm.textContent = st.icon + " " + st.name + " · משימה " + (ti + 1) + " מתוך " + st.tasks.length;
+      temo.textContent = t.e; tq.innerHTML = '<span class="qs">🔍</span>' + esc(t.q); tsm.textContent = st.icon + " " + st.name + " · משימה " + (ti + 1) + " מתוך " + st.tasks.length;
       prog.innerHTML = st.tasks.map(function (_, k) { return '<i class="' + (k < ti ? "on" : "") + '"></i>'; }).join("");
       root.classList.remove("newtask"); void root.offsetWidth; root.classList.add("newtask");
       hintBtn.classList.remove("nudge"); clearTimeout(nudgeTimer);
@@ -307,16 +333,17 @@
     if (mode === "clouds") {
       var spawn = function () {
         if (busy || vp.querySelectorAll(".cloud").length >= 3) return;
-        var sz = sc.size(), c = document.createElement("button"); c.type = "button"; c.className = "cloud no-click" + (Math.random() < .5 ? " blink" : "");
-        c.setAttribute("aria-label", "ענן דאגה");
-        c.innerHTML = CLOUD_SVG;
-        c.style.left = (50 + Math.random() * Math.max(10, sz.w - 100)) + "px"; c.style.top = (40 + Math.random() * Math.max(10, sz.h - 80)) + "px";
+        var sz = sc.size(), c = document.createElement("button"); c.type = "button"; c.className = "cloud notif no-click";
+        c.setAttribute("aria-label", "התראה");
+        var N = NOTIFS[(Math.random() * NOTIFS.length) | 0];
+        c.innerHTML = '<span class="nc-ic">' + N[0] + '</span><span><b>' + N[1] + '</b>' + N[2] + "</span>";
+        c.style.left = (sz.w / 2 + (Math.random() - .5) * Math.max(0, sz.w - 300)) + "px"; c.style.top = (40 + Math.random() * Math.max(10, sz.h - 80)) + "px";
         vp.appendChild(c); FUN.sfx("whoosh");
         var gone = false;
         function bye() { if (gone) return; gone = true; c.classList.add("bye"); setTimeout(function () { c.remove(); }, 600); }
         c.addEventListener("click", function (e) {
           e.stopPropagation(); cloudsSeen++; FUN.sfx("soft");
-          FUN.floatText(cloudsSeen === 1 ? "👀 שמתי לב לענן. חוזרים למשימה!" : "👀 ראיתי. חוזרים!", c);
+          FUN.floatText(cloudsSeen === 1 ? "👀 שמתי לב. חוזרים למשימה" : "👀 ראיתי. חוזרים", c);
           bye();
         });
         setTimeout(bye, 5200 + Math.random() * 1500);
@@ -357,12 +384,12 @@
       var unlockedBefore = P.unlocked; P.unlocked = Math.max(P.unlocked, si + 2); save();
       clearInterval(cloudTimer);
       vp.querySelectorAll(".cloud").forEach(function (c) { c.remove(); });
-      var extra = mode === "clouds" ? "<p>☁️ שמתם לב ל־" + cloudsSeen + " עננים, והחזרתם את הפנס למשימה. זה בדיוק האימון!</p>" : "";
+      var extra = mode === "clouds" ? "<p>🔔 " + cloudsSeen + " התראות קפצו, ובכל זאת חזרת למשימה. זה בדיוק האימון.</p>" : "";
       var m = modal('<div class="big-emo">🎉</div><h2>התחנה הושלמה!</h2><div class="stars-row" id="srow"></div>' +
         "<p>" + clean + " מתוך " + st.tasks.length + " נמצאו בלי רמז</p>" + extra +
         '<div class="found-row">' + found.map(function (it) { return cropHtml(it.x, it.y, it.r, 62); }).join("") + "</div>" +
         '<div class="msg-box">🔦 פנס הקשב שלכם התחזק!</div>' +
-        '<div class="row mt"><button class="btn" id="tomap">🗺️ למפה</button><button class="btn ghost small" id="again">🔄 שוב</button></div>');
+        '<div class="row mt"><button class="btn" id="tomap">📱 למסך הבית</button><button class="btn ghost small" id="again">🔄 שוב</button></div>');
       FUN.revealStars(m.querySelector("#srow"), stars);
       setTimeout(function () { FUN.sfx("win"); FUN.confettiSides(40); }, 200);
       m.querySelector("#tomap").addEventListener("click", function () { map(P.unlocked > unlockedBefore ? P.unlocked - 1 : (first ? si + 1 : null)); });
@@ -436,11 +463,11 @@
     hud(true); scrollTo(0, 0);
     var total = P.stars.reduce(function (a, b) { return a + (b || 0); }, 0);
     FUN.renderCertificate({
-      el: app, title: "מאמני פנס הקשב", chars: [GUIDE],
-      line: "אימנתי את פנס הקשב שלי למצוא דברים מרגיעים, מעניינים ומשמחים, ולהחזיר אותו למשימה כשענן מנסה למשוך אותו.",
+      el: app, title: "שולטים בחיפוש", chars: [GUIDE],
+      line: "אימנתי את פנס הקשב שלי למצוא דברים מרגיעים, מעניינים ומשמחים, ולהחזיר אותו למשימה כשהתראה מנסה למשוך אותו.",
       skill: "🔦 הכוח שלי: לבחור על מה להאיר" + (P.mine.length ? '<div class="mine-cert">' + P.mine.map(function (p) { return cropHtml(p.x, p.y, p.r, 56); }).join("") + "</div>" : ""),
       stars: total, maxStars: STATIONS.length * 3,
-      onMap: function () { map(); },
+      onMap: function () { map(); }, mapLabel: "📱 למסך הבית",
       onAgain: function () { P = { stars: [], unlocked: 1, xp: 0, mine: [] }; save(); story(0); }
     });
   }

@@ -157,3 +157,48 @@ h1,h2,h3,p{margin:0}
   box-shadow:0 0 calc(22px / var(--s,1)) calc(6px / var(--s,1)) rgba(111,182,255,.9);opacity:0;animation:revealIn .6s cubic-bezier(.2,1.6,.4,1) forwards,revealPulse 1.6s ease-in-out .6s infinite}
 @keyframes revealIn{0%{opacity:0;transform:scale(.2)}100%{opacity:1;transform:scale(1)}}
 @keyframes revealPulse{50%{box-shadow:0 0 calc(34px / var(--s,1)) calc(10px / var(--s,1)) rgba(111,182,255,1)}}
+
+/* ===== גרסה בוגרת: טלפון ===== */
+.lock{position:relative;min-height:calc(100dvh - 140px);border-radius:34px;overflow:hidden;background-size:cover;background-position:center;padding:34px 16px 22px;
+  display:flex;flex-direction:column;align-items:center;gap:12px;border:6px solid #0c0a1e;box-shadow:0 20px 50px rgba(0,0,0,.5);max-width:440px;margin:0 auto}
+.lock-date{font-size:17px;font-weight:600;opacity:.9}
+.lock-time{font-size:84px;font-weight:300;line-height:1;letter-spacing:-2px;margin-bottom:14px;direction:ltr}
+.notif-card{width:100%;background:rgba(255,255,255,.16);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:20px;padding:10px 14px;animation:taskIn .6s cubic-bezier(.2,1.4,.4,1)}
+.notif-card.dim{opacity:.8;animation-delay:.25s;animation-fill-mode:both}
+.nc-head{display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:4px}.nc-head small{margin-inline-start:auto;opacity:.7}
+.nc-ic{width:24px;height:24px;border-radius:7px;background:#14112b;display:grid;place-items:center;font-size:14px;flex:none}
+.notif-card p{font-size:15px;line-height:1.45}
+.unlock{margin-top:auto;position:relative;width:100%;height:58px;border-radius:99px;border:0;background:rgba(255,255,255,.18);backdrop-filter:blur(10px);font-weight:700;font-size:16px;touch-action:none}
+.unlock span{animation:shimmer 2.2s linear infinite;background:linear-gradient(90deg,rgba(255,255,255,.4),#fff,rgba(255,255,255,.4));background-size:200%;-webkit-background-clip:text;background-clip:text;color:transparent}
+@keyframes shimmer{to{background-position:-200% 0}}
+.unlock i{position:absolute;right:5px;top:5px;width:48px;height:48px;border-radius:50%;background:#fff;color:#14112b;font-style:normal;font-size:30px;display:grid;place-items:center;transition:transform .2s}
+.search-page{max-width:520px;margin:0 auto}
+.sbar{display:flex;align-items:center;gap:10px;background:#fff;color:#202124;border-radius:99px;padding:12px 18px;font-size:18px;box-shadow:0 4px 18px rgba(0,0,0,.35);min-height:52px}
+.sbar b{font-weight:500}.caret{width:2px;height:22px;background:#1a73e8;animation:blink .9s steps(2) infinite}
+.snum{color:var(--soft);font-size:13px;margin:12px 6px 6px;transition:opacity .3s}
+.sres{display:grid;gap:8px;margin-bottom:14px}
+.sr{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 14px;transition:opacity .35s}
+.sr b{display:block;color:#8ab4f8;font-size:16px;font-weight:600}.sr span{font-size:12px;color:#81c995}
+.phone-home{max-width:440px;margin:0 auto;border-radius:34px;padding:18px 14px;border:6px solid #0c0a1e;min-height:calc(100dvh - 130px);display:flex;flex-direction:column;
+  background:linear-gradient(160deg,#2b2160,#14112b 55%,#1d3550)}
+.ph-widget{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.1);border-radius:22px;padding:12px;margin-bottom:22px}
+.ph-widget img{width:52px;height:52px;border-radius:14px}.ph-widget b{display:block;font-size:18px}.ph-widget span{font-size:13px;color:var(--soft)}
+.apps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px 8px}
+.app{background:none;border:0;padding:0;display:flex;flex-direction:column;align-items:center;gap:6px}
+.app-ic{position:relative;width:68px;height:68px;border-radius:18px;display:grid;place-items:center;font-size:34px;background:linear-gradient(135deg,#ffd23f,#ff9f43);box-shadow:0 6px 16px rgba(0,0,0,.35)}
+.app:nth-child(3n+2) .app-ic{background:linear-gradient(135deg,#6fb6ff,#7a5cff)}.app:nth-child(3n) .app-ic{background:linear-gradient(135deg,#3fe0d0,#2fa874)}
+.app.locked .app-ic{background:#3a3466;filter:grayscale(.5);font-size:26px;box-shadow:none}
+.app.current .app-ic{animation:funPulse 1.4s ease-in-out infinite}
+.app.unlocking .app-ic{animation:funUnlock 1s cubic-bezier(.2,1.6,.4,1)}
+.app-name{font-size:13px;font-weight:600}
+.badge{position:absolute;top:-7px;left:-7px;background:#ff3b30;color:#fff;font-style:normal;font-size:11px;font-weight:800;border-radius:99px;padding:2px 6px;letter-spacing:-1px}
+.badge.new{letter-spacing:0}
+.app.final{grid-column:2}
+.dock{margin-top:auto;display:flex;justify-content:space-around;background:rgba(255,255,255,.12);border-radius:26px;padding:12px;font-size:28px}
+.taskbar .tq b{display:flex;align-items:center;gap:8px;background:#fff;color:#202124;border-radius:99px;padding:6px 14px;font-size:16px;font-weight:500}
+.qs{font-size:14px}
+.cloud.notif{width:min(280px,80vw);height:auto;margin:-30px 0 0 -140px;display:flex;gap:10px;align-items:center;text-align:right;background:rgba(245,245,250,.95);color:#202124;
+  border-radius:18px;padding:10px 12px;box-shadow:0 8px 24px rgba(0,0,0,.45);font-size:14px;animation:notifIn .45s cubic-bezier(.2,1.4,.4,1)}
+.cloud.notif b{display:block;font-size:12px;color:#5f6368}
+.cloud.notif .nc-ic{color:#fff}
+@keyframes notifIn{0%{transform:translateY(-40px);opacity:0}100%{transform:none;opacity:1}}
