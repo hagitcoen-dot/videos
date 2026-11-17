@@ -41,11 +41,12 @@
         ? '<button class="btn" id="go">🗺️ ממשיכים במסע</button><button class="btn ghost small" id="restart">🔄 מהתחלה</button>'
         : '<button class="btn" id="go">▶ מתחילים</button>') + "</div>" +
       '<details class="adult home-only"><summary>👩‍🏫 להורים ולמטפלים</summary>' +
-      "<p><b>על מה המשחק?</b> אימון קשב בהשראת מחקרי \"שינוי הטיית קשב\" (Attention Bias Modification). ילדים עם חרדה או דאגנות נוטים לשים לב מהר יותר לדברים מאיימים ולהתקשות להסיט מהם את הקשב. באימון \"חיפוש חיובי\" (Positive Search Training, Waters ועמיתים) ילדים חיפשו שוב ושוב את הפרצוף השמח בין פרצופים כועסים, וזה עזר לחלקם להפחית חרדה.</p>" +
+      "<p><b>על מה המשחק?</b> אימון קשב בהשראת מחקרי \"שינוי הטיית קשב\" (Attention Bias Modification). ילדים עם חרדה או דאגנות נוטים לשים לב מהר יותר לדברים מאיימים ולהתקשות להסיט מהם את הקשב. באימון \"חיפוש חיובי\" (Positive Search Training, Waters ועמיתים) ילדים חיפשו שוב ושוב את הפרצוף השמח בין פרצופים כועסים, המשחק הזה הוא המחשה ותרגול בהשראת המחקרים, ולא נבדק במחקר בעצמו.</p>" +
       "<ul><li>כאן החיפוש הוא אחר דברים מרגיעים, מעניינים ומשמחים, בתוך תמונה עשירה, כדי לתרגל בחירה פעילה של מוקד הקשב.</li>" +
       "<li>תחנת \"ענני ההסחה\" מתרגלת שחרור קשב ממסיחים: שמים לב לענן ומחזירים את הפנס למשימה, בלי להילחם בו.</li>" +
       "<li>המסר: כל הרגשות לגיטימיים, והמוח שם לב לסכנות כדי לשמור עלינו. אנחנו לא מעלימים דאגות, רק מאמנים גמישות של הקשב.</li>" +
-      "<li>אחרי כל מציאה יש שאלה קצרה לשיחה. כדאי לעצור ולשאול את הילד.</li></ul>" +
+      "<li>אחרי המציאות מופיעים מסרים קצרים ושאלות שאפשר לפתח לשיחה.</li>" +
+      "<li>רמזים לא מורידים כוכבים, ואין בונוס על מהירות: מתגמלים השלמה, התמדה ובקשת עזרה.</li></ul>" +
       "<p>זהו משחק תרגול ופתיחת שיחה, לא תחליף לטיפול. האפקטים במחקר מתונים ומעורבים, ועובדים טוב יותר יחד עם טיפול.</p></details>" +
       '<p class="credit">חגית כהן CBT</p>';
     app.querySelector("#go").addEventListener("click", function () { FUN.sfx("whoosh"); started ? map() : story(0); });
@@ -200,7 +201,7 @@
     var root = app.querySelector(".play"), vp = root.querySelector(".viewport"), tray = root.querySelector(".tray");
     var temo = root.querySelector(".temo"), tq = root.querySelector(".tq b"), tsm = root.querySelector(".tq small"), prog = root.querySelector(".prog");
     var hintBtn = root.querySelector(".hint-btn"), nightEl = root.querySelector(".night");
-    var ti = 0, clean = 0, combo = 0, wrong = 0, hinted = false, t0 = 0, busy = false, recentMiss = [], found = [], cloudsSeen = 0;
+    var hints = 0, ti = 0, clean = 0, combo = 0, wrong = 0, hinted = false, t0 = 0, busy = false, recentMiss = [], found = [], cloudsSeen = 0;
     var timers = [], cloudTimer = null, nudgeTimer = null;
     var traySlots = [];
     st.tasks.forEach(function () { var d = document.createElement("div"); d.className = "crop empty"; tray.appendChild(d); traySlots.push(d); });
@@ -215,7 +216,7 @@
       prog.innerHTML = st.tasks.map(function (_, k) { return '<i class="' + (k < ti ? "on" : "") + '"></i>'; }).join("");
       root.classList.remove("newtask"); void root.offsetWidth; root.classList.add("newtask");
       hintBtn.classList.remove("nudge"); clearTimeout(nudgeTimer);
-      nudgeTimer = setTimeout(function () { hintBtn.classList.add("nudge"); }, 20000);
+      nudgeTimer = setTimeout(function () { hintBtn.classList.add("nudge"); }, 10000);
       vp.querySelectorAll(".hintring").forEach(function (h) { h.remove(); });
       if (nightEl) nightEl.classList.remove("off");
       FUN.sfx("pop");
@@ -226,7 +227,7 @@
       var t = st.tasks[ti], s = sc.scale(), best = null, bd = 1e9;
       t.hits.forEach(function (id) {
         var it = item(id), d = Math.hypot(p.x - it.x, p.y - it.y);
-        if (d <= it.r + 16 / s && d < bd) { bd = d; best = it; }
+        if (d <= it.r + 34 / s && d < bd) { bd = d; best = it; }
       });
       if (best) return hit(best, p);
       miss(p);
@@ -260,10 +261,8 @@
       later(function () { rays.remove(); pop.classList.remove("grow"); pop.classList.add("done"); }, 1500);
       FUN.sfx("good"); later(function () { FUN.sfx("star", 2); }, 260);
       later(function () { FUN.confettiAt(pop, 36); }, 220);
-      var pts = 10; if (isClean) { clean++; combo++; pts += 5; } else combo = 0;
+      var pts = 10; if (isClean) clean++;
       FUN.floatText("+" + pts, pop, "");
-      if (secs < 7 && !hinted) later(function () { FUN.floatText("⚡ מהיר! +5", pop, ""); addXp(5); FUN.sfx("combo", 3); }, 500);
-      if (combo >= 2) later(function () { FUN.bigBanner("🔥 רצף " + combo + "!"); FUN.sfx("combo", combo); }, 700);
       addXp(pts);
       found.push(it);
       var slot = traySlots[ti]; slot.className = "crop"; slot.setAttribute("style", cropStyle(it.x, it.y, Math.max(it.r, 28) * 1.15, 40));
@@ -283,7 +282,7 @@
 
     hintBtn.addEventListener("click", function () {
       if (busy) return;
-      hinted = true; hintBtn.classList.remove("nudge"); FUN.sfx("pop");
+      if (!hinted) hints++; hinted = true; hintBtn.classList.remove("nudge"); FUN.sfx("pop");
       var t = st.tasks[ti], it = item(t.hits[0]);
       if (t.hits.length > 1) { // רמז לפריט הכי קרוב למרכז המסך
         var sz = sc.size(), c = { x: sz.w / 2, y: sz.h / 2 }, bd = 1e9;
@@ -321,17 +320,17 @@
     }
 
     function finish() {
-      var stars = FUN.starsFor(clean, st.tasks.length);
+      var stars = 3;
       var first = !P.stars[si];
       P.stars[si] = Math.max(P.stars[si] || 0, stars);
       var unlockedBefore = P.unlocked; P.unlocked = Math.max(P.unlocked, si + 2); save();
       clearInterval(cloudTimer);
       vp.querySelectorAll(".cloud").forEach(function (c) { c.remove(); });
-      var extra = mode === "clouds" ? "<p>☁️ שמתם לב ל־" + cloudsSeen + " עננים, והחזרתם את הפנס למשימה. זה בדיוק האימון!</p>" : "";
+      var extra = mode === "clouds" ? "<p>☁️ העננים הופיעו, ואתם המשכתם לחפש וחזרתם למשימה.</p>" : "";
       var m = modal('<div class="big-emo">🎉</div><h2>התחנה הושלמה!</h2><div class="stars-row" id="srow"></div>' +
-        "<p>" + clean + " מתוך " + st.tasks.length + " נמצאו בלי רמז</p>" + extra +
+        "<p>מצאתם את כל " + st.tasks.length + " הדברים" + (hints ? ", ונעזרתם ב" + (hints === 1 ? "רמז אחד" : "־" + hints + " רמזים") + ". גם לבקש עזרה זה חכם!" : "!") + "</p>" + extra +
         '<div class="found-row">' + found.map(function (it) { return cropHtml(it.x, it.y, it.r, 62); }).join("") + "</div>" +
-        '<div class="msg-box">🔦 פנס הקשב שלכם התחזק!</div>' +
+        '<div class="msg-box">🔦 תרגלתם לכוון את פנס הקשב!</div>' +
         '<div class="row mt"><button class="btn" id="tomap">🗺️ למפה</button><button class="btn ghost small" id="again">🔄 שוב</button></div>');
       FUN.revealStars(m.querySelector("#srow"), stars);
       setTimeout(function () { FUN.sfx("win"); FUN.confettiSides(40); }, 200);
@@ -344,7 +343,7 @@
 
   /* ---------------- סיום: הפנס שלי ---------------- */
   function finalStart() {
-    var m = modal('<div class="big-emo">💛🔦</div><h2>הפנס שלי</h2><p>עכשיו אתם הבוחרים! מצאו בתמונה 3 דברים שמעניינים אתכם, מרגיעים או משמחים אתכם. אין כאן תשובה נכונה.</p>' +
+    var m = modal('<div class="big-emo">💛🔦</div><h2>הפנס שלי</h2><p>עכשיו אתם הבוחרים! מצאו בתמונה 3 דברים שמעניינים, מרגיעים או משמחים אתכם. אין כאן תשובה נכונה.</p>' +
       '<button class="btn" id="mgo">▶ בוחרים</button>');
     m.querySelector("#mgo").addEventListener("click", function () { closeModal(); finalPlay(); });
   }
@@ -352,7 +351,7 @@
     document.body.classList.add("playing"); hud(true); scrollTo(0, 0);
     var picks = [];
     app.innerHTML = '<div class="play">' +
-      '<div class="taskbar"><div class="temo">💛</div><div class="tq"><small>הפנס שלי · בחירה חופשית</small><b>מצאו בתמונה דבר שמעניין אתכם</b><div class="prog"></div></div></div>' +
+      '<div class="taskbar"><div class="temo">💛</div><div class="tq"><small>הפנס שלי · בחירה 1 מתוך 3</small><b>בחרו דבר שמעניין, מרגיע או משמח אתכם</b><div class="prog"></div></div></div>' +
       '<div class="viewport"><div class="world"><img src="' + ROOM.src + '" alt="חדר היצירה" draggable="false"></div>' +
       '<div class="zoom-ctl"><button class="zin" type="button" aria-label="הגדלה">➕</button><button class="zout" type="button" aria-label="הקטנה">➖</button><button class="zfit" type="button" aria-label="כל התמונה">⤢</button></div>' +
       '</div><div class="tray"><span class="lbl">הבחירות שלי:</span></div></div>';
@@ -385,7 +384,7 @@
           var f = FEELS[+b.dataset.k];
           picks.push({ x: it.x, y: it.y, r: it.r, name: it.name, e: f.e, t: f.t });
           slots[picks.length - 1].className = "crop"; slots[picks.length - 1].setAttribute("style", cropStyle(it.x, it.y, Math.max(it.r, 28) * 1.15, 40));
-          paintProg(); closeModal(); addXp(10); FUN.sfx("star", picks.length - 1); FUN.floatText(f.e + " +10", vp);
+          paintProg(); if (picks.length < 3) root.querySelector(".tq small").textContent = "הפנס שלי · בחירה " + (picks.length + 1) + " מתוך 3"; closeModal(); addXp(10); FUN.sfx("star", picks.length - 1); FUN.floatText(f.e + " +10", vp);
           busy = false;
           if (picks.length >= 3) { P.mine = picks; save(); setTimeout(mineSummary, 700); }
         });
