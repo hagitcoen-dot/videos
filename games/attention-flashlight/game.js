@@ -354,11 +354,13 @@
     /* שאלת ההפתעה: מראה שהקשב מסנן את מה שלא חיפשנו */
     function surprise() {
       busy = true; var sp = st.surprise;
+      vp.classList.add("blind");
       var m = modal('<div class="big-emo">❓🔵</div><h2>שאלת הפתעה</h2><p>' + sp.q + '</p><div class="feels">' +
         sp.opts.map(function (o) { return '<button class="feel" type="button">' + o + "</button>"; }).join("") + "</div>");
       m.querySelectorAll(".feel").forEach(function (b) {
         b.addEventListener("click", function () {
           closeModal(); FUN.sfx("unlock");
+          vp.classList.remove("blind");
           vp.querySelectorAll(".pop").forEach(function (p) { p.remove(); });
           sc.centerOn(ROOM.w / 2, ROOM.h / 2, 1);
           sp.hits.forEach(function (id, k) {
