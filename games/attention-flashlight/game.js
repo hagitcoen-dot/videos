@@ -2,7 +2,7 @@
 (function () {
   "use strict";
   var app = document.getElementById("app");
-  var KEY = "ispy-attn-v1";
+  var KEY = "ispy-attn-v2";
   var GUIDE = "guide.webp";
   var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   var P = FUN.load(KEY, null) || { stars: [], unlocked: 1, xp: 0, mine: [] };
@@ -45,7 +45,10 @@
       "<ul><li>כאן החיפוש הוא אחר דברים מרגיעים, מעניינים ומשמחים, בתוך תמונה עשירה, כדי לתרגל בחירה פעילה של מוקד הקשב.</li>" +
       "<li>תחנת \"ענני ההסחה\" מתרגלת שחרור קשב ממסיחים: שמים לב לענן ומחזירים את הפנס למשימה, בלי להילחם בו.</li>" +
       "<li>המסר: כל הרגשות לגיטימיים, והמוח שם לב לסכנות כדי לשמור עלינו. אנחנו לא מעלימים דאגות, רק מאמנים גמישות של הקשב.</li>" +
+      "<li>תחנת \"ניסוי הפנס\" ממחישה שהקשב מסנן: מחפשים צהוב ואז מגלים כמה דברים כחולים פספסנו. כמו חיפוש בגוגל, מצב הרוח ומה שאנחנו מחפשים קובעים מה נמצא. אפשר להחליט לשנות את מילות החיפוש.</li>" +
+      "<li>בסיום מופיע תרגיל 5-4-3-2-1 להסטת קשב דרך החושים. כדאי לתרגל אותו יחד גם מחוץ למשחק.</li>" +
       "<li>אחרי כל מציאה יש שאלה קצרה לשיחה. כדאי לעצור ולשאול את הילד.</li></ul>" +
+      "<p><b>להרחבה במפגש:</b> ספרי \"אני מגלה\", צורות מתחבאות בקשקוש, חיפוש חפצים לפי צבע או צורה בזמן קצוב, ותרגול קולי של הקשבה לצליל אחד מתוך כמה.</p>" +
       "<p>זהו משחק תרגול ופתיחת שיחה, לא תחליף לטיפול. האפקטים במחקר מתונים ומעורבים, ועובדים טוב יותר יחד עם טיפול.</p></details>" +
       '<p class="credit">חגית כהן CBT</p>';
     app.querySelector("#go").addEventListener("click", function () { FUN.sfx("whoosh"); started ? map() : story(0); });
@@ -56,16 +59,17 @@
   /* ---------------- סיפור פתיחה ---------------- */
   var SLIDES = [
     { emo: "🏠✨", t: "ברוכים הבאים לחדר היצירה! מסתתרים בו מאות דברים: צעצועים, ספרים, צבעים ואוצרות." },
-    { guide: 1, t: "נעים מאוד, אני פנסי! 🔦 לכל אחד מאיתנו יש בראש פנס קשב. הוא מאיר על מה שאנחנו שמים לב אליו." },
+    { guide: 1, t: "לכל אחד מאיתנו יש בראש פנס קשב 🔦. הוא מאיר על מה שאנחנו שמים לב אליו." },
+    { emo: "🔎💻", t: "הפנס עובד קצת כמו חיפוש בגוגל: מה שמחפשים, זה מה שמוצאים. מי שמחפש \"כל הסיבות שאני כועס\" יקבל עוד ועוד סיבות לכעוס.", box: "החדשות הטובות: אפשר להחליט לשנות את מילות החיפוש! 🔄" },
     { emo: "☁️🔦", t: "לפעמים הפנס נתקע על דברים מדאיגים או מעצבנים. זה בסדר, המוח מנסה לשמור עלינו.", box: "אבל אפשר לאמן את הפנס להאיר גם על דברים מרגיעים, מעניינים ומשמחים. כמו שריר! 💪" },
-    { emo: "🗺️⭐", t: "במסע מחכות לכם 7 תחנות. בכל אחת תקבלו משימות חיפוש. כשתמצאו, הדבר יגדל ויזהר!", box: "מוכנים לאמן את הפנס?" }
+    { emo: "🗺️⭐", t: "במסע מחכות לכם " + STATIONS.length + " תחנות. בכל אחת תקבלו משימות חיפוש. כשתמצאו, הדבר יגדל ויזהר!", box: "מוכנים לאמן את הפנס?" }
   ];
   function story(i) {
     hud(false); scrollTo(0, 0);
     var s = SLIDES[i], dots = "";
     for (var k = 0; k < SLIDES.length; k++) dots += '<i class="' + (k === i ? "on" : "") + '"></i>';
     app.innerHTML = '<div class="slide">' +
-      (s.guide ? '<img class="guide-big" src="' + GUIDE + '" alt="פנסי">' : '<div class="big-emo">' + s.emo + "</div>") +
+      (s.guide ? '<img class="guide-big" src="' + GUIDE + '" alt="">' : '<div class="big-emo">' + s.emo + "</div>") +
       "<p>" + s.t + "</p>" + (s.box ? '<div class="msg-box">' + s.box + "</div>" : "") +
       '<div class="dots">' + dots + '</div><div class="row">' +
       (i > 0 ? '<button class="btn ghost small" id="back">→ הקודם</button>' : "") +
@@ -224,7 +228,7 @@
     function onTap(p) {
       if (busy) return;
       var t = st.tasks[ti], s = sc.scale(), best = null, bd = 1e9;
-      t.hits.forEach(function (id) {
+      t.hits.filter(function (id) { return !found.some(function (f) { return f.id === id; }); }).forEach(function (id) {
         var it = item(id), d = Math.hypot(p.x - it.x, p.y - it.y);
         if (d <= it.r + 16 / s && d < bd) { bd = d; best = it; }
       });
@@ -277,7 +281,7 @@
       vp.appendChild(sh);
       sh.querySelector("button").addEventListener("click", function () {
         sh.remove(); ti++;
-        if (ti < st.tasks.length) { FUN.sfx("whoosh"); showTask(); } else finish();
+        if (ti < st.tasks.length) { FUN.sfx("whoosh"); showTask(); } else if (st.surprise) surprise(); else finish();
       });
     }
 
@@ -318,6 +322,32 @@
         setTimeout(bye, 5200 + Math.random() * 1500);
       };
       later(spawn, 1500); cloudTimer = setInterval(spawn, 2600);
+    }
+
+    /* שאלת ההפתעה: מראה שהקשב מסנן את מה שלא חיפשנו */
+    function surprise() {
+      busy = true; var sp = st.surprise;
+      var m = modal('<div class="big-emo">❓🔵</div><h2>שאלת הפתעה</h2><p>' + sp.q + '</p><div class="feels">' +
+        sp.opts.map(function (o) { return '<button class="feel" type="button">' + o + "</button>"; }).join("") + "</div>");
+      m.querySelectorAll(".feel").forEach(function (b) {
+        b.addEventListener("click", function () {
+          closeModal(); FUN.sfx("unlock");
+          vp.querySelectorAll(".pop").forEach(function (p) { p.remove(); });
+          sc.centerOn(ROOM.w / 2, ROOM.h / 2, 1);
+          sp.hits.forEach(function (id, k) {
+            var it = item(id), R = Math.max(it.r * 1.3, 40);
+            var h = document.createElement("div"); h.className = "reveal";
+            h.style.cssText = "left:" + (it.x - R) + "px;top:" + (it.y - R) + "px;width:" + (2 * R) + "px;height:" + (2 * R) + "px;animation-delay:" + (k * 0.25) + "s";
+            sc.world.appendChild(h);
+          });
+          later(function () {
+            var sh = document.createElement("div"); sh.className = "sheet";
+            sh.innerHTML = '<img src="' + GUIDE + '" alt=""><p>' + esc(sp.t) + '</p><button class="btn small" type="button">🏁 סיום</button>';
+            vp.appendChild(sh);
+            sh.querySelector("button").addEventListener("click", function () { sh.remove(); finish(); });
+          }, sp.hits.length * 250 + 600);
+        });
+      });
     }
 
     function finish() {
@@ -396,6 +426,7 @@
     leavePlay(); hud(true); scrollTo(0, 0);
     app.innerHTML = '<div class="slide"><img class="guide-big" src="' + GUIDE + '" alt=""><h2 style="margin-top:10px">הפנס שלי מאיר על...</h2>' +
       '<div class="mine">' + P.mine.map(function (p) { return '<div class="it">' + cropHtml(p.x, p.y, p.r, 64) + "<div><b>" + (p.name ? esc(p.name) : "הדבר שבחרתי") + "</b><span>" + p.e + " " + p.t + "</span></div></div>"; }).join("") + "</div>" +
+      '<div class="msg-box" style="margin-bottom:10px">🖐️ כשמשהו מציף, מסיטים את הפנס אל החושים: מוצאים סביבכם <b>5</b> דברים שרואים, <b>4</b> דברים ששומעים, <b>3</b> דברים שאפשר לגעת בהם, <b>2</b> ריחות ו<b>1</b> טעם.</div>' +
       '<div class="msg-box">🏡 משימה לבית: היום, בבית או בחוץ, מצאו 3 דברים שמרגיעים, מעניינים או משמחים אתכם. אפשר לצלם או לצייר אותם!</div>' +
       '<div class="row mt"><button class="btn" id="cert">🏅 לתעודה</button></div></div>';
     FUN.sfx("win"); FUN.confettiSides(40);

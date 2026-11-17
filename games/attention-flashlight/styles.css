@@ -153,3 +153,7 @@ h1,h2,h3,p{margin:0}
 
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important}.peek .sweep{display:none}}
 @media print{.top,.fun-cert-actions,.home-only{display:none!important}body{background:#fff;color:#000}}
+.reveal{position:absolute;border-radius:50%;pointer-events:none;z-index:3;border:calc(5px / var(--s,1)) solid #6fb6ff;
+  box-shadow:0 0 calc(22px / var(--s,1)) calc(6px / var(--s,1)) rgba(111,182,255,.9);opacity:0;animation:revealIn .6s cubic-bezier(.2,1.6,.4,1) forwards,revealPulse 1.6s ease-in-out .6s infinite}
+@keyframes revealIn{0%{opacity:0;transform:scale(.2)}100%{opacity:1;transform:scale(1)}}
+@keyframes revealPulse{50%{box-shadow:0 0 calc(34px / var(--s,1)) calc(10px / var(--s,1)) rgba(111,182,255,1)}}
