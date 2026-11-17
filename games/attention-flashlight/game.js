@@ -2,7 +2,7 @@
 (function () {
   "use strict";
   var app = document.getElementById("app");
-  var KEY = "ispy-attn-v2";
+  var KEY = "ispy-attn-v3";
   var GUIDE = "guide.webp";
   var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   var P = FUN.load(KEY, null) || { stars: [], unlocked: 1, xp: 0, mine: [] };
@@ -41,19 +41,20 @@
       '<div class="lock-date">יום ' + days[now.getDay()] + ", " + now.getDate() + "." + (now.getMonth() + 1) + '</div><div class="lock-time">' + hh + ":" + mm + "</div>" +
       '<div class="notif-card"><div class="nc-head"><span class="nc-ic">🔦</span><b>פנס הקשב</b><small>עכשיו</small></div>' +
       "<p>" + (started ? "יש לך משימות חיפוש פתוחות. ממשיכים מאיפה שעצרת?" : "יש לך " + STATIONS.length + " משימות חיפוש חדשות. מוכנים לבדוק איך הקשב שלך עובד?") + "</p></div>" +
-      '<div class="notif-card dim"><div class="nc-head"><span class="nc-ic">🧠</span><b>המוח שלך</b><small>לפני 2 דק׳</small></div><p>סיננתי בשבילך 11 מיליון פרטים בשנייה האחרונה. בבקשה.</p></div>' +
+      '<div class="notif-card dim"><div class="nc-head"><span class="nc-ic">🧠</span><b>המוח שלך</b><small>לפני 2 דק׳</small></div><p>קלטתי המון פרטים בדקה האחרונה. על מה נתמקד?</p></div>' +
       '<button class="unlock" id="go" type="button"><span>' + (started ? "החליקו כדי להמשיך" : "החליקו כדי לפתוח") + '</span><i>›</i></button>' +
       (started ? '<button class="btn ghost small" id="restart" type="button" style="margin-top:10px">🔄 מהתחלה</button>' : "") + "</div>" +
       '<details class="adult home-only"><summary>👩‍🏫 להורים ולמטפלים</summary>' +
-      "<p><b>על מה המשחק?</b> אימון קשב בהשראת מחקרי \"שינוי הטיית קשב\" (Attention Bias Modification). ילדים עם חרדה או דאגנות נוטים לשים לב מהר יותר לדברים מאיימים ולהתקשות להסיט מהם את הקשב. באימון \"חיפוש חיובי\" (Positive Search Training, Waters ועמיתים) ילדים חיפשו שוב ושוב את הפרצוף השמח בין פרצופים כועסים, וזה עזר לחלקם להפחית חרדה.</p>" +
+      "<p><b>על מה המשחק?</b> משחק להמחשת קשב ולתרגול בחירת מוקד קשב, בהשראת מחקרי \"חיפוש חיובי\" (Positive Search Training). במחקרים האלה ילדים תרגלו באופן מוגדר וחוזר חיפוש פרצוף שמח בין פרצופים כועסים. המשחק הזה לא נבדק במחקר, ואין להסיק ממנו על הפחתת חרדה.</p>" +
       "<ul><li>כאן החיפוש הוא אחר דברים מרגיעים, מעניינים ומשמחים, בתוך תמונה עשירה, כדי לתרגל בחירה פעילה של מוקד הקשב.</li>" +
       "<li>תחנת \"התראות\" מתרגלת שחרור קשב ממסיחים: קופצות התראות ומחשבות מטרידות, שמים לב אליהן ומחזירים את הקשב למשימה, בלי להילחם בהן.</li>" +
       "<li>המסר: כל הרגשות לגיטימיים, והמוח שם לב לסכנות כדי לשמור עלינו. אנחנו לא מעלימים דאגות, רק מאמנים גמישות של הקשב.</li>" +
-      "<li>תחנת \"ניסוי הפנס\" ממחישה שהקשב מסנן: מחפשים צהוב ואז מגלים כמה דברים כחולים פספסנו. כמו חיפוש בגוגל, מצב הרוח ומה שאנחנו מחפשים קובעים מה נמצא. אפשר להחליט לשנות את מילות החיפוש.</li>" +
+      "<li>תחנת \"הניסוי\" פותחת את המשחק, כשהתמונה עוד חדשה: מחפשים צהוב, ואז שואלים כמה דברים כחולים ראו. רוב המשתתפים מפספסים חלק מהם. זו הזדמנות לשוחח על כך שכשמחפשים משהו מסוים, קל יותר לשים לב אליו, וכך גם עם מצב רוח ומחשבות.</li>" +
       "<li>בסיום מופיע תרגיל 5-4-3-2-1 להסטת קשב דרך החושים. כדאי לתרגל אותו יחד גם מחוץ למשחק.</li>" +
-      "<li>אחרי כל מציאה יש שאלה קצרה לשיחה. כדאי לעצור ולשאול את הילד.</li></ul>" +
+      "<li>אחרי המציאות מופיעים מסרים קצרים ושאלות שאפשר לפתח לשיחה.</li>" +
+      "<li>רמזים לא מורידים כוכבים: גם לבקש עזרה זו אסטרטגיה טובה.</li></ul>" +
       "<p><b>להרחבה במפגש:</b> ספרי \"אני מגלה\", צורות מתחבאות בקשקוש, חיפוש חפצים לפי צבע או צורה בזמן קצוב, ותרגול קולי של הקשבה לצליל אחד מתוך כמה.</p>" +
-      "<p>זהו משחק תרגול ופתיחת שיחה, לא תחליף לטיפול. האפקטים במחקר מתונים ומעורבים, ועובדים טוב יותר יחד עם טיפול.</p></details>" +
+      "<p>זהו משחק תרגול ופתיחת שיחה, לא תחליף לטיפול.</p></details>" +
             '<p class="credit">חגית כהן CBT</p>';
     var go = app.querySelector("#go"), knob = go.querySelector("i"), sx = null, done = false;
     function open() { if (done) return; done = true; FUN.sfx("whoosh"); started ? map() : story(0); }
@@ -67,10 +68,10 @@
 
   /* ---------------- סיפור פתיחה ---------------- */
   var SLIDES = [
-    { q: "כל הסיבות שאני כועס", n: "4,280,000", res: ["10 דברים שמוכיחים שכולם נגדך", "למה תמיד זה קורה דווקא לי?", "עוד סיבה טובה להתעצבן היום"], t: "הקשב עובד כמו מנוע חיפוש: מה שמקלידים, זה מה שמוצאים. מי שמחפש סיבות לכעוס יקבל עוד ועוד סיבות לכעוס." },
-    { q: "מה לא בסדר בי", n: "9,100,000", res: ["כל הטעויות שעשית השבוע", "מה כולם חושבים עליך באמת", "עוד דבר שלא הצלחת בו"], t: "וזה לא רק כעס. כשמצב הרוח ירוד, המוח \"משלים\" את החיפוש לבד ומציע עוד תוצאות באותו כיוון. זה טבעי: המוח מנסה להגן עלינו." },
+    { q: "כל הסיבות שאני כועס", n: "4,280,000", res: ["10 דברים שמוכיחים שכולם נגדך", "למה תמיד זה קורה דווקא לי?", "עוד סיבה טובה להתעצבן היום"], t: "הקשב עובד קצת כמו מנוע חיפוש. כשאנחנו כועסים, דברים מעצבנים עלולים למשוך יותר את הקשב שלנו. אפשר לתרגל לשים לב גם לפרטים נוספים." },
+    { q: "מה לא בסדר בי", n: "9,100,000", res: ["כל הטעויות שעשית השבוע", "מה כולם חושבים עליך באמת", "עוד דבר שלא הצלחת בו"], t: "וזה לא רק כעס. כשמצב הרוח ירוד, קל יותר לשים לב לדברים באותו כיוון. זה טבעי, המוח מנסה להגן עלינו, וזה לא אומר שמשהו לא בסדר בך." },
     { q: "מה כן עבד לי היום", n: "3,650,000", res: ["רגע אחד שצחקת בו", "משהו קטן שהצלחת בו", "מישהו שהיה נחמד אליך"], t: "החדשות הטובות: אפשר לשנות את מילות החיפוש. זה לא קורה בבת אחת, זה מתאמן. כמו שריר." },
-    { q: "איך מאמנים את הקשב", n: "8 משימות", res: [], t: "בכל משימה תופיע שורת חיפוש, ואת הדבר צריך למצוא בתמונה. יהיה גם ניסוי קטן, התראות שמנסות להסיח את הדעת, ומצב לילה." }
+    { q: "איך מאמנים את הקשב", n: "8 משימות", res: [], t: "בכל משימה תופיע שורת חיפוש, ואת הדבר צריך למצוא בתמונה. מתחילים בניסוי קטן, ובהמשך יש התראות שמנסות להסיח את הדעת, ומצב לילה." }
   ];
   function story(i) {
     hud(false); scrollTo(0, 0);
@@ -230,7 +231,7 @@
     var root = app.querySelector(".play"), vp = root.querySelector(".viewport"), tray = root.querySelector(".tray");
     var temo = root.querySelector(".temo"), tq = root.querySelector(".tq b"), tsm = root.querySelector(".tq small"), prog = root.querySelector(".prog");
     var hintBtn = root.querySelector(".hint-btn"), nightEl = root.querySelector(".night");
-    var ti = 0, clean = 0, combo = 0, wrong = 0, hinted = false, t0 = 0, busy = false, recentMiss = [], found = [], cloudsSeen = 0;
+    var hints = 0, ti = 0, clean = 0, combo = 0, wrong = 0, hinted = false, t0 = 0, busy = false, recentMiss = [], found = [], cloudsSeen = 0;
     var timers = [], cloudTimer = null, nudgeTimer = null;
     var traySlots = [];
     st.tasks.forEach(function () { var d = document.createElement("div"); d.className = "crop empty"; tray.appendChild(d); traySlots.push(d); });
@@ -313,7 +314,7 @@
 
     hintBtn.addEventListener("click", function () {
       if (busy) return;
-      hinted = true; hintBtn.classList.remove("nudge"); FUN.sfx("pop");
+      if (!hinted) hints++; hinted = true; hintBtn.classList.remove("nudge"); FUN.sfx("pop");
       var t = st.tasks[ti], it = item(t.hits[0]);
       if (t.hits.length > 1) { // רמז לפריט הכי קרוב למרכז המסך
         var sz = sc.size(), c = { x: sz.w / 2, y: sz.h / 2 }, bd = 1e9;
@@ -356,7 +357,7 @@
       busy = true; var sp = st.surprise;
       vp.classList.add("blind");
       var m = modal('<div class="big-emo">❓🔵</div><h2>שאלת הפתעה</h2><p>' + sp.q + '</p><div class="feels">' +
-        sp.opts.map(function (o) { return '<button class="feel" type="button">' + o + "</button>"; }).join("") + "</div>");
+        sp.opts.map(function (o, k) { return '<button class="feel" type="button" data-k="' + k + '">' + o + "</button>"; }).join("") + "</div>");
       m.querySelectorAll(".feel").forEach(function (b) {
         b.addEventListener("click", function () {
           closeModal(); FUN.sfx("unlock");
@@ -371,7 +372,7 @@
           });
           later(function () {
             var sh = document.createElement("div"); sh.className = "sheet";
-            sh.innerHTML = '<img src="' + GUIDE + '" alt=""><p>' + esc(sp.t) + '</p><button class="btn small" type="button">🏁 סיום</button>';
+            sh.innerHTML = '<img src="' + GUIDE + '" alt=""><p>' + esc(sp.fb[+b.dataset.k]) + '</p><button class="btn small" type="button">🏁 סיום</button>';
             vp.appendChild(sh);
             sh.querySelector("button").addEventListener("click", function () { sh.remove(); finish(); });
           }, sp.hits.length * 250 + 600);
@@ -380,7 +381,7 @@
     }
 
     function finish() {
-      var stars = FUN.starsFor(clean, st.tasks.length);
+      var stars = 3;
       var first = !P.stars[si];
       P.stars[si] = Math.max(P.stars[si] || 0, stars);
       var unlockedBefore = P.unlocked; P.unlocked = Math.max(P.unlocked, si + 2); save();
@@ -388,9 +389,9 @@
       vp.querySelectorAll(".cloud").forEach(function (c) { c.remove(); });
       var extra = mode === "clouds" ? "<p>🔔 " + cloudsSeen + " התראות קפצו, ובכל זאת חזרת למשימה. זה בדיוק האימון.</p>" : "";
       var m = modal('<div class="big-emo">🎉</div><h2>התחנה הושלמה!</h2><div class="stars-row" id="srow"></div>' +
-        "<p>" + clean + " מתוך " + st.tasks.length + " נמצאו בלי רמז</p>" + extra +
+        "<p>מצאת את כל " + st.tasks.length + " הדברים" + (hints ? ", עם " + (hints === 1 ? "רמז אחד" : hints + " רמזים") + ". גם להשתמש בעזרה זו אסטרטגיה טובה." : ".") + "</p>" + extra +
         '<div class="found-row">' + found.map(function (it) { return cropHtml(it.x, it.y, it.r, 62); }).join("") + "</div>" +
-        '<div class="msg-box">🔦 פנס הקשב שלכם התחזק!</div>' +
+        '<div class="msg-box">🔦 תרגלתם לכוון את פנס הקשב שלכם!</div>' +
         '<div class="row mt"><button class="btn" id="tomap">📱 למסך הבית</button><button class="btn ghost small" id="again">🔄 שוב</button></div>');
       FUN.revealStars(m.querySelector("#srow"), stars);
       setTimeout(function () { FUN.sfx("win"); FUN.confettiSides(40); }, 200);

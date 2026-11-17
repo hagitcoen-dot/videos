@@ -203,3 +203,5 @@ h1,h2,h3,p{margin:0}
 .cloud.notif .nc-ic{color:#fff}
 @keyframes notifIn{0%{transform:translateY(-40px);opacity:0}100%{transform:none;opacity:1}}
 .viewport.blind .world{visibility:hidden}
+html,body{overflow-x:hidden;max-width:100%}
+body.playing{overflow:hidden;height:100vh;height:100dvh}
