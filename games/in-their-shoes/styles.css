@@ -1,0 +1,364 @@
+@font-face{font-family:'Rubik';font-style:normal;font-weight:400 800;font-display:swap;src:url('fonts/rubik-hebrew.woff2') format('woff2');unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F;}
+@font-face{font-family:'Rubik';font-style:normal;font-weight:400 800;font-display:swap;src:url('fonts/rubik-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+2190-21FF;}
+/* ילדים: חצר בית ספר בהירה, מסלול עקבות. בוגרים: טלפון כהה עם צ'אטים */
+:root{--bg:#eaf6f3;--bg2:#fdf3e7;--card:#ffffff;--ink:#21403f;--soft:#5b7573;--line:#cfe3df;
+  --accent:#ff7a59;--accent2:#1f8f86;--ok:#2fa866;--okbg:#e5f7ec;--try:#c9762a;--trybg:#fff1e0;--note:#6c5ce7;--notebg:#efedff}
+body.teens{--bg:#0e1120;--bg2:#161a2e;--card:#1b2036;--ink:#f3f4fb;--soft:#a5abc9;--line:#2c3354;
+  --accent:#7c6cff;--accent2:#3fe0d0;--ok:#4be38a;--okbg:#173a2a;--try:#ffb347;--trybg:#3a2c17;--note:#b9b0ff;--notebg:#26224a}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%}
+body{font-family:Rubik,system-ui,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.5;
+  background-image:radial-gradient(circle at 85% 0%,var(--bg2),transparent 55%);background-attachment:fixed;color-scheme:light}
+body.teens{color-scheme:dark;background-image:radial-gradient(circle at 80% 0%,rgba(124,108,255,.22),transparent 45%),radial-gradient(circle at 10% 95%,rgba(63,224,208,.12),transparent 45%)}
+button{font-family:inherit;cursor:pointer;color:inherit}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px max(12px,env(safe-area-inset-right)) 8px max(12px,env(safe-area-inset-left));height:56px;
+  background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:8px;background:none;border:0;font-weight:800;font-size:18px;padding:0;min-width:0}
+.brand span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand-ic{font-size:24px}
+.hud{display:flex;align-items:center;gap:6px}
+.lvl-tag{font-size:12px;font-weight:700;color:var(--soft);white-space:nowrap}
+.icon-btn{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--card);font-size:18px}
+main{max-width:720px;margin:0 auto;padding:16px max(16px,env(safe-area-inset-right)) 24px max(16px,env(safe-area-inset-left))}
+h1,h2,h3{text-wrap:balance;margin:0 0 8px;line-height:1.2}
+.center{text-align:center}.small{font-size:13px;color:var(--soft)}
+.btn{border:0;border-radius:14px;padding:12px 20px;font-weight:700;font-size:16px}
+.btn.primary{background:var(--accent);color:#fff;box-shadow:0 4px 0 color-mix(in srgb,var(--accent) 60%,#000)}
+.btn.primary:active{transform:translateY(2px);box-shadow:0 2px 0 color-mix(in srgb,var(--accent) 60%,#000)}
+.btn.ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink)}
+.btn.small{padding:7px 12px;font-size:14px}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px}
+
+/* פתיחה */
+.hero{text-align:center;padding:12px 0 4px}
+.hero h1{font-size:clamp(34px,8vw,52px);font-weight:800;letter-spacing:-.5px;color:var(--ink)}
+.hero .lead{max-width:34em;margin:0 auto;color:var(--soft);font-size:16px}
+.hero-shoes{display:flex;justify-content:center;gap:2px;margin-bottom:6px}
+.hero-shoes .shoe{animation:walk 2.4s ease-in-out infinite}
+.hero-shoes .shoe:nth-child(2){animation-delay:.3s}.hero-shoes .shoe:nth-child(3){animation-delay:.6s}
+@keyframes walk{0%,100%{transform:translateY(0) rotate(0)}30%{transform:translateY(-8px) rotate(-6deg)}}
+.pick{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px 0}
+@media (max-width:560px){.pick{grid-template-columns:1fr}}
+.pick-card{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;border-radius:22px;padding:18px 14px;border:2px solid transparent;transition:transform .15s}
+.pick-card:hover{transform:translateY(-3px)}
+.pick-card b{font-size:22px}.pick-card small{font-size:13px;opacity:.85}
+.kids-card{background:#fff;border-color:#ffd0c2;color:#21403f}
+.teens-card{background:#121527;border-color:#3a3f6b;color:#f3f4fb}
+.pc-art{display:flex;gap:4px;height:96px;align-items:center}
+.phone-mini{flex-direction:column;align-items:stretch;gap:5px;width:190px;background:#1d2240;border-radius:16px;padding:8px;height:auto}
+.phone-mini i{font-style:normal;font-size:12px;background:#2a3060;border-radius:10px;padding:4px 8px;text-align:right}
+.phone-mini i.b{background:#3b3570;align-self:flex-start}.phone-mini i.r{background:#7c6cff;align-self:center;font-weight:700}
+.adult{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 16px;margin-top:6px}
+.adult summary{font-weight:700;cursor:pointer}
+.adult-in p{font-size:14.5px;margin:10px 0}.adult .src{font-size:12.5px;color:var(--soft)}
+
+/* פתיח */
+.intro{text-align:center;max-width:560px;margin:10px auto}
+.intro .big{font-size:56px;line-height:1.1;margin:4px 0 8px;font-weight:800;color:var(--accent)}
+.intro p{font-size:17px}
+.dots{display:flex;gap:6px;justify-content:center;margin-bottom:6px}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--line)}.dots i.on{background:var(--accent)}
+.steps4,.notlist{list-style:none;padding:0;margin:10px 0;text-align:right;display:grid;gap:10px}
+.steps4 li,.notlist li{display:flex;gap:12px;align-items:flex-start;background:var(--bg);border-radius:14px;padding:10px 12px}
+.steps4 li>span,.notlist li>span{font-size:26px;flex:none}
+.steps4 b,.notlist b{display:block}.steps4 small,.notlist small{color:var(--soft);font-size:14px}
+
+/* מסלול ילדים */
+.trail{text-align:center}.trail .sub{color:var(--soft);margin-top:0}
+.trail ol{list-style:none;padding:0;margin:18px auto;max-width:440px;display:flex;flex-direction:column;gap:6px;position:relative}
+.trail li{display:flex}.trail li.r{justify-content:flex-start}.trail li.l{justify-content:flex-end}.trail li.fin{justify-content:center}
+.trail li:not(.fin)::after{content:"👣";opacity:.35;font-size:20px;align-self:flex-end;margin:0 10px}
+.stop{display:flex;align-items:center;gap:10px;background:var(--card);border:2px solid var(--line);border-radius:999px;padding:6px 16px 6px 8px;min-width:0;text-align:right}
+.stop .ball{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-size:28px;background:var(--bg2);flex:none}
+.stop.open{border-color:var(--accent);box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 18%,transparent)}
+.stop.done .ball{background:var(--okbg)}
+.stop.locked{opacity:.55}
+.stop .nm b{display:block;font-size:16px}.stop .nm small{color:var(--soft);font-size:12.5px}
+.stop .st{display:block;font-style:normal;color:#f5b301;font-size:13px;letter-spacing:1px}
+.unlocking{animation:pulse 1s ease 2}
+@keyframes pulse{50%{transform:scale(1.08)}}
+
+/* תחנה ילדים */
+.play-k{max-width:640px;margin:0 auto}
+.pk-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.pk-head b{font-size:18px}.prog{font-size:12px;color:var(--soft)}
+.cast{display:flex;justify-content:center;align-items:flex-end;gap:14px;flex-wrap:wrap;min-height:120px;padding:8px 0 14px}
+.who{display:flex;flex-direction:column;align-items:center;gap:2px;opacity:.55;transition:opacity .3s,transform .3s;position:relative}
+.who.on,.who.known{opacity:1}.who.on{transform:translateY(-4px)}
+.who span{font-weight:700;font-size:14px}
+.who .worn{position:absolute;bottom:-8px;inset-inline-start:-14px;animation:drop .5s ease}
+@keyframes drop{from{transform:translateY(-40px);opacity:0}}
+.ava{display:block;border-radius:50%}
+.ava.t,.ava.me{display:grid;place-items:center;background:var(--c);color:#fff;font-weight:800;flex:none}
+.ava.me{font-size:13px;border:2px dashed #fff}
+.tear{animation:tear 1.6s ease-in infinite}@keyframes tear{to{transform:translateY(10px);opacity:0}}
+.stagebox{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:0 10px 30px rgba(33,64,63,.08)}
+.in{animation:rise .35s ease}@keyframes rise{from{transform:translateY(12px);opacity:.3}}
+.scene .place{display:inline-block;background:var(--bg);border-radius:999px;padding:3px 12px;font-size:13px;font-weight:700;color:var(--accent2)}
+.scene p{font-size:18px;margin:10px 0 4px}
+.hint{color:var(--soft);font-size:14.5px;margin:4px 0 10px}
+.wear{display:flex;align-items:center;gap:12px}.wear h3{margin:0}
+.wear-shoe{animation:drop .6s ease}
+.clue{background:var(--bg2);border-radius:16px;padding:12px 14px;margin-top:12px}
+.clue p{margin:6px 0 0;font-size:16.5px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chip{border:2px solid var(--line);background:var(--card);border-radius:999px;padding:9px 16px;font-size:16px;font-weight:600}
+.chip.right{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+.chip.no{opacity:.4;text-decoration:line-through}
+.chip.dim{opacity:.4}
+.opts{display:grid;gap:8px}
+.opt{text-align:right;border:2px solid var(--line);background:var(--card);border-radius:16px;padding:12px 14px;font-size:16px;line-height:1.45}
+.opt.right{background:var(--okbg);border-color:var(--ok)}
+.opt.no{opacity:.75;border-style:dashed}
+.opt.dim{opacity:.4}
+.thief{display:block;margin-top:6px;font-size:12.5px;font-weight:700;color:var(--try)}
+.fb{border-radius:14px;padding:10px 12px;margin:10px 0 0;font-size:15px}
+.fb.ok{background:var(--okbg)}.fb.try{background:var(--trybg)}.fb.note{background:var(--notebg)}
+.breathe{display:grid;place-items:center;height:150px}
+.breathe span{width:60px;height:60px;border-radius:50%;background:radial-gradient(circle,var(--accent2),color-mix(in srgb,var(--accent2) 40%,transparent));animation:br 8s ease-in-out infinite}
+@keyframes br{0%,100%{transform:scale(1)}50%{transform:scale(2.1)}}
+.lesson{text-align:center}.lesson p{font-size:16.5px}
+.stars{font-size:34px;justify-content:center;display:flex;gap:4px}
+
+/* טלפון (בוגרים) */
+.phone{max-width:430px;margin:0 auto;background:#121527;border:1px solid var(--line);border-radius:30px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.45)}
+.ph-top{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#191d36;border-bottom:1px solid var(--line);min-height:54px}
+.ph-top b{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ph-back{background:none;border:0;font-size:22px;padding:0 4px}
+.acc{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--accent2);flex:none}
+.acc:empty{display:none}
+.chats{list-style:none;margin:0;padding:0}
+.chat-row{display:flex;align-items:center;gap:12px;width:100%;background:none;border:0;border-bottom:1px solid var(--line);padding:12px 14px;text-align:right}
+.chat-row .ci{width:48px;height:48px;border-radius:50%;background:#262c4f;display:grid;place-items:center;font-size:20px;flex:none;font-weight:800}
+.chat-row .cm{flex:1;min-width:0}.chat-row .cm b{display:block}
+.chat-row .cm small{display:block;color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chat-row .cs{color:#ffd23f;font-size:13px;flex:none}
+.badge{font-style:normal;background:var(--accent2);color:#0e1120;border-radius:999px;padding:1px 8px;font-weight:800}
+.chat-row.locked{opacity:.45}.chat-row.new .cm b::after{content:" •";color:var(--accent2)}
+.phone.play{display:flex;flex-direction:column;min-height:min(78vh,760px)}
+.ph-body{flex:1;padding:14px 12px;display:flex;flex-direction:column;gap:8px;overflow-y:auto;max-height:42vh;min-height:180px;
+  background:#0f1222 radial-gradient(circle at 20% 20%,rgba(124,108,255,.08),transparent 40%)}
+.ph-body.private{background:#13132a radial-gradient(circle at 80% 20%,rgba(63,224,208,.1),transparent 40%)}
+.phone.switch .ph-body{animation:flip .5s ease}
+@keyframes flip{from{transform:rotateY(70deg);opacity:0}}
+.msg{display:flex;align-items:flex-end;gap:6px;max-width:88%;animation:rise .3s ease}
+.msg.mine{align-self:flex-start;flex-direction:row-reverse}
+.msg:not(.mine){align-self:flex-end;flex-direction:row}
+.msg .bub{background:#262c4f;border-radius:16px 16px 4px 16px;padding:8px 12px;font-size:15px}
+.msg.mine .bub{background:#5b4fd6;border-radius:16px 16px 16px 4px}
+.msg .bub b{display:block;font-size:12px;color:var(--accent2)}
+.msg.story .bub{background:linear-gradient(135deg,#ff6fa5,#ffb347);color:#1a1020;font-weight:700}
+.msg.video .bub{background:#1d1d1d;border:1px solid #444}
+.msg.sent .bub{background:#2fa866}
+.sys{align-self:center;font-size:12px;color:var(--soft);background:#1b2036;border-radius:999px;padding:3px 10px;text-align:center;max-width:90%}
+.notecard{background:#fff6c7;color:#3d3313;border-radius:6px 16px 16px 16px;padding:12px 14px;font-size:15.5px;transform:rotate(-1deg);box-shadow:0 4px 12px rgba(0,0,0,.3);animation:rise .3s ease}
+.sheet{background:var(--card);border-top:1px solid var(--line);padding:16px;border-radius:22px 22px 0 0}
+.sheet h3{font-size:18px}
+.scene-t{font-size:16.5px;margin:0 0 4px}
+.switched{font-weight:700;color:var(--accent2);margin:0}
+body.teens .chip,body.teens .opt{background:#232946}
+body.teens .stagebox{box-shadow:none}
+
+/* סיום */
+.thieves{margin-top:20px}.thieves ul{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.thieves li{background:var(--bg);border-radius:14px;padding:10px;opacity:.4;filter:grayscale(1)}
+.thieves li.on{opacity:1;filter:none}
+.thieves li span{font-size:26px;display:block}.thieves li small{display:block;color:var(--soft);font-size:13px}
+.final-msg{font-weight:700;font-size:17px;text-align:center}
+body.teens .fun-cert{color:#21403f}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* מד הנעליים */
+.meter{display:flex;justify-content:center;align-items:flex-end;gap:14px;flex-wrap:wrap;padding:4px 0 12px}
+.phone .meter{padding:8px 10px;background:#161a30;border-bottom:1px solid var(--line);gap:12px}
+.mt{display:flex;flex-direction:column;align-items:center;gap:2px;opacity:.6;transition:opacity .3s}
+.mt.on,.mt.full{opacity:1}
+.mt small{font-size:12px;font-weight:700;color:var(--soft)}
+.mt.on small{color:var(--ink)}
+.shoe-fill .fillrect{transition:width .7s cubic-bezier(.3,1.4,.5,1)}
+.mt.full .shoe-fill{animation:stomp .5s ease}
+@keyframes stomp{40%{transform:translateY(-6px) rotate(-5deg)}70%{transform:translateY(1px)}}
+.meter.done{padding-bottom:0}
+/* הנפשת הכריך */
+.anim{position:relative;height:150px;margin:10px 0 4px;border-radius:16px;overflow:hidden;background:linear-gradient(#bfe6ff 0 62%,#f2d49b 62%)}
+.anim .sand{position:absolute;inset:auto 0 0;height:38%;background:radial-gradient(circle at 30% 40%,#e8c47f 2px,transparent 3px) 0 0/18px 14px}
+.anim .bench{position:absolute;right:48%;bottom:44%;width:90px;height:10px;background:#a0683c;border-radius:4px}
+.anim .sw{position:absolute;right:56%;bottom:calc(44% + 8px);font-size:34px;animation:swFall 2.4s ease-in forwards}
+.anim .ball{position:absolute;right:-50px;bottom:60%;font-size:30px;animation:ballFly 2.4s linear forwards}
+.anim .puff{position:absolute;right:54%;bottom:52%;font-size:26px;opacity:0;animation:puff 2.4s forwards}
+@keyframes ballFly{0%{transform:translate(0,0) rotate(0)}45%{transform:translate(calc(-1 * (min(640px,100vw) * .38)),10px) rotate(-400deg)}100%{transform:translate(calc(-1 * (min(640px,100vw) * .8)),-60px) rotate(-900deg)}}
+@keyframes swFall{0%,44%{transform:none}70%{transform:translate(-20px,40px) rotate(-120deg)}100%{transform:translate(-26px,58px) rotate(-170deg)}}
+@keyframes puff{0%,42%{opacity:0;transform:scale(.4)}50%{opacity:1;transform:scale(1.2)}70%,100%{opacity:0}}
+.freeze{font-weight:800;color:var(--accent);font-size:17px;margin:8px 0 0}
+/* צעדים ונקודת מבט */
+.walk{display:flex;justify-content:center;gap:28px;height:26px;font-size:20px}
+.walk i{font-style:normal;opacity:0;animation:step .5s ease forwards}.walk i:nth-child(2){animation-delay:.35s}
+@keyframes step{from{opacity:0;transform:translateY(10px)}to{opacity:.7;transform:none}}
+.wear,.pov,.clue{animation:rise .4s ease both}.wear{animation-delay:.7s}.pov{animation-delay:1s}.clue{animation-delay:1.3s}
+.pov{margin-top:12px;border-radius:18px;border:3px solid var(--c);overflow:hidden;background:var(--bg)}
+.pov-view{font-size:40px;text-align:center;padding:14px 8px;letter-spacing:4px;background:linear-gradient(180deg,color-mix(in srgb,var(--c) 22%,#fff),#fff);box-shadow:inset 0 0 40px rgba(0,0,0,.12)}
+.pov small{display:block;padding:8px 12px;font-size:14px;font-weight:600}
+.skip{align-self:center;margin:-40px auto 8px;position:relative;z-index:2;background:rgba(124,108,255,.9);color:#fff;border:0;border-radius:999px;padding:6px 14px;font-size:13px;font-weight:700}
+.thief.close{color:var(--note)}
+.clues .opt{font-size:15px}
+/* איורים */
+.pic{margin:10px 0 0;border-radius:18px;overflow:hidden}
+.pic img{display:block;width:100%;max-width:100%;aspect-ratio:1/1;max-height:340px;object-fit:cover;animation:rise .5s ease}
+.pic figcaption{font-size:13px;color:var(--soft);padding:6px 4px 0}
+.pc-img{width:100%;max-width:260px;aspect-ratio:1/1;object-fit:cover;border-radius:16px}
+.intro-img{width:min(260px,70%);aspect-ratio:1/1;object-fit:cover;border-radius:20px;margin:6px auto 10px;display:block}
+.stop .ball img,.chat-row .ci img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.stop .ball,.chat-row .ci{overflow:hidden}
+.hero-shoes img{filter:drop-shadow(0 6px 10px rgba(0,0,0,.12))}
+img.swap{width:44px;height:auto;vertical-align:middle}
+.walk{align-items:center}
+.ph-body{background-size:cover;background-position:center}
+.medal{display:block;width:110px;margin:4px auto}
+/* שביל עקבות */
+.trail-fp{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 3px;padding:4px 6px;max-width:100%}
+.fp{width:34px;height:17px;flex:none;margin-top:-8px}
+.fp.flip{margin-top:8px}
+.fp.now{filter:drop-shadow(0 0 5px rgba(139,92,246,.7))}
+.fp.stamp{animation:stampIn .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes stampIn{from{opacity:0;transform:scale(1.8)}}
+.fp-who{font-size:11px;font-weight:700;color:var(--soft);margin:0 2px 0 8px;white-space:nowrap;opacity:.6}
+.fp-who.on{opacity:1;color:var(--ink)}
+
+/* פורטרטים מהאיורים */
+img.ava.pic{border-radius:50%;object-fit:cover;box-shadow:0 0 0 3px var(--c),0 4px 10px rgba(0,0,0,.12);background:#fff;flex:none}
+.who:not(.on):not(.known) img.ava.pic{filter:saturate(.6)}
+/* כיתוב גדול יותר */
+body{font-size:17px}
+.hint{font-size:16.5px}
+.scene p,.clue p{font-size:19px}
+.clue b{font-size:16.5px}
+.pov small{font-size:16px}
+.stagebox h3,.sheet h3{font-size:21px}
+.chip{font-size:18px;padding:10px 18px}
+.opt{font-size:17.5px}
+.fb{font-size:16.5px}
+.who span{font-size:16px}
+.fp-who{font-size:13px}
+.lesson p{font-size:18px}
+.msg .bub{font-size:16.5px}
+.notecard{font-size:17px}
+.scene-t{font-size:18px}
+.btn{font-size:17px}
+.stop .nm b{font-size:17.5px}.stop .nm small{font-size:14px}
+img.swap{width:64px}
+@media (min-width:700px){
+  body{font-size:18px}
+  .scene p,.clue p{font-size:21px}
+  .hint,.pov small,.fb{font-size:18px}
+  .stagebox h3,.sheet h3{font-size:24px}
+  .chip{font-size:19px}.opt{font-size:19px}
+  .who span{font-size:17px}
+  .msg .bub{font-size:17.5px}
+}
+/* כיתוב גדול בכל המשחק */
+.hero .lead{font-size:18.5px}
+.pick-card b{font-size:25px}.pick-card small{font-size:15.5px}
+.adult summary{font-size:17px}.adult-in p{font-size:16.5px}.adult .src{font-size:14px}
+.intro p{font-size:19px}.intro h2{font-size:28px}
+.steps4 b,.notlist b{font-size:18px}.steps4 small,.notlist small{font-size:16px}
+.trail h2{font-size:26px}.trail .sub{font-size:16.5px}
+.chat-row .cm b{font-size:17.5px}.chat-row .cm small{font-size:15px}
+.ph-top b{font-size:17px}
+.sys{font-size:14px}
+.switched{font-size:17.5px}
+.pk-head b{font-size:20px}
+.thief{font-size:14.5px}
+.thieves li b{font-size:17px}.thieves li small{font-size:15px}
+.final-msg{font-size:19px}
+.small{font-size:15px}
+.brand{font-size:19px}.lvl-tag{font-size:14px}
+.btn.small{font-size:15.5px}
+.fun-cert-line{font-size:18px}
+.scene .place{font-size:15px}
+@media (min-width:700px){
+  .hero .lead{font-size:20px}
+  .intro p{font-size:20.5px}
+  .adult-in p{font-size:17.5px}
+  .chat-row .cm b{font-size:18.5px}.chat-row .cm small{font-size:16px}
+}
+
+/* מסלול של נעליים שקופות שנצבעות */
+.shoes-path ol{gap:0}
+.shoes-path li{position:relative}
+.shoes-path li:not(.fin)::after{content:none}
+.shoes-path li + li::before{content:"👣";position:absolute;top:-6px;left:50%;transform:translateX(-50%) rotate(-20deg);opacity:.3;font-size:20px}
+.shoe-stop{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:0;padding:6px 10px;border-radius:24px;min-width:0}
+.ss-shoe{position:relative;display:block}
+.ss-shoe .shoe-fill{display:block;width:130px;height:auto;filter:drop-shadow(0 4px 6px rgba(33,64,63,.12))}
+.ss-pic{position:absolute;width:44px;height:44px;border-radius:50%;object-fit:cover;left:12px;top:8px;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.shoe-stop.locked .ss-pic{filter:grayscale(1);opacity:.5}
+.ss-lock,.ss-ok{position:absolute;right:6px;top:-4px;font-size:20px}
+.ss-ok{background:var(--ok);color:#fff;border-radius:50%;width:28px;height:28px;display:grid;place-items:center;font-size:16px;font-weight:800}
+.shoe-stop .nm{text-align:center}
+.shoe-stop .nm b{display:block;font-size:18px}.shoe-stop .nm small{color:var(--soft);font-size:14px}
+.shoe-stop .st{display:block;font-style:normal;color:#f5b301;font-size:14px;letter-spacing:1px}
+.shoe-stop.cur .ss-shoe{animation:shoeBob 1.8s ease-in-out infinite}
+.shoe-stop.cur .shoe-fill{filter:drop-shadow(0 0 8px rgba(139,92,246,.55))}
+.shoe-stop.locked .nm{opacity:.55}
+.shoe-stop.done .shoe-fill{animation:stomp .6s ease}
+@keyframes shoeBob{50%{transform:translateY(-5px) rotate(-3deg)}}
+.ss-medal img{width:110px;display:block}
+.shoe-stop.final.locked .ss-medal img{filter:grayscale(1);opacity:.4}
+.cshoe{flex:none;display:flex}
+.cshoe .shoe-fill{width:40px;height:auto}
+/* עוד הגדלה: כתב גדול ככל האפשר */
+.intro{max-width:640px}
+.intro h2{font-size:32px}.intro p{font-size:21px}
+.steps4 li,.notlist li{padding:14px 16px;gap:14px}
+.steps4 li>span,.notlist li>span{font-size:32px}
+.steps4 b,.notlist b{font-size:21px}.steps4 small,.notlist small{font-size:18.5px;line-height:1.45}
+.hint,.fb{font-size:18px}.scene p,.clue p{font-size:20.5px}.pov small{font-size:17.5px}
+.stagebox h3,.sheet h3{font-size:23px}.chip{font-size:19px}.opt{font-size:19px}
+.lesson p{font-size:19.5px}.msg .bub{font-size:17.5px}.notecard{font-size:18px}
+.thieves li b{font-size:19px}.thieves li small{font-size:16.5px}
+.adult-in p{font-size:17.5px}
+@media (min-width:700px){
+  .intro h2{font-size:34px}.intro p{font-size:22px}
+  .steps4 b,.notlist b{font-size:22px}.steps4 small,.notlist small{font-size:19.5px}
+  .hint,.fb{font-size:19px}.scene p,.clue p{font-size:22px}
+  .stagebox h3,.sheet h3{font-size:25px}.chip,.opt{font-size:20px}
+}
+
+/* הנפשת הקומיקס של חגית: שני פריימים */
+.comic{position:relative;margin:10px 0 0;border-radius:18px;overflow:hidden;aspect-ratio:1024/278;max-width:100%;background:#f2d49b}
+.comic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.comic .f1{animation:cf1 3.4s ease forwards}
+.comic .f2{opacity:0;animation:cf2 3.4s ease forwards}
+@keyframes cf1{0%{transform:scale(1.12) translateX(4%)}40%{transform:scale(1.02) translateX(0);opacity:1}52%{opacity:0}100%{opacity:0}}
+@keyframes cf2{0%,42%{opacity:0;transform:scale(1.15)}55%{opacity:1;transform:scale(1.04) translateX(-1.5%)}60%{transform:scale(1.04) translateX(1.5%)}65%{transform:scale(1.04) translateX(-1%)}75%,100%{opacity:1;transform:scale(1)}}
+@media (min-width:700px){.comic{aspect-ratio:1024/330}}
+.clues .opt{font-size:19px;padding:14px 16px}
+.fp-who{font-size:15px}
+.who span{font-size:18px}
+@media (min-width:700px){.clues .opt{font-size:20px}.fp-who{font-size:16px}}
+/* סריקה אחרונה: אין כיתוב קטן מ-15px */
+body .small,body .scene .place,body .pic figcaption,body .shoe-stop .nm small,body .stop .nm small,body .adult .src,body .thieves li small{font-size:15.5px}
+body .pov small{font-size:17.5px}
+body .msg .bub b{font-size:14px}
+body .sys{font-size:15px}
+body .acc{font-size:14px}
+body .shoe-stop .nm b{font-size:20px}
+body .shoe-stop .st,body .chat-row .cs{font-size:16px}
+body .btn.small{font-size:16px}
+body .lvl-tag{font-size:15px}
+body .thief{font-size:15.5px}
+body .skip{font-size:15px}
+
+/* קומיקס המרוץ: ארבעה פריימים ברצף */
+.comic.race{aspect-ratio:502/276}
+@media (min-width:700px){.comic.race{aspect-ratio:502/276;max-width:760px;margin-inline:auto}}
+.comic.race img{opacity:0;animation:rc 5.2s ease forwards}
+.comic.race .r1{opacity:1;animation-name:rc1}
+.comic.race .r2{animation-delay:1.2s}
+.comic.race .r3{animation-delay:2.4s}
+.comic.race .r4{animation-delay:3.6s;animation-name:rcl}
+@keyframes rc1{0%{transform:scale(1.08)}20%{opacity:1;transform:scale(1)}26%,100%{opacity:0}}
+@keyframes rc{0%{opacity:0;transform:scale(1.08)}6%{opacity:1}20%{opacity:1;transform:scale(1)}26%,100%{opacity:0}}
+@keyframes rcl{0%{opacity:0;transform:scale(1.08)}6%{opacity:1}30%,100%{opacity:1;transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.comic.race img{animation:none;opacity:0}.comic.race .r4{opacity:1}}
