@@ -213,3 +213,39 @@ body.playing{overflow:hidden;height:100vh;height:100dvh}
 .pop.found{background:none!important;transform:none;animation:none;z-index:1;border:calc(3px / var(--s,1)) solid rgba(75,227,138,.85);box-shadow:none}
 /* רמז מדורג: מלבן של חצי או רבע תמונה */
 .hintring.rect{border-radius:calc(18px / var(--s,1))}
+
+/* חלונית אחרי מציאה: במרכז, גדולה, והשאלה בולטת */
+.sheet.tip{top:50%;bottom:auto;left:50%;right:auto;width:min(520px,calc(100% - 20px));transform:translate(-50%,-50%);flex-direction:column;align-items:stretch;
+  gap:10px;padding:16px;text-align:center;animation:tipIn .5s cubic-bezier(.2,1.5,.4,1);box-shadow:0 0 0 4000px rgba(6,4,20,.45),0 14px 40px rgba(0,0,0,.55)}
+@keyframes tipIn{0%{transform:translate(-50%,-50%) scale(.6);opacity:0}100%{transform:translate(-50%,-50%) scale(1);opacity:1}}
+.tip-head{display:flex;align-items:center;justify-content:center;gap:12px}
+.sheet.tip .tip-head .crop{width:76px;height:76px}
+.tip-found{font-size:18px;color:var(--soft)}.tip-found b{color:var(--gold);font-size:22px}
+.sheet.tip p{flex:none}
+.tip-say{font-size:17px;line-height:1.5;font-weight:600;color:var(--ink)}
+.tip-ask{position:relative;background:linear-gradient(135deg,#ff6fa5,#a77bff);border-radius:20px;padding:20px 14px 14px;margin-top:8px;
+  box-shadow:0 6px 0 #6b3fb0,0 0 24px rgba(255,111,165,.55);animation:askPulse 2.4s ease-in-out .6s infinite}
+.tip-ask p{font-size:21px;line-height:1.4;font-weight:800;color:#fff}
+.tip-chip{position:absolute;top:-13px;right:50%;transform:translateX(50%);background:var(--gold);color:#2a1a00;font-weight:800;font-size:14px;padding:4px 12px;border-radius:99px;white-space:nowrap}
+@keyframes askPulse{50%{box-shadow:0 6px 0 #6b3fb0,0 0 40px rgba(255,111,165,.9)}}
+.sheet.tip .btn{align-self:center;margin-top:4px}
+
+/* מצב מקרן */
+.proj .top{position:fixed;inset:0 0 auto 0;visibility:hidden;background:none;border:0;backdrop-filter:none;pointer-events:none}
+.proj #projBtn{visibility:visible;pointer-events:auto;position:fixed;top:8px;left:8px;z-index:70;background:rgba(34,29,69,.75)}
+.proj .play{position:relative;height:100vh;height:100dvh}
+.proj .taskbar{position:absolute;top:8px;right:50%;transform:translateX(50%);z-index:7;min-height:0;padding:6px 10px 6px 8px;border:2px solid var(--gold);
+  border-radius:99px;background:rgba(34,29,69,.85);max-width:calc(100% - 120px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.proj .taskbar .temo{font-size:30px}
+.proj .taskbar .tq small,.proj .taskbar .prog{display:none}
+.proj .taskbar .tq b{font-size:clamp(18px,2.4vw,30px)}
+.proj .taskbar .hint-btn{font-size:clamp(14px,1.6vw,20px)}
+.proj .tray{position:absolute;bottom:8px;left:8px;z-index:6;background:none;border:0;min-height:0;padding:0;overflow:visible}
+.proj .tray .lbl,.proj .tray .crop{display:none}
+.proj .tray .zoom-ctl button{opacity:.6}.proj .tray .zoom-ctl button:hover{opacity:1}
+.proj .night-tip{top:70px}
+.proj .sheet.tip{width:min(760px,calc(100% - 40px));padding:22px}
+.proj .tip-say{font-size:clamp(18px,2vw,26px)}
+.proj .tip-ask p{font-size:clamp(22px,2.8vw,36px)}
+.proj .tip-found b{font-size:clamp(22px,2.4vw,32px)}
+.proj .modal-card{max-width:680px}.proj .modal-card p{font-size:clamp(17px,1.8vw,24px)}.proj .modal-card h2{font-size:clamp(26px,3vw,40px)}

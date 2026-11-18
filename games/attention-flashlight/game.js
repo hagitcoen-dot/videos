@@ -13,6 +13,28 @@
   document.getElementById("homeBtn").addEventListener("click", function () { leavePlay(); home(); });
   mapBtn.textContent = "📱"; mapBtn.setAttribute("aria-label", "למסך הבית");
   mapBtn.addEventListener("click", function () { leavePlay(); map(); });
+  /* מצב מקרן: מסך מלא, בלי הפסים, תמונה גדולה */
+  var projBtn = document.createElement("button");
+  projBtn.className = "icon-btn"; projBtn.id = "projBtn"; projBtn.type = "button";
+  document.querySelector(".top .hud").appendChild(projBtn);
+  function paintProj() {
+    var on = document.body.classList.contains("proj");
+    projBtn.textContent = on ? "✕" : "📽️";
+    projBtn.title = on ? "יציאה ממצב מקרן" : "מצב מקרן (מסך מלא)";
+    projBtn.setAttribute("aria-label", projBtn.title);
+  }
+  function setProj(on) {
+    document.body.classList.toggle("proj", on); paintProj();
+    try {
+      if (on && !document.fullscreenElement && document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(function () {});
+      if (!on && document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(function () {});
+    } catch (e) {}
+    setTimeout(function () { dispatchEvent(new Event("resize")); }, 60);
+    setTimeout(function () { dispatchEvent(new Event("resize")); }, 400);
+  }
+  projBtn.addEventListener("click", function () { setProj(!document.body.classList.contains("proj")); });
+  document.addEventListener("fullscreenchange", function () { if (!document.fullscreenElement && document.body.classList.contains("proj")) setProj(false); });
+  paintProj();
   function hud(show) { xpPill.hidden = mapBtn.hidden = !show; xpEl.textContent = P.xp; }
   function addXp(n) { P.xp += n; xpEl.textContent = P.xp; FUN.bounce(xpPill); save(); }
 
@@ -312,8 +334,14 @@
 
     function tipSheet(t, it) {
       var last = ti === st.tasks.length - 1;
-      var sh = document.createElement("div"); sh.className = "sheet";
-      sh.innerHTML = cropHtml(it.x, it.y, it.r, 60) + "<p>" + esc(t.tip) + '</p><button class="btn small" type="button">' + (last ? "🏁 סיום" : "הבא ←") + "</button>";
+      var sh = document.createElement("div"); sh.className = "sheet tip";
+      // השאלה (המשפט האחרון שנגמר בסימן שאלה) מקבלת בועה בולטת משלה
+      var tip = t.tip, say = tip, ask = "", m = tip.match(/^([\s\S]*?[.!:])\s+([^.!:]*\?)\s*$/);
+      if (m) { say = m[1]; ask = m[2]; } else if (/\?\s*$/.test(tip)) { say = ""; ask = tip; }
+      sh.innerHTML = '<div class="tip-head">' + cropHtml(it.x, it.y, it.r, 76) + '<div class="tip-found">✨ מצאתם: <b>' + esc(it.name || "") + "</b></div></div>" +
+        (say ? '<p class="tip-say">' + esc(say) + "</p>" : "") +
+        (ask ? '<div class="tip-ask"><span class="tip-chip">💬 שאלה לשיחה</span><p>' + esc(ask) + "</p></div>" : "") +
+        '<button class="btn" type="button">' + (last ? "🏁 סיום" : "הבא ←") + "</button>";
       vp.appendChild(sh);
       sh.querySelector("button").addEventListener("click", function () {
         sh.remove(); ti++;
