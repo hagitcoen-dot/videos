@@ -205,3 +205,11 @@ h1,h2,h3,p{margin:0}
 .viewport.blind .world{visibility:hidden}
 html,body{overflow-x:hidden;max-width:100%}
 body.playing{overflow:hidden;height:100vh;height:100dvh}
+
+/* כפתורי הגדלה בפס התחתון, כדי שלא יסתירו את התמונה */
+.tray .zoom-ctl{position:static;flex-direction:row;margin-inline-start:auto;flex:none;gap:5px}
+.tray .zoom-ctl button{width:38px;height:38px;font-size:18px}
+/* פריט שכבר נמצא: טבעת דקה ושקופה */
+.pop.found{background:none!important;transform:none;animation:none;z-index:1;border:calc(3px / var(--s,1)) solid rgba(75,227,138,.85);box-shadow:none}
+/* רמז מדורג: מלבן של חצי או רבע תמונה */
+.hintring.rect{border-radius:calc(18px / var(--s,1))}

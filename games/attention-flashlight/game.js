@@ -195,7 +195,7 @@
     vp.addEventListener("pointerup", up);
     vp.addEventListener("pointercancel", function (e) { delete ptrs[e.pointerId]; if (!Object.keys(ptrs).length) gest = null; });
     vp.addEventListener("wheel", function (e) { e.preventDefault(); var p = local(e); zoomAt(e.deltaY < 0 ? 1.15 : 1 / 1.15, p.x, p.y); }, { passive: false });
-    var zc = vp.querySelector(".zoom-ctl");
+    var zc = vp.querySelector(".zoom-ctl") || (vp.parentNode && vp.parentNode.querySelector(".zoom-ctl"));
     if (zc) {
       zc.querySelector(".zin").addEventListener("click", function () { zoomAt(1.5, vw / 2, vh / 2, true); });
       zc.querySelector(".zout").addEventListener("click", function () { zoomAt(1 / 1.5, vw / 2, vh / 2, true); });
@@ -226,22 +226,22 @@
       '<button class="hint-btn" type="button">💡 רמז</button></div>' +
       '<div class="viewport"><div class="world"><img src="' + ROOM.src + '" alt="חדר היצירה" draggable="false"></div>' +
       (mode === "night" ? '<div class="night"></div><div class="night-tip">🔦 גררו כדי להזיז את הפנס</div>' : "") +
-      (mode !== "night" ? '<div class="zoom-ctl"><button class="zin" type="button" aria-label="הגדלה">➕</button><button class="zout" type="button" aria-label="הקטנה">➖</button><button class="zfit" type="button" aria-label="כל התמונה">⤢</button></div>' : "") +
-      '</div><div class="tray"><span class="lbl">מצאתי:</span></div></div>';
+      '</div><div class="tray"><span class="lbl">מצאתי:</span>' + (mode !== "night" ? '<div class="zoom-ctl"><button class="zin" type="button" aria-label="הגדלה">➕</button><button class="zout" type="button" aria-label="הקטנה">➖</button><button class="zfit" type="button" aria-label="כל התמונה">⤢</button></div>' : "") + '</div></div>';
     var root = app.querySelector(".play"), vp = root.querySelector(".viewport"), tray = root.querySelector(".tray");
     var temo = root.querySelector(".temo"), tq = root.querySelector(".tq b"), tsm = root.querySelector(".tq small"), prog = root.querySelector(".prog");
     var hintBtn = root.querySelector(".hint-btn"), nightEl = root.querySelector(".night");
     var hints = 0, ti = 0, clean = 0, combo = 0, wrong = 0, hinted = false, t0 = 0, busy = false, recentMiss = [], found = [], cloudsSeen = 0, spawned = 0;
     var timers = [], cloudTimer = null, nudgeTimer = null;
     var traySlots = [];
-    st.tasks.forEach(function () { var d = document.createElement("div"); d.className = "crop empty"; tray.appendChild(d); traySlots.push(d); });
+    var zcEl = tray.querySelector(".zoom-ctl");
+    st.tasks.forEach(function () { var d = document.createElement("div"); d.className = "crop empty"; tray.insertBefore(d, zcEl); traySlots.push(d); });
 
     var sc = Scene(vp, { night: mode === "night", onTap: onTap });
     G = { stop: function () { timers.forEach(clearTimeout); clearInterval(cloudTimer); clearTimeout(nudgeTimer); sc.destroy(); } };
 
     function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
     function showTask() {
-      var t = st.tasks[ti]; wrong = 0; hinted = false; t0 = Date.now(); busy = false;
+      var t = st.tasks[ti]; wrong = 0; hinted = false; t0 = Date.now(); busy = false; hintLv = 0; hintIt = null; hintBtn.textContent = "💡 רמז";
       temo.textContent = t.e; tq.innerHTML = '<span class="qs">🔍</span>' + esc(t.q); tsm.textContent = st.icon + " " + st.name + " · משימה " + (ti + 1) + " מתוך " + st.tasks.length;
       prog.innerHTML = st.tasks.map(function (_, k) { return '<i class="' + (k < ti ? "on" : "") + '"></i>'; }).join("");
       root.classList.remove("newtask"); void root.offsetWidth; root.classList.add("newtask");
@@ -284,6 +284,7 @@
       // האפקט: גדל, מהבהב, זוהר
       var D = Math.max(it.r * 2.2, 70 / sc.scale());
       var pop = document.createElement("div"); pop.className = "pop grow";
+      pop.dataset.x = it.x; pop.dataset.y = it.y; pop.dataset.r = it.r;
       pop.style.cssText = "left:" + (it.x - D / 2) + "px;top:" + (it.y - D / 2) + "px;width:" + D + "px;height:" + D + "px;" + cropStyle(it.x, it.y, D / 2, D);
       var rays = document.createElement("div"); rays.className = "rays";
       rays.style.cssText = "left:" + (it.x - D) + "px;top:" + (it.y - D) + "px;width:" + (2 * D) + "px;height:" + (2 * D) + "px";
@@ -301,6 +302,14 @@
       later(function () { tipSheet(t, it); }, 1300);
     }
 
+    // פריט שכבר נמצא הופך לטבעת דקה ושקופה, כדי שלא יסתיר דברים שצמודים אליו
+    function settleFound() {
+      sc.world.querySelectorAll(".pop.done").forEach(function (p) {
+        var r = +p.dataset.r, x = +p.dataset.x, y = +p.dataset.y;
+        p.className = "pop found"; p.style.cssText = "left:" + (x - r) + "px;top:" + (y - r) + "px;width:" + (2 * r) + "px;height:" + (2 * r) + "px";
+      });
+    }
+
     function tipSheet(t, it) {
       var last = ti === st.tasks.length - 1;
       var sh = document.createElement("div"); sh.className = "sheet";
@@ -308,26 +317,50 @@
       vp.appendChild(sh);
       sh.querySelector("button").addEventListener("click", function () {
         sh.remove(); ti++;
+        settleFound();
         if (ti < st.tasks.length) { FUN.sfx("whoosh"); showTask(); } else if (st.surprise) surprise(); else finish();
       });
     }
 
+    /* רמז מדורג: קודם חצי מהתמונה, אחר כך רבע, ורק בסוף עיגול קטן סביב המקום */
+    var hintLv = 0;
+    function hintTarget() {
+      var t = st.tasks[ti], it = item(t.hits.filter(function (id) { return !found.some(function (f) { return f.id === id; }); })[0] || t.hits[0]);
+      if (t.hits.length > 1) { // רמז לפריט הכי קרוב למרכז המסך
+        var sz = sc.size(), c = { x: sz.w / 2, y: sz.h / 2 }, bd = 1e9;
+        t.hits.forEach(function (id) { if (found.some(function (f) { return f.id === id; })) return; var j = item(id), q = sc.toScreen(j.x, j.y), d = Math.hypot(q.x - c.x, q.y - c.y); if (d < bd) { bd = d; it = j; } });
+      }
+      return it;
+    }
+    var hintIt = null;
     hintBtn.addEventListener("click", function () {
       if (busy) return;
       if (!hinted) hints++; hinted = true; hintBtn.classList.remove("nudge"); FUN.sfx("pop");
-      var t = st.tasks[ti], it = item(t.hits[0]);
-      if (t.hits.length > 1) { // רמז לפריט הכי קרוב למרכז המסך
-        var sz = sc.size(), c = { x: sz.w / 2, y: sz.h / 2 }, bd = 1e9;
-        t.hits.forEach(function (id) { var j = item(id), q = sc.toScreen(j.x, j.y), d = Math.hypot(q.x - c.x, q.y - c.y); if (d < bd) { bd = d; it = j; } });
-      }
-      var R = Math.max(it.r * 2.6, 120), ox = (Math.random() - .5) * R * .5, oy = (Math.random() - .5) * R * .5;
+      if (!hintIt || hintLv === 0) hintIt = hintTarget();
+      var it = hintIt, W = ROOM.w, H = ROOM.h;
+      hintLv = Math.min(hintLv + 1, 3);
       vp.querySelectorAll(".hintring").forEach(function (h) { h.remove(); });
-      var h = document.createElement("div"); h.className = "hintring";
-      h.style.cssText = "left:" + (it.x + ox - R) + "px;top:" + (it.y + oy - R) + "px;width:" + (2 * R) + "px;height:" + (2 * R) + "px";
-      sc.world.appendChild(h);
-      sc.centerOn(it.x + ox, it.y + oy, 1.6);
-      if (nightEl) { var q = sc.toScreen(it.x + ox, it.y + oy); nightEl.style.setProperty("--lx", q.x + "px"); nightEl.style.setProperty("--ly", q.y + "px"); }
-      FUN.floatText("חפשו בתוך העיגול 👀", hintBtn);
+      var h = document.createElement("div"), cx, cy;
+      if (hintLv < 3) {
+        var top = it.y < H / 2, right = it.x >= W / 2, x0 = 0, y0 = top ? 0 : H / 2, w = W, hh = H / 2;
+        if (hintLv === 2) { w = W / 2; x0 = right ? W / 2 : 0; }
+        h.className = "hintring rect";
+        h.style.cssText = "left:" + x0 + "px;top:" + y0 + "px;width:" + w + "px;height:" + hh + "px";
+        cx = x0 + w / 2; cy = y0 + hh / 2;
+        sc.world.appendChild(h);
+        sc.centerOn(cx, cy, hintLv === 2 ? 1.3 : 1);
+        FUN.floatText(hintLv === 1 ? "זה בחצי הזה של התמונה 👀" : "עכשיו ברבע הזה 👀", hintBtn);
+        hintBtn.textContent = "💡 עוד רמז";
+      } else {
+        var R = Math.max(it.r * 2.6, 120), ox = (Math.random() - .5) * R * .5, oy = (Math.random() - .5) * R * .5;
+        cx = it.x + ox; cy = it.y + oy;
+        h.className = "hintring";
+        h.style.cssText = "left:" + (cx - R) + "px;top:" + (cy - R) + "px;width:" + (2 * R) + "px;height:" + (2 * R) + "px";
+        sc.world.appendChild(h);
+        sc.centerOn(cx, cy, 1.6);
+        FUN.floatText("חפשו בתוך העיגול 👀", hintBtn);
+      }
+      if (nightEl) { var q = sc.toScreen(cx, cy); nightEl.style.setProperty("--lx", q.x + "px"); nightEl.style.setProperty("--ly", q.y + "px"); }
     });
 
     /* ענני הסחה */
@@ -414,10 +447,10 @@
     app.innerHTML = '<div class="play">' +
       '<div class="taskbar"><div class="temo">💛</div><div class="tq"><small>הפנס שלי · בחירה 1 מתוך 3</small><b>בחרו דבר שמעניין, מרגיע או משמח אתכם</b><div class="prog"></div></div></div>' +
       '<div class="viewport"><div class="world"><img src="' + ROOM.src + '" alt="חדר היצירה" draggable="false"></div>' +
-      '<div class="zoom-ctl"><button class="zin" type="button" aria-label="הגדלה">➕</button><button class="zout" type="button" aria-label="הקטנה">➖</button><button class="zfit" type="button" aria-label="כל התמונה">⤢</button></div>' +
-      '</div><div class="tray"><span class="lbl">הבחירות שלי:</span></div></div>';
+      '</div><div class="tray"><span class="lbl">הבחירות שלי:</span><div class="zoom-ctl"><button class="zin" type="button" aria-label="הגדלה">➕</button><button class="zout" type="button" aria-label="הקטנה">➖</button><button class="zfit" type="button" aria-label="כל התמונה">⤢</button></div></div></div>';
     var root = app.querySelector(".play"), vp = root.querySelector(".viewport"), tray = root.querySelector(".tray"), prog = root.querySelector(".prog");
-    var slots = [0, 1, 2].map(function () { var d = document.createElement("div"); d.className = "crop empty"; tray.appendChild(d); return d; });
+    var zcF = tray.querySelector(".zoom-ctl");
+    var slots = [0, 1, 2].map(function () { var d = document.createElement("div"); d.className = "crop empty"; tray.insertBefore(d, zcF); return d; });
     function paintProg() { prog.innerHTML = [0, 1, 2].map(function (k) { return '<i class="' + (k < picks.length ? "on" : "") + '"></i>'; }).join(""); }
     paintProg();
     var busy = false;
