@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>בנעליים של מישהו אחר</title>
+<meta name="description" content="משחק אמפתיה בשתי רמות: נכנסים לנעליים של כל דמות, מגלים מה היא מרגישה וחושבת, ובוחרים תגובה מתחשבת. חגית כהן CBT">
+<meta name="theme-color" content="#fff4e6">
+<link rel="stylesheet" href="fun.css">
+<link rel="stylesheet" href="styles.css?v=16">
+</head>
+<body class="kids">
+<header class="top">
+  <button class="brand" id="homeBtn" type="button" aria-label="להתחלה"><span class="brand-ic">👟</span><span>בנעליים של מישהו אחר</span></button>
+  <div class="hud">
+    <span class="lvl-tag" id="lvlTag"></span>
+    <button class="icon-btn" id="mapBtn" type="button" aria-label="למסלול" hidden>🗺️</button>
+    <button class="icon-btn" id="soundBtn" type="button" aria-label="צלילים">🔊</button>
+  </div>
+</header>
+<main id="app" aria-live="polite"></main>
+<script src="data.js?v=16"></script>
+<script src="fun.js?v=16"></script>
+<script src="game.js?v=16"></script>
+<script src="../back.js" data-hide="body.playing" defer></script>
+<script src="../brand.js" defer></script>
+</body>
+</html>
