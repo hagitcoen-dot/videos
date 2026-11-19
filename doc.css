@@ -1,0 +1,14 @@
+/* עמודי מסמך: הצהרת נגישות, פרטיות */
+.dochead{background:var(--surface);border-bottom:1px solid var(--line);padding-block:12px}
+.dochead .back{font-weight:700;text-decoration:none;font-size:1.05rem}
+.doc{max-width:760px;padding-block:28px 40px}
+.doc h1{font-family:var(--display);font-weight:400;font-size:clamp(2rem,6vw,2.8rem);margin:0 0 .1em}
+.doc h2{font-family:var(--display);font-weight:400;font-size:1.5rem;margin:1.6em 0 .4em;color:var(--accent)}
+.doc p,.doc li{font-size:1.1rem}
+.doc ul{padding-inline-start:1.3em}
+.doc li{margin-bottom:.45em}
+.upd{color:var(--muted);margin-top:0}
+.small{color:var(--muted);font-size:1rem !important}
+.contactbox,.lead2{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 18px}
+.contactbox p{margin:.3em 0}
+.doc a{word-break:break-word}

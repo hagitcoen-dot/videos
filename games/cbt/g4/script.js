@@ -411,7 +411,7 @@
         busy = true; b.classList.add("right");
         flyKey(b, chip, function () {
           chip.classList.remove("active"); chip.textContent = k.t; chip.classList.add("open");
-          SFX.unlock(); buzz([20, 30, 50]); sparks(chip, 34, { speed: 7, colors: ["#7ef0cf", "#1fb58f", "#ffd75e", "#ffffff"] });
+          SFX.unlock(); buzz([20, 30, 50]); sparks(chip, 34, { speed: 7, colors: ["#7ef0cf", "#1ca381", "#ffd75e", "#ffffff"] });
           spawn(center(chip).x, center(chip).y, 6, { glyphs: ["✨", "🔓"], speed: 4, size: 7, life: 50, g: 0.05 });
           good(chip);
           if (save.keys.indexOf(k.t) < 0) save.keys.push(k.t);

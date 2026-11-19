@@ -56,7 +56,7 @@ h1{font-size:27px} h2{font-size:23px}
 p{margin:.4em 0}
 .soft{color:var(--ink-soft)}
 .screen > .soft, .map-head .soft{color:#e9e2ff}
-.credit{text-align:center; font-size:12.5px; color:#8b82ad; margin-top:14px}
+.credit{text-align:center; font-size:12.5px; color:#776c9f; margin-top:14px}
 .kicker{font-size:13px; font-weight:700; letter-spacing:.02em; color:var(--lock2); margin:0}
 
 .btn{border:0; border-radius:999px; padding:12px 22px; font-weight:700; font-size:17px; cursor:pointer; transition:transform .12s, box-shadow .2s; min-height:48px}

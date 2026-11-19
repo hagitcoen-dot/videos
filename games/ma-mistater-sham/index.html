@@ -1,4 +1,5 @@
-<!doctype html><html lang="he" dir="rtl"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>מה מסתתר שם? · דמיון וגילוי</title>
+<!doctype html><html lang="he" dir="rtl"><head><meta charset=utf8>
+<script src="../../a11y.js?v=1"></script><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>מה מסתתר שם? · דמיון וגילוי</title>
 <meta property="og:title" content="מה מסתתר שם? 🦉 משחק בלש על דמיון ומה שבאמת יש שם">
 <meta property="og:description" content="משחק לילדים: מה הדמיון שלי אומר, מה עוד זה יכול להיות, ואיך בודקים. חגית כהן CBT | טיפול חברתי">
 <meta property="og:image" content="https://hagitcoen-dot.github.io/videos/games/ma-mistater-sham/og.jpg">
@@ -9,8 +10,7 @@
 </head><body>
 <title>מה מסתתר שם?</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;700;800&family=Varela+Round&display=swap">
+<link rel="stylesheet" href="gfonts/fonts.css">
 <style>
 /* Layout: one-screen app; the "peek stage" (square picture) beside a chunky step panel, stacked on phones. Bedtime-lamp palette: indigo ink, lamp yellow, soft dusk ground. */
 :root{
@@ -433,7 +433,9 @@ function bindStage(stage){
  const move=e=>{const R=state.round;if(!R||!R.flash||R.revealed)return;const p=pt(e);R.flash.x=Math.max(0,Math.min(400,p.x));R.flash.y=Math.max(0,Math.min(400,p.y));R.flash.r=Math.round(45*p.s);refreshMask();};
  stage.addEventListener('pointerdown',e=>{if(!state.round.flash)return;down=true;try{stage.setPointerCapture(e.pointerId)}catch(_){}move(e);e.preventDefault();});
  stage.addEventListener('pointermove',e=>{if(down||e.pointerType==='mouse')move(e);});
- const up=()=>{down=false};stage.addEventListener('pointerup',up);stage.addEventListener('pointercancel',up);}
+ const up=()=>{down=false};stage.addEventListener('pointerup',up);stage.addEventListener('pointercancel',up);
+ {stage.tabIndex=0;stage.setAttribute('role','application');stage.setAttribute('aria-label','התמונה. כשהפנס דולק, מזיזים אותו בחיצים');
+  stage.addEventListener('keydown',e=>{const R=state.round;if(!R||!R.flash||R.revealed||!/^Arrow/.test(e.key))return;e.preventDefault();const d=e.shiftKey?6:20;R.flash.x=Math.max(0,Math.min(400,R.flash.x+(e.key==='ArrowLeft'?-d:e.key==='ArrowRight'?d:0)));R.flash.y=Math.max(0,Math.min(400,R.flash.y+(e.key==='ArrowUp'?-d:e.key==='ArrowDown'?d:0)));if(!R.flash.r)R.flash.r=45;refreshMask();});}}
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 function vbFor(x,y,s){const w=400/Math.max(1,s);return {x:Math.max(0,Math.min(400-w,x-w/2)),y:Math.max(0,Math.min(400-w,y-w/2)),w};}
 function setVB(){const v=state.round.vb;document.querySelectorAll('#stage svg').forEach(el=>el.setAttribute('viewBox',`${v.x.toFixed(2)} ${v.y.toFixed(2)} ${v.w.toFixed(2)} ${v.w.toFixed(2)}`));}

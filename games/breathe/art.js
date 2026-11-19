@@ -97,10 +97,10 @@ V.turtle={emoji:"🐢", name:"צב", the:"הצב", color:"teal", make:function(h
   var tpf=mkPuffs(head,187,129,1,[0.35,-0.95],tsm,toh);
   el("circle",{cx:170,cy:130,r:3.6,fill:"#f7a8a0",opacity:".7"},head);
   var sh=el("g",{},s);
-  el("path",{d:"M38 156 Q38 80 100 80 Q162 80 162 156 Z",fill:"#62bdb0",stroke:"#2f8a7f","stroke-width":4,"stroke-linejoin":"round"},sh);
-  el("path",{d:"M100 92 L118 104 L118 126 L100 138 L82 126 L82 104 Z",fill:"#7fd0c3",stroke:"#2f8a7f","stroke-width":3,"stroke-linejoin":"round"},sh);
-  el("path",{d:"M60 112 L76 104 L80 126 L66 140 L52 132 Z",fill:"#7fd0c3",stroke:"#2f8a7f","stroke-width":3,"stroke-linejoin":"round"},sh);
-  el("path",{d:"M140 112 L124 104 L120 126 L134 140 L148 132 Z",fill:"#7fd0c3",stroke:"#2f8a7f","stroke-width":3,"stroke-linejoin":"round"},sh);
+  el("path",{d:"M38 156 Q38 80 100 80 Q162 80 162 156 Z",fill:"#62bdb0",stroke:"#2b7f75","stroke-width":4,"stroke-linejoin":"round"},sh);
+  el("path",{d:"M100 92 L118 104 L118 126 L100 138 L82 126 L82 104 Z",fill:"#7fd0c3",stroke:"#2b7f75","stroke-width":3,"stroke-linejoin":"round"},sh);
+  el("path",{d:"M60 112 L76 104 L80 126 L66 140 L52 132 Z",fill:"#7fd0c3",stroke:"#2b7f75","stroke-width":3,"stroke-linejoin":"round"},sh);
+  el("path",{d:"M140 112 L124 104 L120 126 L134 140 L148 132 Z",fill:"#7fd0c3",stroke:"#2b7f75","stroke-width":3,"stroke-linejoin":"round"},sh);
   el("rect",{x:34,y:150,width:132,height:12,rx:6,fill:"#f6d98b",stroke:"#d9b24f","stroke-width":2.5},sh);
   return {update:function(st){
     tpf.update(st);
@@ -185,7 +185,7 @@ V.star={emoji:"⭐", name:"כוכב", the:"הכוכב", color:"yellow2", make:fu
   var fill=el("rect",{x:X0,y:Y0+SZ,width:SZ,height:0,fill:"#d9f0ea"},s);
   el("rect",{x:X0,y:Y0,width:SZ,height:SZ,fill:"none",stroke:"#efe3d3","stroke-width":12,"stroke-linejoin":"round"},s);
   var segG=el("g",{},s), segs=[], cutKey="";
-  var COL={in:"#3fa69a",hold:"#f6c945",out:"#f4897b",holdE:"#9db7e8"};
+  var COL={in:"#307e75",hold:"#f6c945",out:"#f4897b",holdE:"#9db7e8"};
   var mid=el("g",{},s); var fc=face(mid,100,96,1.1,12,[1,0.1]);
   var glow=el("circle",{r:18,fill:"#fde68a",opacity:".55"},s);
   var star=el("path",{fill:"#f6c945",stroke:"#d99a1e","stroke-width":2.5,"stroke-linejoin":"round"},s);
@@ -196,7 +196,7 @@ V.star={emoji:"⭐", name:"כוכב", the:"הכוכב", color:"yellow2", make:fu
       var pts=[pt(cut[i])], a=cut[i]*4, b=cut[i+1]*4;
       for (var c=Math.floor(a)+1;c<b;c++) pts.push(pt(c/4));
       pts.push(b>=4?pt(0.99999):pt(cut[i+1]));
-      segs.push(el("polyline",{points:pts.map(function(p){return f1(p[0])+","+f1(p[1]);}).join(" "),fill:"none",stroke:COL[kinds[i]]||"#3fa69a","stroke-width":12,"stroke-linecap":"round","stroke-linejoin":"round",opacity:".35"},segG));
+      segs.push(el("polyline",{points:pts.map(function(p){return f1(p[0])+","+f1(p[1]);}).join(" "),fill:"none",stroke:COL[kinds[i]]||"#307e75","stroke-width":12,"stroke-linecap":"round","stroke-linejoin":"round",opacity:".35"},segG));
     }
   }
   return {update:function(st){

@@ -184,7 +184,7 @@
   function isNew(d) { if (!d) return false; const day = String(d).slice(0, 10); if (day < NEW_FROM) return false; const t = Date.parse(day); return !isNaN(t) && Date.now() - t < NEW_DAYS * 864e5; }
   function newBadge() { const s = document.createElement("span"); s.className = "newb"; s.textContent = "חדש"; return s; }
   function gameCard(g, small) {
-    const a = document.createElement("a"); a.className = small ? "gcard small" : "gcard"; a.href = g.url; a.target = "_blank"; a.rel = "noopener";
+    const a = document.createElement("a"); a.className = small ? "gcard small" : "gcard"; a.href = g.url; a.target = "_blank"; a.rel = "noopener"; a.setAttribute("aria-describedby", "newTab");
     if (g.image) { const img = document.createElement("img"); img.src = g.image; img.alt = ""; img.loading = "lazy"; a.append(img); }
     else { const art = document.createElement("div"); art.className = "gart"; art.innerHTML = '<svg viewBox="0 0 48 32" aria-hidden="true"><rect x="2" y="6" width="44" height="22" rx="11" fill="currentColor" opacity=".9"/><rect x="11" y="15" width="10" height="3" rx="1.5" fill="#fff"/><rect x="14.5" y="11.5" width="3" height="10" rx="1.5" fill="#fff"/><circle cx="33" cy="14" r="2.6" fill="#fff"/><circle cx="38" cy="19" r="2.6" fill="#fff"/></svg>'; a.append(art); }
     if (isNew(g.added)) a.append(newBadge());
@@ -366,6 +366,7 @@
     const v = state.videos.find((x) => x.id === id); if (!v) return;
     curVid = id; fillVidQuotes(id);
     $("pFrame").src = `https://www.youtube-nocookie.com/embed/${id}?rel=0`;
+    $("pFrame").title = "נגן וידאו: " + v.title;
     if (push) { const t = v.title.split("|")[0].trim(); gc("צפייה/" + t, t); }
     $("pTitle").textContent = v.title;
     $("pMeta").textContent = [fmtDate(v.published), fmtDur(v.duration)].filter(Boolean).join(" · ");

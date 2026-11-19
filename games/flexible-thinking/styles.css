@@ -628,7 +628,7 @@ body.is-max .sit-card::before{background-image:url(img/stretch-max.svg)}
 h1, h2, .learn-title{font-weight:900; letter-spacing:-.01em}
 .kicker{color:var(--lock2); letter-spacing:.04em}
 .level-chip{background:linear-gradient(90deg,var(--neon2),var(--neon3)); border-radius:4px; transform:skewX(-10deg); box-shadow:3px 3px 0 #070a1f; padding:3px 14px}
-.credit{color:#6b6f96}
+.credit{color:#676b92}
 .screen > .soft, .map-head .soft{color:#d8dcff}
 
 /* buttons: angular neon */

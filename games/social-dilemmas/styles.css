@@ -1,7 +1,7 @@
 
 @font-face{font-family:'Rubik';font-style:normal;font-weight:400 800;font-display:swap;src:url('fonts/rubik-hebrew.woff2') format('woff2');unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F;}
 @font-face{font-family:'Rubik';font-style:normal;font-weight:400 800;font-display:swap;src:url('fonts/rubik-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
-:root{--ink:#3a2d4f;--soft:#6c5f84;--bg:#fff4e6;--card:#fffdf9;--orange:#f39a4a;--orange-d:#d9772a;--yellow:#f6c945;--mint:#7cc8a4;--lilac:#b9a3e3;--blue:#8fb8f0;--pink:#f48fb1;--barh:80px;
+:root{--ink:#3a2d4f;--soft:#6c5f84;--bg:#fff4e6;--card:#fffdf9;--orange:#df710f;--orange-d:#d9772a;--yellow:#f6c945;--mint:#7cc8a4;--lilac:#b9a3e3;--blue:#8fb8f0;--pink:#f48fb1;--barh:80px;
   --fs:clamp(16px,2.1vw + 9px,21px);}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
@@ -24,7 +24,7 @@ h2{font-size:clamp(23px,3.4vw,32px);font-weight:800;margin-bottom:6px}
 .lead{margin:4px 0 2px;font-size:1.15em;font-weight:700}
 .sub{margin:6px 0 4px;color:var(--soft);max-width:30em}
 .note{margin:10px 0 0;color:var(--soft);font-size:.92em}
-.credit-text{margin:14px 0 0;font-size:13px;color:#a497b7}
+.credit-text{margin:14px 0 0;font-size:13px;color:#7e6c99}
 .start-cast{display:flex;justify-content:center;align-items:flex-end;gap:0;margin:6px 0 0;width:100%}
 .start-cast .sc{width:19%;max-width:110px;animation:bob 3s ease-in-out infinite}
 .start-cast .sc svg{width:100%;height:auto;display:block}

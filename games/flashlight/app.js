@@ -83,6 +83,8 @@ function Lamp(frame,s,interactive){
    self.cover=nCells/80;
    torch.style.left=(beam.x*100)+"%";torch.style.top="calc("+(beam.y*100)+"% + "+Math.round(br()*frame.clientWidth*1.05)+"px)";torch.classList.remove("idle");torch.classList.add("on");if(tag)tag.style.opacity=0;
    self.onprogress&&self.onprogress(self.stats())}
+  frame.tabIndex=0;frame.setAttribute("role","application");frame.setAttribute("aria-label","התמונה החשוכה. מזיזים את הפנס בחיצים");
+  var kb={x:.72,y:.5};frame.addEventListener("keydown",function(e){if(!/^Arrow/.test(e.key))return;e.preventDefault();var d=e.shiftKey?.02:.06;kb.x=Math.max(0,Math.min(1,kb.x+(e.key==="ArrowLeft"?-d:e.key==="ArrowRight"?d:0)));kb.y=Math.max(0,Math.min(1,kb.y+(e.key==="ArrowUp"?-d:e.key==="ArrowDown"?d:0)));var r=frame.getBoundingClientRect();move({clientX:r.left+kb.x*r.width,clientY:r.top+kb.y*r.height,pointerType:"mouse"})});
   frame.addEventListener("pointerdown",function(e){if(full>0)return;down=true;try{frame.setPointerCapture(e.pointerId)}catch(_){}move(e);e.preventDefault()});
   frame.addEventListener("pointermove",function(e){if(down||e.pointerType==="mouse")move(e)});
   frame.addEventListener("pointerup",function(){down=false;lastT=0});

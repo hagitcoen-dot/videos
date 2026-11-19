@@ -2,7 +2,7 @@
 (function(){
 "use strict";
 var C = {
-  me:   {body:"#f39a4a", dark:"#d9772a", belly:"#fff3e4", ear:"fox"},
+  me:   {body:"#df710f", dark:"#d9772a", belly:"#fff3e4", ear:"fox"},
   dubi: {body:"#b07a52", dark:"#8c5a37", belly:"#f1d7b8", ear:"bear"},
   nuni: {body:"#e9e2f2", dark:"#c8bbdc", belly:"#ffffff", ear:"bunny"},
   kipi: {body:"#c79b6d", dark:"#7a5435", belly:"#fbe9d2", ear:"hedgehog"},
@@ -105,7 +105,7 @@ function bg(t){
     s+='<rect width="360" height="200" fill="#fff6e6"/><rect y="150" width="360" height="50" fill="#f1dcc0"/>';
     s+='<rect x="96" y="16" width="168" height="74" rx="8" fill="#3f7d6a" stroke="#b88a5a" stroke-width="5"/><path d="M114 38h46M114 52h72M114 66h34" stroke="#e9f5ef" stroke-width="3" stroke-linecap="round" opacity=".8"/><text x="230" y="64" font-size="22" fill="#fff8d6" font-family="Rubik,sans-serif">2+3</text>';
     s+='<rect x="18" y="26" width="46" height="36" rx="4" fill="#cfe9f7" stroke="#9cc7de" stroke-width="3"/><path d="M41 26v36M18 44h46" stroke="#9cc7de" stroke-width="2"/>';
-    s+='<rect x="300" y="24" width="34" height="44" rx="4" fill="#ffe08a" stroke="#e7b84a" stroke-width="2"/><circle cx="317" cy="40" r="7" fill="#f39a4a"/><path d="M308 58h18" stroke="#e7b84a" stroke-width="2"/>';
+    s+='<rect x="300" y="24" width="34" height="44" rx="4" fill="#ffe08a" stroke="#e7b84a" stroke-width="2"/><circle cx="317" cy="40" r="7" fill="#df710f"/><path d="M308 58h18" stroke="#e7b84a" stroke-width="2"/>';
   } else if (t==="yard"){
     s+='<rect width="360" height="200" fill="#dff1fb"/><circle cx="318" cy="34" r="18" fill="#ffe08a"/><ellipse cx="80" cy="34" rx="28" ry="10" fill="#fff"/><ellipse cx="100" cy="28" rx="18" ry="9" fill="#fff"/>';
     s+='<path d="M0 132q90 -18 180 -6t180 -4v78H0z" fill="#b8e0a0"/><path d="M0 160q100 -10 200 0t160 -2v42H0z" fill="#a3d58a"/>';

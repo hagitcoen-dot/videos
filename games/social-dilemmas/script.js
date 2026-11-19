@@ -38,7 +38,7 @@ setMute();
 var CV=$("confetti"), CX=CV.getContext("2d"), parts=[], raf=0;
 function sizeCv(){ var d=window.devicePixelRatio||1; CV.width=innerWidth*d; CV.height=innerHeight*d; CX.setTransform(d,0,0,d,0,0); }
 sizeCv(); addEventListener("resize", sizeCv);
-var COLS=["#f6c945","#f39a4a","#7cc8a4","#8fb8f0","#f48fb1","#b9a3e3"];
+var COLS=["#f6c945","#df710f","#7cc8a4","#8fb8f0","#f48fb1","#b9a3e3"];
 function confetti(n, stars){
   if (reduce) return; n=n||90;
   for (var k=0;k<n;k++) parts.push({x:innerWidth*(0.15+Math.random()*0.7), y:innerHeight*0.32, vx:(Math.random()-0.5)*9, vy:-Math.random()*9-3, r:4+Math.random()*5, c:COLS[k%COLS.length], a:Math.random()*6, va:(Math.random()-0.5)*0.3, star:stars&&k%3===0, life:0});

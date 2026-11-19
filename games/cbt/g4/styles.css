@@ -4,7 +4,7 @@
 :root{
   --ink:#2a2050; --ink-soft:#5d5384; --cream:#fffaf2; --card:#fffdf8;
   --gold:#ffc93c; --gold-deep:#e79a12; --lock:#3b2a6b; --lock2:#5b3fb5;
-  --flex:#1fb58f; --flex-soft:#d9f7ee; --coral:#ff6f7d; --sky1:#24184f; --sky2:#4a2f8f;
+  --flex:#1ca381; --flex-soft:#d9f7ee; --coral:#ff6f7d; --sky1:#24184f; --sky2:#4a2f8f;
   --radius:22px; --shadow:0 10px 30px rgba(20,10,60,.28);
 }
 body.theme-keys{--sky1:#0f3a4f; --sky2:#1d7a83;}
@@ -52,7 +52,7 @@ h1{font-size:27px} h2{font-size:23px}
 p{margin:.4em 0}
 .soft{color:var(--ink-soft)}
 .screen > .soft, .map-head .soft{color:#e9e2ff}
-.credit{text-align:center; font-size:12.5px; color:#8b82ad; margin-top:14px}
+.credit{text-align:center; font-size:12.5px; color:#776c9f; margin-top:14px}
 .kicker{font-size:13px; font-weight:700; letter-spacing:.02em; color:var(--lock2); margin:0}
 
 .btn{border:0; border-radius:999px; padding:12px 22px; font-weight:700; font-size:17px; cursor:pointer; transition:transform .12s, box-shadow .2s; min-height:48px}
@@ -326,7 +326,7 @@ body.og-mode main{max-width:none; padding:0}
 .why-big{position:relative; margin:14px 0 4px; padding:18px 18px 16px; border-radius:22px; background:linear-gradient(135deg,#fffbea,#fff0c2); border:3px solid #ffc83d; box-shadow:0 0 0 6px rgba(255,200,61,.25),0 14px 34px rgba(0,0,0,.25); text-align:start; animation:whyIn .55s cubic-bezier(.2,1.5,.4,1) both}
 .why-big h3{margin:0 0 8px; font-size:17px; color:#8a5a00; display:flex; align-items:center; gap:6px}
 .why-big h3 .bulb{display:inline-block; animation:bulb 1.2s ease-in-out .5s 2}
-.why-big .wkey{display:inline-block; background:#1fb58f; color:#fff; border-radius:12px; padding:2px 10px; font-weight:800}
+.why-big .wkey{display:inline-block; background:#1ca381; color:#fff; border-radius:12px; padding:2px 10px; font-weight:800}
 .why-big p{margin:0; font-size:21px; line-height:1.45; font-weight:700; color:#2b2140}
 .why-big .btn{margin-top:14px; width:100%}
 @keyframes whyIn{0%{opacity:0; transform:translateY(24px) scale(.85)}100%{opacity:1; transform:none}}

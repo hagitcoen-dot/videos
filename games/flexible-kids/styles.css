@@ -3,7 +3,7 @@
 
 
 :root{
-  --ink:#24345a; --ink-soft:#5a6a8e; --card:#fffdf8; --mint:#4fd29a; --mint-d:#23a06e; --sky:#bfe9ff;
+  --ink:#24345a; --ink-soft:#5a6a8e; --card:#fffdf8; --mint:#4fd29a; --mint-d:#1d835a; --sky:#bfe9ff;
   --peach:#ffb48a; --sun:#ffd25e; --pink:#ff8fa3; --stone:#9aa1b2; --stone-d:#6d7385; --grape:#9b7bff;
   --r:24px; --shadow:0 10px 28px rgba(40,80,140,.16);
 }
@@ -52,7 +52,7 @@ button{font-family:inherit; color:inherit}
   background:linear-gradient(180deg,#ffd668,#ffac3e); box-shadow:0 4px 0 #d9822a; cursor:pointer; flex:none}
 .read-btn .rb-i{font-size:19px; line-height:1}.read-btn .rb-t{font-size:15px; font-weight:800; color:#5a3300}
 .read-btn:active{transform:translateY(3px); box-shadow:0 1px 0 #d9822a}
-.read-btn.talking{animation:talk 1s ease-in-out infinite; background:linear-gradient(180deg,#8ff0c4,#4fd29a); box-shadow:0 4px 0 #23a06e,0 0 0 6px rgba(79,210,154,.3)}
+.read-btn.talking{animation:talk 1s ease-in-out infinite; background:linear-gradient(180deg,#8ff0c4,#4fd29a); box-shadow:0 4px 0 #1d835a,0 0 0 6px rgba(79,210,154,.3)}
 @keyframes talk{50%{transform:scale(1.07)}}
 .topbar.compact .brand span{display:none}
 .topbar .pill{padding:5px 9px}

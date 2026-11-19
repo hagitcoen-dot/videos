@@ -1,6 +1,6 @@
 @font-face{font-family:"Varela Round";src:url(fonts/VarelaRound.ttf) format("truetype");font-display:swap}
 @font-face{font-family:"Rubik";src:url(fonts/Rubik.ttf) format("truetype");font-weight:300 900;font-display:swap}
-:root{--deep:#063a3a;--teal:#2f7d7a;--soft:#4fa3a0;--aqua:#9ad9d4;--aqua2:#dff3f1;--peach:#f6c3a3;--pink:#f2a7b8;--ink:#063a3a;--bg:#fff;
+:root{--deep:#063a3a;--teal:#2c7471;--soft:#4fa3a0;--aqua:#9ad9d4;--aqua2:#dff3f1;--peach:#f6c3a3;--pink:#f2a7b8;--ink:#063a3a;--bg:#fff;
 --bar-h:calc(72px + env(safe-area-inset-bottom));}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:"Rubik","Varela Round",system-ui,sans-serif;-webkit-tap-highlight-color:transparent}

@@ -1,6 +1,6 @@
 @font-face{font-family:'Rubik';font-style:normal;font-weight:400 800;font-display:swap;src:url('fonts/rubik-hebrew.woff2') format('woff2');unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F;}
 @font-face{font-family:'Rubik';font-style:normal;font-weight:400 800;font-display:swap;src:url('fonts/rubik-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
-:root{--ink:#26404a;--soft:#5b6f76;--bg:#fff3e4;--card:#fffbf5;--teal:#3fa69a;--teal-d:#2f8a7f;--mint:#d9f0ea;--coral:#f4897b;--coral-d:#e2705f;--yellow:#f6c945;--yellow-d:#d9a62a;--pink:#f48aa5;--pink-d:#d96f8c;--blue:#5fb5cf;--blue-d:#3f97b2;--fs:clamp(17px,1.2vw + 12px,21px)}
+:root{--ink:#26404a;--soft:#5b6f76;--bg:#fff3e4;--card:#fffbf5;--teal:#307e75;--teal-d:#2b7f75;--mint:#d9f0ea;--coral:#f4897b;--coral-d:#e2705f;--yellow:#f6c945;--yellow-d:#d9a62a;--pink:#f48aa5;--pink-d:#d96f8c;--blue:#5fb5cf;--blue-d:#3f97b2;--fs:clamp(17px,1.2vw + 12px,21px)}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
 body{font-family:'Rubik',system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);background:var(--bg);font-size:var(--fs);line-height:1.35;-webkit-tap-highlight-color:transparent;overflow:hidden;

@@ -216,6 +216,34 @@
     }
     vp.addEventListener("pointerup", up);
     vp.addEventListener("pointercancel", function (e) { delete ptrs[e.pointerId]; if (!Object.keys(ptrs).length) gest = null; });
+    /* מקלדת: חיצים מזיזים כוונת, Enter בוחר, + ו- להגדלה */
+    var kp = null, kx = document.createElement("div");
+    kx.className = "kbx"; kx.setAttribute("aria-hidden", "true");
+    kx.style.cssText = "position:absolute;left:0;top:0;width:46px;height:46px;margin:-23px 0 0 -23px;border:3px solid #fff;border-radius:50%;box-shadow:0 0 0 3px #0b57d0,inset 0 0 0 3px #0b57d0;pointer-events:none;z-index:60;display:none";
+    vp.appendChild(kx);
+    vp.tabIndex = 0; vp.setAttribute("role", "application");
+    vp.setAttribute("aria-label", "התמונה. חיצים מזיזים את הכוונת, Enter בוחר, פלוס ומינוס מגדילים ומקטינים");
+    function kshow() { kx.style.display = "block"; kx.style.left = kp.x + "px"; kx.style.top = kp.y + "px"; if (night) light(kp); }
+    vp.addEventListener("focus", function () { if (!vp.matches(":focus-visible")) return; if (!kp) kp = { x: vw / 2, y: vh / 2 }; kshow(); });
+    vp.addEventListener("blur", function () { kx.style.display = "none"; });
+    vp.addEventListener("keydown", function (e) {
+      var k = e.key, d = e.shiftKey ? 6 : 24;
+      if (/^Arrow/.test(k)) {
+        e.preventDefault(); if (!kp) kp = { x: vw / 2, y: vh / 2 };
+        kp.x += k === "ArrowLeft" ? -d : k === "ArrowRight" ? d : 0;
+        kp.y += k === "ArrowUp" ? -d : k === "ArrowDown" ? d : 0;
+        var m = 30;
+        if (kp.x < m) { tx += m - kp.x; kp.x = m; } if (kp.x > vw - m) { tx -= kp.x - (vw - m); kp.x = vw - m; }
+        if (kp.y < m) { ty += m - kp.y; kp.y = m; } if (kp.y > vh - m) { ty -= kp.y - (vh - m); kp.y = vh - m; }
+        apply(); kshow();
+      } else if (k === "Enter" || k === " ") {
+        e.preventDefault(); if (!kp) { kp = { x: vw / 2, y: vh / 2 }; kshow(); return; }
+        opts.onTap({ x: (kp.x - tx) / s, y: (kp.y - ty) / s, sx: kp.x, sy: kp.y });
+      } else if (k === "+" || k === "=" || k === "-") {
+        e.preventDefault(); if (!kp) kp = { x: vw / 2, y: vh / 2 };
+        zoomAt(k === "-" ? 1 / 1.5 : 1.5, kp.x, kp.y, true);
+      }
+    });
     vp.addEventListener("wheel", function (e) { e.preventDefault(); var p = local(e); zoomAt(e.deltaY < 0 ? 1.15 : 1 / 1.15, p.x, p.y); }, { passive: false });
     var zc = vp.querySelector(".zoom-ctl") || (vp.parentNode && vp.parentNode.querySelector(".zoom-ctl"));
     if (zc) {
