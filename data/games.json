@@ -400,6 +400,24 @@
       "image": "games/attention-flashlight-v1.jpg"
     },
     {
+      "id": "attention-flashlight-camp",
+      "title": "פנס הקשב · מחנה ביער",
+      "url": "games/attention-flashlight-camp/",
+      "desc": "עוד משחק חפש ומצא עם פנסי, הפעם במחנה ביער: חידות במקום שמות, פריטים קטנים ומשימות של \"מצאו את שניהם\". מאמנים את פנס הקשב למצוא דברים מרגיעים, מעניינים ומשמחים.",
+      "age": "ג'–ו'",
+      "audience": [
+        "ילדים"
+      ],
+      "topics": [
+        "ויסות רגשי",
+        "חרדה ודאגה",
+        "מיינדפולנס"
+      ],
+      "videos": [],
+      "added": "2026-11-19",
+      "image": "games/attention-flashlight-camp-v1.jpg"
+    },
+    {
       "id": "attention-flashlight",
       "title": "פנס הקשב · לכיתה ו' ומעלה",
       "url": "games/attention-flashlight/",

@@ -221,6 +221,8 @@
       const v = it.kind === "video" ? state.videos.find((x) => x.id === it.id) : null;
       const g = it.kind === "game" ? games.find((x) => x.id === it.id) : null;
       if (!v && !g) continue;
+      // המלצה שלא מתאימה לקהל שנבחר (ילדים / נוער / מבוגרים) לא מוצגת
+      if (state.aud !== "all" && !audOk(g ? g.aud : v.aud || [])) continue;
       const pic = document.createElement("img"); pic.alt = ""; pic.loading = "lazy";
       pic.src = v ? (v.thumbnail || `https://i.ytimg.com/vi/${v.id}/mqdefault.jpg`) : (g.image || "");
       const btn = document.createElement(v ? "button" : "a"); btn.className = "fpic";
@@ -264,7 +266,7 @@
   let featView = null;
   function render() {
     const gview = state.view === "games";
-    if (featView !== state.view) { featView = state.view; renderFeatured(); }
+    if (featView !== state.view + "|" + state.aud) { featView = state.view + "|" + state.aud; renderFeatured(); }
     $("feat").classList.toggle("off", !!norm(state.q).trim() || state.onlyFav);
     $("quotes").classList.toggle("off", !!norm(state.q).trim() || state.onlyFav);
     $("games").hidden = !gview; $("grid").hidden = gview;

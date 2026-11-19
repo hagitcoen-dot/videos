@@ -149,6 +149,8 @@
   var G = null;
   function Scene(vp, opts) {
     var world = vp.querySelector(".world"), W = ROOM.w, H = ROOM.h;
+    /* התמונה זזה רק דרך הגדלה וגרירה, לא דרך גלילה של הדפדפן */
+    vp.addEventListener("scroll", function () { vp.scrollTop = 0; vp.scrollLeft = 0; });
     var s = 1, tx = 0, ty = 0, fit = 1, vw = 0, vh = 0;
     var ptrs = {}, gest = null, night = opts.night, nightEl = vp.querySelector(".night");
     world.style.width = W + "px"; world.style.height = H + "px";
