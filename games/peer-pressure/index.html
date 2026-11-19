@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<script src="../../a11y.js?v=1"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>מבחן ההפסקה הגדולה</title>
+<style>@font-face{font-family:'Rubik';font-style:normal;font-weight:400 800;font-display:swap;src:url('fonts/rubik-hebrew.woff2') format('woff2');unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}@font-face{font-family:'Rubik';font-style:normal;font-weight:400 800;font-display:swap;src:url('fonts/rubik-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}</style>
+<style>
+:root{--ink:#22314d;--soft:#566683;--bg:#eef5fc;--card:#fff;--blue:#2f6fb5;--blue-d:#21558e;--sun:#ffc94a;--sun-d:#e8a91c;--mint:#5fbf95;--ice:#d9f0fc;--line:#d6e2f0;
+ --H:100vh;--barh:84px;--toph:56px;--fs:clamp(16px,1.6vw + 10px,20px);}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Rubik',system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:var(--fs);line-height:1.45;-webkit-tap-highlight-color:transparent;
+ background-image:radial-gradient(circle at 85% 0%,#fff7dc 0,transparent 40%),radial-gradient(circle at 0% 100%,#e2f2e9 0,transparent 45%);}
+button,a.btn{font:inherit;color:inherit}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
+/* top */
+#top{position:fixed;top:0;left:0;right:0;height:var(--toph);display:flex;align-items:center;gap:8px;padding:4px max(8px,env(safe-area-inset-right)) 4px max(8px,env(safe-area-inset-left));z-index:10}
+#top[hidden]{display:none}
+#top .tt{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0}
+#epChip{font-weight:700;font-size:.82em;background:#fff;border:2px solid var(--line);border-radius:99px;padding:2px 14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.steps{display:flex;gap:6px;font-size:.72em;color:var(--soft)}
+.steps span{padding:0 6px;border-radius:99px;white-space:nowrap}
+.steps span.on{background:var(--blue);color:#fff}
+.steps span.done{color:var(--mint)}
+.ic{width:48px;height:48px;border-radius:14px;border:2px solid var(--line);background:#fff;font-size:22px;cursor:pointer;flex:none}
+/* screens */
+#app{position:fixed;left:0;right:0;top:0;height:calc(var(--H) - var(--barh));overflow:hidden}
+body.has-top #app{top:var(--toph);height:calc(var(--H) - var(--barh) - var(--toph))}
+.screen{height:100%;width:100%;max-width:1180px;margin:0 auto;padding:8px 14px 6px;display:flex;flex-direction:column;gap:10px;transform-origin:top center}
+.screen[hidden]{display:none}
+h1{font-size:calc(var(--k,1)*clamp(30px,6vw,46px));line-height:1.1;font-weight:800;color:var(--blue-d)}
+h2{font-size:calc(var(--k,1)*clamp(22px,4.6vw,32px));line-height:1.15;font-weight:800;color:var(--blue-d);text-align:center}
+.lead{text-align:center;max-width:860px;margin:0 auto}
+.hint{text-align:center;color:var(--soft);font-size:.86em;margin-top:auto}
+.hint b{color:var(--blue-d)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:8px 20px;border-radius:16px;border:2px solid var(--line);background:#fff;font-weight:700;cursor:pointer;text-decoration:none;box-shadow:0 3px 0 var(--line)}
+.btn:active{transform:translateY(2px);box-shadow:none}
+.btn.primary{background:var(--blue);border-color:var(--blue-d);color:#fff;box-shadow:0 4px 0 var(--blue-d)}
+.btn.sun{background:var(--sun);border-color:var(--sun-d);box-shadow:0 4px 0 var(--sun-d)}
+.btn.ice{background:#bfe6fb;border-color:#7cc4ec;box-shadow:0 4px 0 #7cc4ec;color:#174a72}
+.btn.big{font-size:1.2em;min-height:60px;padding:8px 34px}
+.btn.pulse{animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+/* bar */
+#bar[hidden]{display:none}
+#bar{position:fixed;left:0;right:0;bottom:0;height:var(--barh);display:flex;align-items:center;justify-content:center;padding:8px max(12px,env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));background:linear-gradient(to top,var(--bg) 70%,transparent);z-index:9}
+#barIn{display:flex;gap:10px;width:100%;max-width:720px;justify-content:center}
+#barIn .btn{flex:1;max-width:420px}
+#barIn .btn.back{flex:0 0 auto;max-width:none;padding:8px 14px}
+/* start */
+#s-start{justify-content:center;align-items:center;gap:0;position:relative}
+.start-art{width:100%;max-width:640px;border-radius:22px;overflow:hidden;box-shadow:0 8px 24px #2f6fb533;aspect-ratio:16/9;flex:0 1 auto;min-height:0}
+.start-art img{width:100%;height:100%;object-fit:cover;display:block}
+.start-card{text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:-26px;background:#fff;border-radius:22px;padding:14px 18px 10px;box-shadow:0 6px 20px #22314d1f;position:relative;max-width:620px;width:94%}
+.grade{background:var(--sun);font-weight:800;border-radius:99px;padding:2px 16px;font-size:.9em}
+.sub{font-weight:600;color:var(--soft);font-size:1.02em}
+.start-btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:4px}
+.start-btns .big{flex-basis:100%}
+.credit-t{font-size:.72em;color:var(--soft)}
+.start-card .hint{margin-top:2px}
+/* intro tools */
+.tools3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.tool{background:#fff;border:2px solid var(--line);border-radius:18px;padding:12px;text-align:center;display:flex;flex-direction:column;gap:6px;box-shadow:0 4px 0 var(--line)}
+.tool .ti{font-size:2em;line-height:1}
+.tool .tn{font-weight:800;color:var(--blue-d);font-size:1.05em}
+.tool .tl{background:#fff6dd;border-radius:12px;padding:4px 8px;font-weight:600;font-size:.9em}
+.tool .ts{font-size:.86em;color:var(--soft)}
+/* scene */
+.scene{display:flex;flex-direction:column;gap:8px;height:100%;min-height:0}
+.scene-art{border-radius:18px;overflow:hidden;flex:none;aspect-ratio:16/9;max-height:34%;align-self:center;box-shadow:0 6px 18px #2f6fb52a}
+.scene-art img{width:100%;height:100%;object-fit:cover;display:block}
+.talk{flex:1;display:flex;flex-direction:column;gap:6px;min-height:0}
+.ep-title{font-size:calc(var(--k,1)*clamp(20px,4.2vw,28px))}
+.bubbles{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 34px);mask-image:linear-gradient(to bottom,transparent 0,#000 34px);padding-top:30px}
+.place{background:#fff8e3;border:2px dashed #f0d48a;border-radius:14px;padding:8px 12px;font-size:.88em;color:#6a5422;flex:none}
+.place b{color:#8a6a1a}
+.bub{display:flex;gap:8px;align-items:flex-end;flex:none;animation:pop .35s ease-out}
+.bub.end{flex-direction:row-reverse}
+.av{width:42px;height:42px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:19px;box-shadow:0 2px 0 #0002}
+.bw{background:#fff;border:2px solid var(--line);border-radius:18px 18px 18px 6px;padding:6px 12px;max-width:min(86%,640px);box-shadow:0 3px 0 var(--line)}
+.bub.end .bw{border-radius:18px 18px 6px 18px;background:#eaf3ff;border-color:#bcd5f3}
+.who{font-weight:800;font-size:.82em}
+.how{font-weight:400;color:var(--soft);font-style:italic}
+.say{font-weight:500}
+.say.strong{font-weight:800}
+@keyframes pop{from{opacity:0}to{opacity:1}}
+/* freeze */
+.freeze{position:relative;background:linear-gradient(160deg,#e9f7ff,#bfe3f7);border-radius:0;max-width:none;align-items:center;justify-content:center;text-align:center}
+.freeze>*{position:relative;max-width:900px}
+.frost{position:absolute!important;inset:0;max-width:none!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg stroke='%23ffffff' stroke-width='2' stroke-linecap='round' opacity='.7'%3E%3Cpath d='M30 14v32M14 30h32M19 19l22 22M41 19L19 41'/%3E%3Cpath d='M90 74v24M78 86h24M82 78l16 16M98 78l-16 16'/%3E%3C/g%3E%3C/svg%3E");pointer-events:none}
+.fz-title{font-size:calc(var(--k,1)*clamp(40px,9vw,72px));color:#13527f;text-shadow:0 3px 0 #fff;animation:fz .5s ease-out}
+@keyframes fz{from{transform:scale(1.5);opacity:0;filter:blur(4px)}to{transform:none;opacity:1}}
+.fz-art{flex:0 1 auto;min-height:0;max-height:26%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;border:4px solid #fff;box-shadow:0 6px 18px #13527f33;position:relative}
+.fz-art img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.55) brightness(1.08) contrast(.95)}
+.fz-art::after{content:"";position:absolute;inset:0;background:linear-gradient(160deg,#cdeeff88,#7fc4ec55)}
+.fz-sub{font-weight:600;color:#2f5f82}
+.fz-q{list-style:none;display:flex;flex-direction:column;gap:10px;width:100%}
+.fz-q li{background:#ffffffd9;border:2px solid #fff;border-radius:18px;padding:10px 16px;font-weight:700;font-size:1.08em;box-shadow:0 4px 14px #13527f1a}
+.fz-q li::before{content:"🤔 "}
+.fact{background:#fffbe9;border:2px solid #f5d77a;border-radius:18px;padding:10px 16px;font-size:.98em;animation:pop .35s}
+.fact .br{display:block;margin-top:6px;font-weight:700;color:var(--blue-d)}
+/* tools picker */
+.pick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;flex:none}
+.pk{position:relative;background:#fff;border:3px solid var(--line);border-radius:16px;padding:6px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:64px;font-weight:800;color:var(--blue-d);line-height:1.15;box-shadow:0 4px 0 var(--line)}
+.pk .ti{font-size:1.4em}
+.pk .tn{font-size:.86em}
+.pk.on{border-color:var(--blue);background:#eaf3ff;box-shadow:0 4px 0 var(--blue)}
+.pk.tried::after{content:"✓";position:absolute;top:-8px;left:-8px;width:26px;height:26px;border-radius:50%;background:var(--mint);color:#fff;font-size:15px;display:flex;align-items:center;justify-content:center}
+.model{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;gap:7px}
+.model-empty{margin:auto;color:var(--soft);font-weight:600}
+.model .principle{flex:none;background:#fff6dd;border-radius:12px;padding:5px 12px;font-size:.84em;text-align:center}
+/* task card */
+.taskcard{margin:auto;width:100%;max-width:860px;background:#fff;border:3px dashed #9cc0e6;border-radius:22px;padding:14px 18px;display:flex;flex-direction:column;gap:8px;box-shadow:0 8px 24px #2f6fb522;position:relative}
+.taskcard .tag{position:absolute;top:-16px;right:20px;background:var(--sun);font-weight:800;border-radius:99px;padding:2px 16px;font-size:1.05em}
+.taskcard h3{font-size:1.15em;color:var(--blue-d);margin-top:6px}
+.tc-row{display:flex;gap:10px;align-items:flex-start}
+.tc-k{flex:none;font-weight:800;min-width:6.4em;color:var(--soft);font-size:.9em;padding-top:2px}
+.tc-v{flex:1}
+.starter{background:#fff6dd;border-radius:12px;padding:4px 10px;font-weight:700}
+.roles{display:flex;flex-wrap:wrap;gap:6px}
+.role{display:inline-flex;align-items:center;gap:6px;border:2px solid var(--line);border-radius:99px;padding:2px 10px 2px 4px;font-size:.86em}
+.role .av{width:26px;height:26px;font-size:13px}
+.reflect{background:#eef8f2;border-radius:12px;padding:6px 12px;font-weight:600}
+/* learned */
+.learned{list-style:none;display:flex;flex-direction:column;gap:8px;max-width:860px;margin:0 auto;width:100%}
+.learned li{display:flex;gap:10px;align-items:center;background:#fff;border:2px solid var(--line);border-radius:16px;padding:8px 14px;font-weight:600;animation:pop .4s both}
+.learned li span{font-size:1.4em;flex:none}
+/* reward */
+.reward{margin:auto;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center}
+.medal{font-size:clamp(64px,14vw,100px);line-height:1;animation:fz .6s ease-out}
+.badges{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.badges span{background:#fff;border:2px solid var(--sun);border-radius:99px;padding:4px 14px;font-weight:700}
+.credit{display:flex;align-items:center;justify-content:center;gap:8px;font-size:.8em;color:var(--soft);flex:none}
+.credit img{width:32px;height:auto}
+/* teacher */
+.tabs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;flex:none}
+.tab{min-height:48px;border-radius:99px;border:2px solid var(--line);background:#fff;padding:4px 14px;font-weight:700;cursor:pointer;font-size:.86em}
+.tab.on{background:var(--blue);border-color:var(--blue-d);color:#fff}
+.tpanel{flex:1;min-height:0;background:#fff;border:2px solid var(--line);border-radius:18px;padding:12px 16px;overflow:hidden;max-width:900px;width:100%;margin:0 auto}
+.tpanel h3{color:var(--blue-d);margin-bottom:6px}
+.tpanel ul,.tpanel ol{padding-inline-start:1.2em;display:flex;flex-direction:column;gap:6px}
+.flow{list-style:none;padding:0!important}
+.flow li{display:flex;gap:10px;align-items:center}
+.flow .min{flex:none;background:var(--sun);border-radius:10px;font-weight:800;min-width:3.6em;text-align:center;padding:2px 6px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.two>div{border-radius:14px;padding:8px 12px}
+.yes{background:#eef8f2}.no{background:#fdeeee}
+.two h4{margin-bottom:4px}
+.pdfln{display:inline-flex;margin-top:10px}
+/* wide (projector) */
+html.wide .scene{flex-direction:row;align-items:stretch;gap:18px}
+html.wide .scene-art{max-height:none;width:48%;aspect-ratio:auto;align-self:center}
+html.wide .scene-art img{aspect-ratio:16/9;height:auto}
+html.wide .talk{width:52%}
+html.wide{--fs:clamp(20px,1.1vw + 8px,23px)}
+html.wide .model,html.wide .bubbles{max-width:1000px;width:100%;margin:0 auto}
+html.wide .av{width:50px;height:50px;font-size:22px}
+html.wide .pk{min-height:84px}
+html.wide .pick{max-width:1000px;width:100%;margin:0 auto}
+html.wide .start-art{max-width:560px}
+html.short .scene-art{max-height:28%}
+@media (max-width:560px){
+ .tools3{grid-template-columns:1fr;gap:8px}
+ .tool{flex-direction:row;text-align:start;align-items:center;padding:8px 10px;gap:10px}
+ .tool .ti{font-size:1.6em}
+ .tool>div{display:flex;flex-direction:column;gap:3px}
+ .two{grid-template-columns:1fr}
+ .tc-row{flex-direction:column;gap:2px}
+ .av{width:34px;height:34px;font-size:16px}
+ .ic{width:48px;height:48px}
+}
+
+.model .who,.model .say{display:inline}
+.model .who::after{content:": "}
+.model .bw{padding:5px 12px}
+.model .av{width:38px;height:38px;font-size:17px}
+html.wide .pk{min-height:70px}
+.fz-art{height:24%;max-height:none;width:auto}
+html.wide .fz-art{height:30%}
+.start-art img{object-position:center 30%}
+
+html.wide #s-tools{display:grid;grid-template-columns:250px 1fr;grid-template-rows:auto 1fr auto;column-gap:18px;row-gap:8px}
+html.wide #s-tools h2{grid-column:1/-1}
+html.wide #s-tools .pick{grid-template-columns:1fr;grid-auto-rows:min-content;align-content:center;width:auto;margin:0}
+html.wide #s-tools .pk{flex-direction:row;justify-content:flex-start;gap:10px;padding:10px 12px;text-align:start}
+html.wide #s-tools .model{max-width:none}
+html.wide #s-tools .hint{grid-column:1/-1}
+
+/* ---------- intro stages (v3) ---------- */
+.stage{display:flex;flex-direction:column;gap:10px;height:100%;min-height:0}
+.stage-art{flex:none;border-radius:18px;overflow:hidden;box-shadow:0 6px 18px #2f6fb52a;align-self:center;width:100%;max-width:760px}
+.stage-art img{width:100%;aspect-ratio:16/9;height:auto;object-fit:cover;display:block}
+.stage-txt{display:flex;flex-direction:column;gap:10px;flex:1;min-height:0;justify-content:center}
+.stage-dots{display:flex;gap:7px;justify-content:center}
+.stage-dots span{width:11px;height:11px;border-radius:50%;background:var(--line)}
+.stage-dots span.on{background:var(--blue);width:28px;border-radius:6px}
+.stage-dots span.done{background:var(--mint)}
+.stage-p{font-size:calc(var(--k,1)*1.18em);line-height:1.5;text-align:center;font-weight:500;max-width:820px;margin:0 auto}
+.shout{position:relative;align-self:center;background:#fff4e6;border:3px solid #f08a3c;border-radius:22px;padding:10px 18px;font-weight:800;font-size:calc(var(--k,1)*1.3em);text-align:center;box-shadow:0 4px 0 #f08a3c33;animation:pop .4s ease-out}
+.shout:after{content:"";position:absolute;bottom:-14px;right:34px;border:12px solid transparent;border-top-color:#f08a3c;border-bottom:0}
+.shout .who{font-weight:800}
+.tease{align-self:center;background:#f2ecff;border:2px dashed #8a6fd1;border-radius:16px;padding:9px 16px;text-align:center;font-weight:600;max-width:820px}
+html.wide .stage{flex-direction:row;align-items:center;gap:22px}
+html.wide .stage-art{width:54%;max-width:none}
+html.wide .stage-txt{width:46%}
+
+.star{display:block;font-size:.72em;font-weight:700;color:#9a6a00;background:#fff3c4;border:1px solid #f1cf6a;border-radius:999px;padding:1px 8px;margin-top:3px;width:max-content;max-width:100%;white-space:normal}
+h3 .star{display:inline-block;vertical-align:middle;margin:0 6px}
+.pk.main{border-color:#f1cf6a;box-shadow:0 0 0 2px #ffe08a inset}
+html.wide .stage-art{width:57%}
+html.wide .stage-txt{width:43%;gap:14px}
+html.wide .stage-p{font-size:calc(var(--k,1)*1.32em)}
+html.wide #s-stage h2{font-size:calc(var(--k,1)*36px)}
+html.wide .shout{font-size:calc(var(--k,1)*1.45em)}
+html.wide .tease{font-size:calc(var(--k,1)*1.05em)}
+html.wide #s-intro{justify-content:center}
+html.wide #s-intro .hint{margin-top:14px}
+
+/* v5 additions: new flow (try / model / feedback), chapter menu, safety strip */
+:root{color-scheme:light}
+body{background-color:var(--bg);color:var(--ink);direction:rtl}
+#top .ic{font-size:20px}
+.lead.small{font-size:.9em;color:var(--soft)}
+/* always-available options */
+.always{background:#eef8f2;border:2px solid #bfe3cf;border-radius:16px;padding:8px 14px;text-align:center;max-width:860px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:4px}
+.always-t{font-weight:800;color:#1f6b47;font-size:.92em}
+.always-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.always-row span{background:#fff;border:2px solid #bfe3cf;border-radius:99px;padding:2px 14px;font-weight:700}
+.always-s{font-size:.8em;color:#2f6b4f}
+.shaky{text-align:center;font-weight:600;color:var(--blue-d);background:#eaf3ff;border-radius:14px;padding:6px 14px;max-width:860px;margin:0 auto;font-size:.92em}
+/* chapter menu */
+.eps{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:980px;width:100%;margin:0 auto;flex:1;min-height:0;align-content:center}
+.epc{position:relative;display:flex;flex-direction:column;align-items:stretch;gap:2px;background:#fff;border:3px solid var(--line);border-radius:18px;padding:6px 6px 10px;cursor:pointer;text-align:center;box-shadow:0 4px 0 var(--line);font:inherit;color:var(--ink);min-width:0}
+.epc img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:12px;max-height:22vh}
+.epc .epn{font-size:.75em;color:var(--soft);font-weight:700}
+.epc .ept{font-weight:800;color:var(--blue-d);font-size:1.02em;line-height:1.15}
+.epc .eptool{font-size:.78em;color:#9a6a00}
+.epc.done::after{content:"✓";position:absolute;top:-10px;left:-10px;width:30px;height:30px;border-radius:50%;background:var(--mint);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
+.epc:focus-visible,.mo:focus-visible,.btn:focus-visible,.tab:focus-visible,.ic:focus-visible{outline:3px solid var(--sun-d);outline-offset:2px}
+/* scene: current line highlighted */
+.place{font-size:.84em}
+.bub.past{opacity:.55}
+.bub.past .bw{box-shadow:none}
+.bub.now .bw{border-color:var(--sun-d);box-shadow:0 0 0 3px #ffe7a6,0 3px 0 var(--line)}
+.bub.now .say{font-weight:700}
+/* freeze: one question at a time */
+.fz-q li.later{display:none}
+.fact{max-width:820px}
+/* try */
+.try{margin:auto;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;max-width:900px;width:100%}
+.try-ic{font-size:clamp(44px,8vw,64px);line-height:1}
+.try-p{font-size:1.15em;font-weight:500}
+.try-p b{color:var(--blue-d)}
+.starter-big{display:flex;align-items:center;gap:10px;background:#fff;border:2px solid var(--line);border-radius:18px;padding:8px 14px;text-align:start;font-weight:600;box-shadow:0 3px 0 var(--line)}
+.timer{min-height:46px;font-size:.9em}
+/* model */
+#s-tools h2 .star{display:inline-block;vertical-align:middle;margin:0 6px}
+.model .principle{text-align:start}
+.note-step{flex:none;align-self:center;background:#eef8f2;border:2px dashed #8fcfac;border-radius:14px;padding:6px 14px;font-weight:700;color:#1f6b47;font-size:.92em;max-width:760px}
+.more{flex:none;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center}
+.more-t{font-weight:700;color:var(--soft);font-size:.86em}
+.mo{background:#fff;border:2px solid var(--line);border-radius:99px;padding:6px 14px;font:inherit;font-weight:700;font-size:.86em;color:var(--blue-d);cursor:pointer;min-height:44px}
+.mo .seen{color:var(--mint);font-size:.85em;font-weight:600}
+/* task */
+.safe{background:#fff4e6;border:2px solid #f5c38f;border-radius:14px;padding:6px 12px;font-weight:600;font-size:.86em;color:#7a4a12;margin-top:6px}
+.seq{list-style:none;display:flex;flex-direction:column;gap:6px;counter-reset:s}
+.seq li{display:flex;gap:10px;align-items:baseline;counter-increment:s}
+.seq li>span{flex:none;background:var(--blue);color:#fff;border-radius:99px;padding:1px 10px;font-weight:700;font-size:.8em;min-width:7.4em;text-align:center}
+.seq li>span::before{content:counter(s) ". "}
+.seq li.after>span{background:var(--mint)}
+.seq li.after>span::before{content:""}
+/* feedback */
+.fb-q{list-style:none;display:flex;flex-direction:column;gap:10px;width:100%}
+.fb-q li{background:#fff;border:2px solid var(--line);border-radius:18px;padding:10px 16px;font-weight:700;font-size:1.12em;box-shadow:0 3px 0 var(--line)}
+/* learned */
+.personal{max-width:860px;width:100%;margin:0 auto;background:#fff6dd;border:2px dashed #f1cf6a;border-radius:16px;padding:10px 14px;text-align:center;font-size:1.05em}
+/* teacher */
+.tpanel{overflow:auto}
+.tpanel h4{margin:8px 0 4px;color:var(--blue-d)}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.three>div{border-radius:14px;padding:8px 12px}
+.mid{background:#fff6dd}
+.note-t{margin-top:10px;font-weight:600;color:var(--blue-d)}
+html.wide .eps{grid-template-columns:repeat(4,1fr)}
+html.wide .epc img{max-height:none}
+@media (max-width:560px){
+ .eps{grid-template-columns:1fr 1fr;gap:8px}
+ .three{grid-template-columns:1fr}
+ .seq li{flex-direction:column;gap:2px}
+ #top .ic{width:42px;height:42px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+html.wide #s-tools{display:flex;flex-direction:column;gap:10px}
+html.wide #s-tools .model{max-width:1000px;width:100%;margin:0 auto}
+.model{justify-content:center}
+.pl-meta{color:var(--soft);font-size:.88em;margin-bottom:4px}
+.tpanel h4{margin-top:12px}
+.pl-steps{display:flex;flex-direction:column;gap:8px}
+.pl-step{border:2px solid var(--line);border-radius:14px;padding:8px 12px;background:#fbfdff}
+.pl-h{display:flex;gap:10px;align-items:center;margin-bottom:4px;color:var(--blue-d)}
+.pl-step ul{font-size:.94em}
+
+</style>
+<style id="a11y-fix">/* ניגודיות לפי ת"י 5568: שמות הדוברים גדולים מספיק */.who{font-size:max(.82em,19px) !important}</style>
+</head>
+<body>
+<div dir="rtl" lang="he" id="root">
+<canvas id="fx" aria-hidden="true"></canvas>
+<header id="top" hidden>
+  <button class="ic" id="b-home" aria-label="למסך הפתיחה">🏠</button>
+  <button class="ic" id="b-eps" aria-label="תפריט פרקים">📚</button>
+  <div class="tt"><span id="epChip"></span><span id="steps" class="steps"></span></div>
+  <button class="ic" id="b-guide" aria-label="למורה">📖</button>
+</header>
+<main id="app">
+
+<section class="screen" id="s-start">
+  <div class="start-art"><img src="img/01-46f515b0.webp" alt="חצר בית הספר בהפסקה" width="1024" height="576"></div>
+  <div class="start-card">
+    <div class="grade">כיתות ד'–ו'</div>
+    <h1>מבחן ההפסקה הגדולה</h1>
+    <p class="sub">משחק כיתתי על לחץ חברתי ושמירה על הבחירה שלנו</p>
+    <div class="start-btns">
+      <button class="btn big primary" id="b-start">פתיחה ▶</button>
+      <button class="btn" id="b-pick">📚 בחירת פרק</button>
+      <button class="btn sun" id="b-plan">📋 מערך השיעור</button>
+      <button class="btn" id="b-teacher">📖 למורה</button>
+    </div>
+    <p class="credit-t">חגית כהן CBT | חברתי</p>
+  </div>
+</section>
+
+<section class="screen" id="s-stage" hidden>
+  <div class="stage">
+    <figure class="stage-art"><img id="stImg" alt="" width="1024" height="576"></figure>
+    <div class="stage-txt">
+      <div class="stage-dots" id="stDots"></div>
+      <h2 id="stTitle"></h2>
+      <p class="stage-p" id="stText"></p>
+      <div class="shout" id="stSay" hidden></div>
+      <div class="tease" id="stTease" hidden></div>
+    </div>
+  </div>
+</section>
+
+<section class="screen" id="s-intro" hidden>
+  <h2>3 כלים לשמור על הבחירה שלנו</h2>
+  <div class="tools3" id="introTools"></div>
+  <div class="always" id="introAlways"></div>
+  <p class="shaky" id="introShaky"></p>
+</section>
+
+<section class="screen" id="s-menu" hidden>
+  <h2>באיזה פרק נתחיל?</h2>
+  <p class="lead small">הצעה לשיעור: פרק אחד בהדגמה משותפת, ואת שלושת האחרים מחלקים לקבוצות.</p>
+  <div class="eps" id="eps"></div>
+</section>
+
+<section class="screen" id="s-scene" hidden>
+  <div class="scene">
+    <figure class="scene-art"><img id="sceneImg" alt="" width="1024" height="576"></figure>
+    <div class="talk">
+      <h2 class="ep-title" id="sceneTitle"></h2>
+      <div class="bubbles" id="bubbles"></div>
+    </div>
+  </div>
+</section>
+
+<section class="screen freeze" id="s-freeze" hidden>
+  <div class="frost" aria-hidden="true"></div>
+  <h2 class="fz-title">❄️ קפיאה!</h2>
+  <figure class="fz-art"><img id="fzImg" alt="" width="1024" height="576"></figure>
+  <ol class="fz-q" id="fzQ"></ol>
+  <button class="btn fact-btn" id="b-fact"></button>
+  <div class="fact" id="fzFact" hidden></div>
+</section>
+
+<section class="screen" id="s-try" hidden>
+  <div class="try">
+    <div class="try-ic" aria-hidden="true">🗣️</div>
+    <h2 id="tryTitle"></h2>
+    <p class="try-p" id="tryText"></p>
+    <div class="starter-big" id="tryLine"></div>
+    <div class="always" id="tryAlways"></div>
+    <button class="btn timer" id="b-timer">⏱️ דקה לחשוב</button>
+  </div>
+</section>
+
+<section class="screen" id="s-tools" hidden>
+  <h2 id="toolsTitle"></h2>
+  <div class="model" id="model"></div>
+  <div class="more" id="more"></div>
+</section>
+
+<section class="screen" id="s-task" hidden>
+  <article class="taskcard" id="taskCard"></article>
+</section>
+
+<section class="screen" id="s-feedback" hidden>
+  <div class="try">
+    <div class="try-ic" aria-hidden="true">💬</div>
+    <h2>משוב קצר</h2>
+    <ol class="fb-q" id="fbQ"></ol>
+    <p class="shaky" id="fbShaky"></p>
+  </div>
+</section>
+
+<section class="screen" id="s-learned" hidden>
+  <h2>מה למדנו?</h2>
+  <ul class="learned" id="learned"></ul>
+  <div class="personal" id="personal"></div>
+</section>
+
+<section class="screen" id="s-reward" hidden>
+  <div class="reward">
+    <div class="medal">🛡️</div>
+    <h2>כל הכבוד לכיתה!</h2>
+    <p class="lead">היום תרגלתם איך לשמור על הבחירה שלכם גם כשלוחצים עליכם 💛</p>
+    <div class="badges"><span>🔁 התקליט השבור</span><span>🚪 משפט סיום ויציאה</span><span>🔄 החלפת פעילות</span><span>🙋 בקשת עזרה</span></div>
+  </div>
+  <footer class="credit"><img src="img/02-f5ee05f3.png" alt="" width="32" height="29"> חגית כהן CBT | חברתי</footer>
+</section>
+
+<section class="screen" id="s-teacher" hidden>
+  <h2>📖 למורה</h2>
+  <div class="tabs" id="tTabs" role="tablist"></div>
+  <div class="tpanel" id="tPanel" tabindex="0"></div>
+</section>
+
+</main>
+<nav id="bar"><div id="barIn"></div></nav>
+</div>
+<script>
+/* מבחן ההפסקה הגדולה – תוכן, גרסה מתוקנת. חגית כהן CBT | חברתי */
+window.PP = {
+ cast: {
+  itai:{n:"איתי",c:"#cb6110"}, maya:{n:"מאיה",c:"#a23b5a"}, noam:{n:"נועם",c:"#3882d8"}, daniel:{n:"דניאל",c:"#2a915f"},
+  noa:{n:"נועה",c:"#4f8a3a"}, shira:{n:"שירה",c:"#a87627"}, tamar:{n:"תמר",c:"#cf5782"}
+ },
+ intro: [
+  {img:"img/03-adafda64.webp", title:"מה זה לחץ חברתי?", alt:"קבוצת ילדים בחצר מסתכלת על נועם שמהסס",
+   text:"לחץ חברתי הוא כשאנחנו מרגישים שצריך לעשות משהו כדי להשתייך, לקבל אישור או להימנע מדחייה – גם כשזה לא מתאים לנו."},
+  {img:"img/04-ef6a80e3.webp", title:"לפעמים הלחץ רועש", alt:"איתי קורא בקול לנועם שיצטרף, ונועם מהסס",
+   text:"מישהו אומר לנו ישירות מה לעשות:", say:["itai","יאללה, מה אכפת לך, כולם זורמים!"]},
+  {img:"img/05-c59060a2.webp", title:"ולפעמים הלחץ שקט", alt:"נועה יושבת לבד על ספסל בצד החצר ומסתכלת על הקבוצה שמשחקת",
+   text:"אף אחד לא אומר מילה, ובכל זאת אנחנו רוצים להיות חלק ולא לשבת בצד.",
+   tease:"כשאנחנו חוששים להישאר בחוץ, הגוף יכול להיכנס למתח. זה מסביר למה קשה לסרב."}
+ ],
+ tools: [
+  {id:1, ic:"🔁", name:"התקליט השבור", short:"אומרים משפט סירוב קצר, ואם צריך חוזרים עליו פעם אחת. בלי להתווכח ובלי להסביר. אחר כך אפשר להתרחק, להצטרף לחבר או לפנות למבוגר.", line:"לא מתאים לי."},
+  {id:2, ic:"🚪", name:"משפט סיום ויציאה מהשיחה", short:"אומרים משפט קצר שסוגר את השיחה. אפשר להתרחק, ואפשר להישאר במקום ולחזור למה שעשינו.", line:"לא, אני ממשיך במה שאני עושה."},
+  {id:3, ic:"🔄", name:"החלפת פעילות + חבר מגן", short:"מציעים משהו אחר, ופונים לחבר שיצטרף.", line:"בואו עדיף… דניאל, בא לך?"}
+ ],
+ always:[["🚶","להתרחק"],["🤝","להצטרף לחבר"],["🙋","לפנות למבוגר"]],
+ shaky:"גם אם הקול רועד, מסתכלים הצידה או קשה למצוא מילים – הסירוב נחשב.",
+ episodes: [
+ { id:"bag", num:1, title:"התיק ליד הברזייה", img:"img/01-46f515b0.webp", hero:"noam",
+   place:"חצר בית הספר, בהפסקה. נועם יושב על ספסל ואוכל. איתי ומאיה ניגשים אליו. דניאל עומד קצת בצד ומסתכל בטלפון.",
+   lines:[
+    ["itai","בחיוך מתגרה","נועם, בוא רגע! תראה את רון שם ליד הברזייה. הוא הניח את התיק שלו והלך. בוא נחביא לו את התיק מאחורי השיחים של המגרש! יהיה קטעים, כולם יראו את זה."],
+    ["noam","מהסס, מביט הצידה","לא יודע… הוא ממש ייבהל. השיעור הבא מתחיל בעוד חמש דקות, ויש לו שם את כל הציוד למבחן."],
+    ["maya","בטון מזלזל, משלבת ידיים","יאללה נועם, אל תהיה כבד! כולם בעניין. אם אתה לא עוזר לנו עכשיו, אל תבוא לשבת איתנו במשחק כדורגל אחרי הלימודים. אתה חבר או פחדן?"]
+   ],
+   freeze:{ q:["מה מקשה על נועם לסרב, כשמאיה אומרת 'אל תבוא לשבת איתנו'?","מה נועם יכול לעשות?"],
+     factT:"🫀 מה קורה בגוף?",
+     fact:"כשאנחנו חוששים להישאר בחוץ, הגוף יכול להיכנס למתח: כיווץ בבטן, לב שדופק מהר. זה מסביר למה קשה לסרב, וזה לא אומר שאנחנו חלשים." },
+   models:{
+    1:[["itai","","נועם, נו, קח את התיק מהר, לפני שמישהו מסתכל!"],["noam","בקול שקט","לא מתאים לי."],["maya","","מה אכפת לך? זה רק בצחוק!"],["noam","באותו טון","לא מתאים לי."],["itai","","אתה ממש מגזים!"],["noam","מתרחק לכיוון הברזייה","אני הולך לשתות מים."]],
+    2:[["itai","","יאללה נועם, תפוס את התיק, מה הסיפור שלך?"],["noam","מסתובב ללכת","עזבו, אני הולך למגרש."],["maya","","רגע, לאן אתה הולך?"],["noam","ממשיך ללכת, בלי להתווכח","נתראה בכיתה."]],
+    3:[["itai","","נועם, בוא נחביא לו את זה, אל תהיה יבש!"],["noam","","עזבו את התיק שלו. בואו עדיף נתפוס את המגרש לפני שיתפסו לנו את השערים."],["noam","מסתכל על דניאל","דניאל, בא לך מסירות עד הצלצול?"],["daniel","מצטרף","כן, יאללה, תמסור לי!"]]
+   },
+   task:{ tool:1, starter:["itai","נועם, נו, קח את התיק מהר, לפני שמישהו מסתכל!"], again:["maya","מה אכפת לך? זה רק בצחוק!"],
+     roles:[["itai","לוחץ ומשכנע"],["maya","תומכת באיתי"],["noam","מסרב"],["daniel","מסתכל מהצד, ויכול להצטרף לנועם"]],
+     reflect:["למה לדעתכם איתי ומאיה לוחצים? (אפשרויות שונות, לא תשובה אחת)","מתי נועם יכול להחליט שמספיק לחזור על הסירוב, ולהתרחק?","מה דניאל יכול לעשות מהצד?"] }
+ },
+ { id:"copy", num:2, title:"להעתיק או לא להעתיק?", img:"img/06-2884967e.webp", hero:"noa",
+   place:"שיעור חשבון, עבודה עצמית. כולם פותרים תרגילים במחברת. מאיה יושבת ליד נועה, ושירה בצד השני.",
+   lines:[
+    ["maya","מתקרבת ומצביעה בעיפרון, בלחש","נועה, ששש… מה יצא לך בתרגיל 3? תזיזי רגע את המחברת, אני רק מעתיקה את התשובות."],
+    ["noa","מסתכלת הצידה, מהססת","אממ… ישבתי על זה המון. והמורה אמרה שזה בדיוק מה שיהיה בבוחן ביום חמישי."],
+    ["maya","מגלגלת עיניים","נו באמת, מה את עושה מזה עניין? כולן נותנות להעתיק. ובבוחן תשבי לידי ותזיזי קצת את הדף, כן?"],
+    ["maya","נעלבת","אם את לא נותנת, אל תבקשי ממני כלום יותר. חשבתי שאנחנו חברות."]
+   ],
+   freeze:{ img:"img/07-d6844a1d.webp", q:["מה מקשה על נועה לסרב, כשמאיה אומרת 'חשבתי שאנחנו חברות'?","מה נועה יכולה לעשות?"],
+     factT:"💡 שווה לדעת",
+     fact:"מותר לסרב גם לחברה. היא עלולה להתאכזב או לכעוס, ועדיין מותר לך לשמור על ההחלטה שלך." },
+   models:{
+    1:[["maya","","נו, רק את תרגיל 3!"],["noa","בקול שקט","לא מתאים לי."],["maya","","מה אכפת לך? זה רק תרגיל!"],["noa","באותו טון","לא מתאים לי."],["maya","","וואו, את ממש קמצנית…"],["noa","חוזרת למחברת","בהפסקה אוכל להסביר לך איך פתרתי."]],
+    2:[["maya","","נו נועה, מהר, לפני שהמורה מגיעה לפה!"],["noa","מסובבת את המחברת אליה","לא. אני מתרכזת בתרגיל שלי."],["maya","","רק שנייה…"],["noa","נשארת בכיסא וחוזרת לפתור. השיחה נגמרה.","בהפסקה אוכל להסביר לך."]],
+    3:[["maya","","יאללה, תני להעתיק!"],["noa","","להעתיק לא. אבל בהפסקה אסביר לך איך עשיתי, זה לא קשה כשמבינים את הטריק."],["noa","בלחש, לשירה","שירה, בהפסקה נשב שלושתנו על תרגיל 3?"],["shira","מחייכת","כן, בטח! זה כמו הדוגמה על הלוח."]]
+   },
+   task:{ tool:2, starter:["maya","נו נועה, מהר, לפני שהמורה מגיעה לפה!"], again:["maya","חשבתי שאנחנו חברות…"],
+     roles:[["maya","מבקשת להעתיק ולוחצת"],["noa","מסיימת את השיחה"],["shira","חברה שיכולה לעזור"]],
+     reflect:["איזה משפט סיום הייתם יכולים להגיד בחיים שלכם? מתי הוא מתאים?","איך אפשר להישאר במקום ועדיין לסיים את השיחה?","מה עושים אם החברה כועסת אחרי ה'לא'?"] }
+ },
+ { id:"game", num:3, title:"אין מקום במשחק", img:"img/08-74e16569.webp", hero:"noa",
+   place:"מגרש הכדורסל, בהפסקה. נועה מחזיקה את הכדור. מאיה ושירה לידה. תמר, החדשה בכיתה, מתקרבת עם התיק ושואלת אם אפשר להצטרף.",
+   lines:[
+    ["tamar","בחיוך מהסס","היי… אפשר לשחק איתכן?"],
+    ["maya","מרימה יד ועוצרת אותה","אממ, לא, אנחנו כבר מלאות."],
+    ["maya","בלחש, לנועה","נועה, תגידי לה שאין מקום. היא חדשה, היא לא באמת מהחבורה שלנו."],
+    ["noa","מחזיקה את הכדור חזק","אבל… היא לבד כל ההפסקה."],
+    ["maya","בטון מאיים","אם היא נכנסת, אני יוצאת. את איתנו או איתה?"]
+   ],
+   freeze:{ q:["מה מקשה על נועה לסרב, כשמאיה שואלת 'את איתנו או איתה?'","מה נועה יכולה לעשות, גם בשביל תמר?"],
+     factT:"💡 שווה לדעת",
+     fact:"להישאר בחוץ יכול לכאוב – לתמר, וגם לנועה, שחוששת שישאירו גם אותה בחוץ. אפשר לסרב למאיה ולתת לתמר מקום." },
+   models:{
+    1:[["maya","","נועה, תגידי לה שאין מקום. מהר."],["noa","בקול רגוע","לא מתאים לי."],["maya","","מה הבעיה? זה רק משחק!"],["noa","באותו טון","לא מתאים לי."],["maya","","את הורסת לכולן!"],["noa","פונה לתמר","תמר, בואי, נשחק יחד."]],
+    2:[["maya","","נו, תגידי לה כבר שאין מקום."],["noa","מניחה את הכדור","אני לא משתתפת בזה."],["noa","פונה לתמר","תמר, בואי איתי לשתות ונחשוב במה לשחק."],["tamar","מחייכת","בכיף!"]],
+    3:[["maya","","את איתנו או איתה?"],["noa","","בואו נשחק שתיים נגד שתיים. ככה זה יותר כיף, ויש מקום לכולן."],["noa","מוסרת לתמר את הכדור","תמר, את איתי. שירה ומאיה, אתן נגדנו!"],["shira","מחייכת לתמר","יאללה! תמר, תפסי!"]]
+   },
+   task:{ tool:3, starter:["maya","אם היא נכנסת, אני יוצאת. את איתנו או איתה?"], again:["maya","את הורסת לכולן!"],
+     roles:[["maya","לוחצת להוציא את תמר"],["noa","מציעה משחק אחר ופונה לשירה"],["shira","חברה מגינה"],["tamar","מבקשת להצטרף"]],
+     reflect:["מה הרגשת בתפקיד של תמר, כשנתנו לך מקום?","מה זה דורש מאיתנו להיות ה'שירה' של מישהו?","ומה אם מאיה באמת יוצאת מהמשחק?"] }
+ },
+ { id:"video", num:4, title:"הסרטון בקבוצה של הכיתה", img:"img/09-850c85c3.webp", hero:"noam",
+   place:"בהפסקה, בחצר. איתי מחזיק טלפון ומאיה מציצה מעבר לכתף שלו. נועם מתקרב. דניאל יושב לא רחוק.",
+   lines:[
+    ["itai","צוחק","נועם, בוא תראה! צילמתי את רון נופל בשיעור ספורט. תראה את הפרצוף שלו!"],
+    ["maya","","חחח, זה חייב להיות בקבוצה של הכיתה. נועם, אתה תשלח, ותכתוב עליו משהו מצחיק. אתה הכי טוב בזה."],
+    ["noam","מסתכל על המסך ולא צוחק","אממ… זה קצת מביך בשבילו, לא?"],
+    ["itai","מושיט לו את הטלפון","מה מביך? כולם יצחקו! ואם אתה לא שולח, אנחנו נשלח ונכתוב שפחדת."]
+   ],
+   freeze:{ q:["מה מקשה על נועם לסרב, כשאיתי מאיים לכתוב שהוא פחד?","מה נועם יכול לעשות, גם כדי להגן על רון?"],
+     factT:"📱 שווה לדעת",
+     fact:"גם אם נועם מסרב, איתי עלול לשלוח בעצמו. לכן אחרי הסירוב חשוב לפנות למבוגר. ואם סרטון כבר הופץ: לא מעבירים הלאה, ומבקשים ממבוגר לעזור לתעד ולדווח." },
+   models:{
+    1:[["itai","","נו, שלח כבר!"],["noam","מחזיר את הטלפון, בקול רגוע","לא מתאים לי."],["maya","","זה רק בצחוק!"],["noam","באותו טון","לא מתאים לי."],["itai","","אז אני שולח בעצמי ואכתוב שפחדת."],["noam","מתרחק","אני לא בעניין."],["note","","נועם הולך למורה ומספר, כדי לעצור את הסרטון לפני שהוא מגיע לקבוצה."]],
+    2:[["maya","","נו, תשלח, מה כבר יקרה?"],["noam","מחזיר את הטלפון ומתרחק","עזבו, אני לא בעניין."],["maya","","רגע, נו!"],["note","","נועם לא חוזר לוויכוח. הוא ניגש למורה ומספר מה קרה, כדי להגן על רון."]],
+    3:[["itai","","שלח, כולם יצחקו!"],["noam","","עזבו את הסרטון. בואו נצלם את הטריק עם הכדור שהתאמנו עליו."],["noam","פונה לדניאל","דניאל, תצלם אותנו?"],["daniel","מתקרב","כן, יאללה! ואיתי, את הסרטון של רון אל תשלח. הוא לא היה רוצה שיראו."],["note","","ואם איתי ממשיך לאיים לשלוח, נועם ודניאל פונים יחד למבוגר."]]
+   },
+   task:{ tool:1, starter:["itai","ואם אתה לא שולח, אנחנו נשלח ונכתוב שפחדת."], again:["maya","זה רק בצחוק, מה כבר יקרה?"],
+     after:"אחרי הסירוב: מה עוד נועם יכול לעשות כדי להגן על רון?",
+     roles:[["itai","מצלם ולוחץ"],["maya","מעודדת לשלוח"],["noam","מסרב, ופונה למבוגר"],["daniel","יכול להפוך לחבר מגן"]],
+     reflect:["מה עושים אם סרטון מביך כבר נשלח לקבוצה? (לא מעבירים הלאה, ומבקשים ממבוגר עזרה בתיעוד ובדיווח)","למי בבית הספר אפשר לפנות?","איך אפשר לתמוך ברון, גם בהודעה פרטית?"] }
+ }
+ ],
+ feedback:["מה עזר לשמור על הבחירה?","מה אפשר לנסות אחרת?"],
+ learned:[
+  ["❄️","לחץ חברתי מרגיש גם בגוף. זה טבעי, וזה לא אומר שאנחנו חלשים."],
+  ["🛡️","מותר לסרב גם לחבר או לחברה. הם עלולים להתאכזב, ועדיין מותר לשמור על ההחלטה."],
+  ["💬","3 כלים: התקליט השבור, משפט סיום ויציאה מהשיחה, והחלפת פעילות עם חבר מגן."],
+  ["🚶","להתרחק, להצטרף לחבר או לפנות למבוגר: גם אלה בחירות מוצלחות."],
+  ["🎭","גם אם הקול רועד או קשה להסתכל בעיניים, הסירוב נחשב."],
+  ["🙋","פנייה למבוגר היא בקשת עזרה, לא הלשנה."]
+ ],
+ personal:"בפעם הבאה שילחצו עליי, אני יכול/ה…",
+ teacher:{
+ plan:{
+  meta:"כיתות ד'–ו' · 45 דקות · מליאה ועבודה בקבוצות",
+  goals:[
+   "לזהות לחץ חברתי רועש ולחץ חברתי שקט.",
+   "להכיר שלושה כלים לתגובה, וגם דרכים נוספות: להתרחק, להצטרף לחבר, לפנות למבוגר.",
+   "לתרגל תגובה תחת לחץ במשחק תפקידים.",
+   "לדעת שמותר לסרב גם לחבר, ושפנייה למבוגר היא בקשת עזרה ולא הלשנה."
+  ],
+  prep:[
+   "מקרן או לוח חכם, עם האתר פתוח.",
+   "להדפיס: כרטיסי כלים (לתלייה או אחד לכל קבוצה), וכרטיס קבוצה לכל פרק שהקבוצות יעבדו עליו.",
+   "לבחור מראש את הפרק המשותף. לכיתה ד' מומלץ פרק 1 או 3.",
+   "לחלק מראש לקבוצות של 3–4, ולבחור מי משחק את הלוחצים. לא לתת תפקיד לוחץ או נפגע לילד שנמצא כרגע בעמדה כזו בכיתה.",
+   "אם יש בכיתה אירוע פעיל דומה (חרם, סרטון שהופץ), לשקול לבחור פרק אחר ולטפל באירוע בנפרד."
+  ],
+  steps:[
+   ["5","פתיחה והיכרות עם הכלים",[
+     "מסכי הפתיחה: מה זה לחץ חברתי, לחץ רועש ולחץ שקט.",
+     "שאלה לכיתה: 'מתי אפשר להרגיש לחץ שקט?' (דוגמאות כלליות, בלי שמות).",
+     "מסך הכלים: שלושת הכלים, ו'בכל רגע אפשר גם'. להדגיש: גם אם הקול רועד, הסירוב נחשב."]],
+   ["10","סצנה משותפת, קפיאה וניסיונות של הילדים",[
+     "פותחים את הפרק שנבחר. תלמידים קוראים את הדמויות, משפט אחר משפט.",
+     "קפיאה: שואלים את השאלה הראשונה ואחר כך את השנייה. אפשר לפתוח 'שווה לדעת'.",
+     "תורכם: זוגות מנסחים תשובה בדקה. 2–3 זוגות משתפים.",
+     "לא מתקנים את התשובות. שואלים: 'מה עוד אפשר?'"]],
+   ["5","הדגמה ותרגול קצר",[
+     "מציגים את הדוגמה לכלי של הפרק. 'עוד אפשרויות' רק אם עלו בכיתה.",
+     "זוג אחד מתרגל מול הכיתה לפי ארבעת השלבים: משפט לחץ, תגובה, לחץ נוסף, תגובה או יציאה.",
+     "הצופים מחפשים: מה עזר לשמור על הבחירה?"]],
+   ["15","תרגול בקבוצות",[
+     "כל קבוצה מקבלת כרטיס קבוצה לאחד הפרקים האחרים, וכרטיסי כלים.",
+     "הקבוצה עובדת לפי חמשת השלבים בכרטיס, ומחליפה תפקידים לפחות פעם אחת.",
+     "המורה עוברת בין הקבוצות. בפרק 4 לוודא שהקבוצה מגיעה גם לפנייה למבוגר."]],
+   ["7","שיתוף ומשוב",[
+     "כל קבוצה מציגה בקצרה: משפט הלחץ והתגובה שבחרה, או מספרת מה בחרה לעשות.",
+     "שאלות משוב: מה עזר לשמור על הבחירה? מה אפשר לנסות אחרת?",
+     "להדגיש: התרחקות, הצטרפות לחבר ופנייה למבוגר הן הצלחה, לא כישלון."]],
+   ["3","משפט אישי לסיום",[
+     "מסך 'מה למדנו'.",
+     "כל ילד משלים בלב, בעל פה או בדף: 'בפעם הבאה שילחצו עליי, אני יכול/ה…'"]]
+  ],
+  safety:[
+   "מותר לבחור להיות צופה.",
+   "משתמשים בשמות הדמויות, ולא באירועים אישיים מהכיתה.",
+   "בסוף כל סצנה 'יוצאים מהדמות': מנערים ידיים ואומרים את השם האמיתי.",
+   "אם ילד משתף פגיעה אישית: מודים לו, לא מעמיקים מול הכיתה, ומשוחחים איתו אחר כך או מעדכנים את היועצת."
+  ],
+  adapt:[
+   "כיתה ד': המורה קוראת את הסצנה, ופחות קריאה עצמאית בקבוצות. אפשר לעבוד על שני פרקים בלבד.",
+   "כיתה ו': פרק 4 מתאים לשיחה רחבה יותר על קבוצות ורשתות.",
+   "אם הזמן קצר: מוותרים על העבודה בקבוצות, ועושים פרק משותף עם תרגול של כמה זוגות מול הכיתה.",
+   "שיעור המשך: לעבור על הפרקים שלא תורגלו, עם החלפת תפקידים."
+  ]
+ },
+  how:[
+   "מקרינים על הלוח. אפשר להתחיל בפתיחה, או לבחור פרק ישירות מתפריט הפרקים (📚 בפינה).",
+   "בסצנה: ▶ המשך (או רווח / חיצים) חושף משפט אחר משפט. המשפט הנוכחי מודגש.",
+   "בכל פרק: סצנה ← ❄️ קפיאה ← 🗣️ תורכם (ניסוח בזוגות) ← 👀 דוגמה ← 🎭 תרגול ← 💬 משוב.",
+   "חשוב: נותנים לילדים לנסות תשובה לפני שמציגים את הדוגמה.",
+   "בכל פרק מוצגת דוגמה לכלי אחד. את שני האחרים אפשר לפתוח ב'עוד אפשרויות', אבל אין צורך לעבור על כולם.",
+   "לפני משחק התפקידים: מותר לבחור להיות צופה; משתמשים בשמות הדמויות ולא באירועים מהכיתה; בסוף 'יוצאים מהדמות'.",
+   "בשיעור של 45 דקות: פרק אחד בהדגמה משותפת, ושלושת האחרים בקבוצות."
+  ],
+  flow:[
+   ["5","פתיחה והיכרות קצרה עם הכלים"],
+   ["10","סצנה משותפת, קפיאה וניסיונות של הילדים"],
+   ["5","הדגמה ותרגול קצר"],
+   ["15","תרגול בקבוצות (פרקים אחרים) והחלפת תפקידים"],
+   ["7","שיתוף ומשוב"],
+   ["3","משפט אישי לסיום"]
+  ],
+  why:["אפשר לשאול: 'למה לדעתכם איתי ומאיה לוחצים?' ולאסוף כמה אפשרויות.","לפעמים רוצים להשתייך או להצחיק, ולפעמים להשיג משהו או לשלוט במצב.","אפשר להבין את הסיבה ועדיין לעצור את הפגיעה."],
+  body:{
+   help:["משפט קצר, בלי הסברים מיותרים","עמידה יציבה, אם זה נוח","קשר עין יכול לעזור לחלק מהילדים, אבל הוא לא חובה","להתרחק, להצטרף לחבר, לפנות למבוגר"],
+   tangle:["ויכוח ארוך","הרבה הסברים והצדקות","להישאר מול הלחץ עד שהאחר יוותר"],
+   hurt:["צעקות או איומים","עלבונות ולעג","דחיפות"]
+  },
+  research:[
+   "ההסבר לילדים מצומצם בכוונה: 'כשאנחנו חוששים להישאר בחוץ, הגוף יכול להיכנס למתח. זה מסביר למה קשה לסרב.'",
+   "משחק המסירות (Cyberball, Eisenberger ועמיתים, 2003): הדרה במשחק מחשב פשוט עוררה מצוקה, ונמצאה חפיפה מסוימת בפעילות מוחית עם אזורים שקשורים לכאב. חפיפה אינה מוכיחה שכאב חברתי וכאב גופני הם אותו תהליך, ולכן לא כדאי להציג זאת כך לילדים.",
+   "השפעת נוכחות חברים (Chein ועמיתים, 2011): מתבגרים לקחו יותר סיכונים במשחק נהיגה כשידעו שחברים צופים בהם, ונמדדה יותר פעילות באזורים הקשורים לתגמול.",
+   "עקרונות SAFE (CASEL) – רציף, אקטיבי, ממוקד ומפורש – שימשו כעיקרון תכנון. המערך עצמו לא נבדק מחקרית."
+  ]
+ }
+};
+
+(function(){
+"use strict";
+var P=window.PP, $=function(id){return document.getElementById(id)};
+var de=document.documentElement, Z=1;
+de.setAttribute("dir","rtl"); de.setAttribute("lang","he");
+/* ---------- desktop auto-zoom + height ---------- */
+function sizeUp(){
+  var w=innerWidth,h=innerHeight;
+  if(w>=900){ Z=Math.min(w/600,h/680,1.8); de.style.zoom=Z; de.classList.add("wide"); }
+  else { Z=1; de.style.zoom=""; de.classList.remove("wide"); }
+  de.style.setProperty("--H",(h/Z)+"px");
+  de.classList.toggle("short",(h/Z)<640);
+  sizeCv(); queueFit();
+}
+/* ---------- confetti ---------- */
+var CV=$("fx"),CX=CV.getContext("2d"),parts=[],raf=0,COLS=["#2f6fb5","#ffc94a","#5fbf95","#ffffff","#8fc3ee"];
+var RM=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+function sizeCv(){var d=window.devicePixelRatio||1;CV.width=innerWidth*d;CV.height=innerHeight*d;CX.setTransform(d,0,0,d,0,0);}
+function confetti(n){ if(RM)return; for(var k=0;k<n;k++)parts.push({x:innerWidth*(.1+Math.random()*.8),y:innerHeight*.25,vx:(Math.random()-.5)*10,vy:-Math.random()*10-3,r:4+Math.random()*6,c:COLS[k%COLS.length],a:Math.random()*6,va:(Math.random()-.5)*.3,life:0}); if(!raf)raf=requestAnimationFrame(tick); }
+function tick(){ CX.clearRect(0,0,innerWidth,innerHeight); parts=parts.filter(function(p){return p.life<200&&p.y<innerHeight+30});
+  parts.forEach(function(p){p.life++;p.vy+=.22;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;CX.save();CX.translate(p.x,p.y);CX.rotate(p.a);CX.fillStyle=p.c;CX.fillRect(-p.r,-p.r/2,p.r*2,p.r);CX.restore();});
+  raf=parts.length?requestAnimationFrame(tick):0; if(!raf)CX.clearRect(0,0,innerWidth,innerHeight); }
+/* ---------- helpers ---------- */
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function av(id){var c=P.cast[id];return '<span class="av" style="background:'+c.c+'" aria-hidden="true">'+c.n.charAt(0)+'</span>'}
+var ALLY={daniel:1,shira:1};
+function female(id){return id==="noa"||id==="maya"||id==="shira"||id==="tamar"}
+function g(id,m,f){return female(id)?f:m}
+function bubble(l,hero,cls){var id=l[0];
+  if(id==="note")return '<div class="note-step">➜ '+esc(l[2])+'</div>';
+  var c=P.cast[id],end=(id===hero||ALLY[id]||(hero==="noa"&&id==="tamar"&&cls==="mb"));
+  return '<div class="bub'+(end?' end':'')+(cls?' '+cls:'')+'">'+av(id)+'<div class="bw"><div class="who" style="color:'+c.c+'">'+c.n+(l[1]?' <span class="how">('+esc(l[1])+')</span>':'')+'</div><div class="say'+(id===hero&&cls==="mb"?' strong':'')+'">'+esc(l[2])+'</div></div></div>'}
+function alwaysHTML(title){return '<div class="always-t">'+(title||'בכל רגע אפשר גם:')+'</div><div class="always-row">'+P.always.map(function(a){return '<span>'+a[0]+' '+a[1]+'</span>'}).join("")+'</div><div class="always-s">אלה בחירות מוצלחות בפני עצמן.</div>'}
+function btn(label,cls,fn,id){return {label:label,cls:cls||"",fn:fn,id:id}}
+/* ---------- state ---------- */
+var S={scr:"start",ep:0,line:0,seen:{},tool:0,open:{},tab:0,from:null,st:0,timer:0};
+var SCREENS=["start","stage","intro","menu","scene","freeze","try","tools","task","feedback","learned","reward","teacher"];
+var STEPN=[["scene","סצנה"],["freeze","קפיאה"],["try","תורכם"],["tools","דוגמה"],["task","תרגול"],["feedback","משוב"]];
+function show(name){
+  stopTimer();
+  S.scr=name;
+  SCREENS.forEach(function(s){$("s-"+s).hidden=(s!==name)});
+  var epScr=STEPN.map(function(x){return x[0]}).indexOf(name)>=0;
+  $("top").hidden=(name==="start");
+  document.body.classList.toggle("has-top",name!=="start");
+  if(epScr){var e=P.episodes[S.ep];$("epChip").textContent="פרק "+e.num+" · "+e.title;
+    var idx=STEPN.map(function(x){return x[0]}).indexOf(name);
+    $("steps").innerHTML=STEPN.map(function(x,i){return '<span class="'+(i===idx?'on':(i<idx?'done':''))+'">'+x[1]+'</span>'}).join("");
+  } else { $("epChip").textContent={stage:"פתיחה · "+(S.st+1)+" מתוך 3",intro:"פתיחה · הכלים",menu:"בחירת פרק",learned:"סיכום",reward:"סיום",teacher:"מדריך למורה"}[name]||""; $("steps").innerHTML=""; }
+  render[name]();
+  queueFit(); setTimeout(queueFit,80);
+}
+function setBar(list){var b=$("barIn");b.innerHTML="";S.primary=null;
+  list.forEach(function(x){var el=document.createElement("button");el.className="btn "+x.cls;el.innerHTML=x.label;if(x.id)el.id=x.id;
+    el.addEventListener("click",function(ev){ev.preventDefault();x.fn()});b.appendChild(el); if(/primary|ice|sun/.test(x.cls)&&!/back/.test(x.cls))S.primary=x.fn;});
+  $("bar").hidden=!list.length; }
+var BACK="→ חזרה";
+function stopTimer(){if(S.timer){clearInterval(S.timer);S.timer=0;}}
+var render={
+ start:function(){setBar([]);},
+ stage:function(){
+   var t=P.intro[S.st],last=S.st>=P.intro.length-1;
+   $("stImg").src=t.img; $("stImg").alt=t.alt;
+   $("stDots").innerHTML=P.intro.map(function(x,i){return '<span class="'+(i===S.st?'on':(i<S.st?'done':''))+'"></span>'}).join("");
+   $("stTitle").textContent=t.title; $("stText").textContent=t.text;
+   $("stSay").hidden=!t.say; if(t.say){var c=P.cast[t.say[0]];$("stSay").innerHTML='<span class="who" style="color:'+c.c+'">'+c.n+':</span> "'+esc(t.say[1])+'"';}
+   $("stTease").hidden=!t.tease; if(t.tease)$("stTease").textContent=t.tease;
+   setBar([btn(BACK,"back",back,"b-back"),btn(last?"לכלים ▶":"המשך ▶","primary",function(){if(last)show("intro");else{S.st++;show("stage")}},"b-stage")]);
+ },
+ intro:function(){
+   $("introTools").innerHTML=P.tools.map(function(t){return '<div class="tool"><div class="ti">'+t.ic+'</div><div><div class="tn">'+t.name+'</div><div class="tl">"'+esc(t.line)+'"</div><div class="ts">'+esc(t.short)+'</div></div></div>'}).join("");
+   $("introAlways").innerHTML=alwaysHTML();
+   $("introShaky").textContent=P.shaky;
+   setBar([btn(BACK,"back",function(){S.st=P.intro.length-1;show("stage")},"b-back"),btn("לבחירת פרק ▶","primary",function(){show("menu")},"b-next")]);
+ },
+ menu:function(){
+   $("eps").innerHTML=P.episodes.map(function(e,i){var tl=P.tools[e.task.tool-1];return '<button class="epc'+(S.done&&S.done[i]?' done':'')+'" data-i="'+i+'" id="ep'+i+'"><img src="'+e.img+'" alt="" width="1024" height="576"><span class="epn">פרק '+e.num+'</span><span class="ept">'+e.title+'</span><span class="eptool">'+tl.ic+' '+tl.name+'</span></button>'}).join("");
+   Array.prototype.forEach.call($("eps").children,function(b){b.addEventListener("click",function(){startEp(+b.dataset.i)})});
+   setBar([btn("🏠 לפתיחה","back",function(){show("start")},"b-back"),btn("לסיכום ✨","sun",function(){show("learned")},"b-sum")]);
+ },
+ scene:function(){
+   var e=P.episodes[S.ep]; $("sceneImg").src=e.img; $("sceneImg").alt=e.title; $("sceneTitle").textContent="פרק "+e.num+": "+e.title;
+   var h='<div class="place">🎬 '+esc(e.place)+'</div>';
+   for(var i=0;i<S.line;i++)h+=bubble(e.lines[i],e.hero,i===S.line-1?"now":"past");
+   $("bubbles").innerHTML=h;
+   var done=S.line>=e.lines.length;
+   setBar([btn(BACK,"back",back,"b-back"), done?btn("❄️ קפיאה!","ice",function(){S.fact=false;show("freeze")},"b-freeze"):btn(S.line===0?"מה קורה? ▶":"המשך ▶","primary",nextLine,"b-line")]);
+ },
+ freeze:function(){
+   var e=P.episodes[S.ep],f=e.freeze;$("fzImg").src=(f.img||e.img);
+   var lis=f.q.map(function(q,i){return '<li class="'+(i<=S.q?'':'later')+'">'+esc(q)+'</li>'}).join("");
+   $("fzQ").innerHTML=lis;
+   $("b-fact").textContent=f.factT;
+   $("b-fact").hidden=!!S.fact; $("fzFact").hidden=!S.fact;
+   $("fzFact").textContent=f.fact;
+   var moreQ=S.q<f.q.length-1;
+   setBar([btn(BACK,"back",back,"b-back"),moreQ?btn("השאלה הבאה ▶","ice",function(){S.q++;render.freeze();queueFit()},"b-q"):btn("🗣️ תורכם ▶","primary",function(){show("try")},"b-try")]);
+ },
+ try:function(){
+   var e=P.episodes[S.ep],h=e.hero,last=e.lines[e.lines.length-1],c=P.cast[last[0]];
+   $("tryTitle").textContent="תורכם!";
+   $("tryText").innerHTML='בזוגות: מה '+P.cast[h].n+' '+g(h,'יכול','יכולה')+' להגיד או לעשות עכשיו? <b>נסחו תשובה אחת.</b>';
+   $("tryLine").innerHTML=av(last[0])+'<span><b style="color:'+c.c+'">'+c.n+':</b> "'+esc(last[2])+'"</span>';
+   $("tryAlways").innerHTML=alwaysHTML('ואפשר גם לבחור:');
+   $("b-timer").textContent="⏱️ דקה לחשוב";
+   setBar([btn(BACK,"back",back,"b-back"),btn("👀 נראה דוגמה","primary",function(){S.tool=e.task.tool;S.open={};show("tools")},"b-model")]);
+ },
+ tools:function(){
+   var e=P.episodes[S.ep],hero=P.cast[e.hero],main=e.task.tool;
+   (S.seen[S.ep]=S.seen[S.ep]||{})[S.tool]=1;
+   var tl=P.tools[S.tool-1];
+   $("toolsTitle").innerHTML="דוגמה: "+tl.ic+" "+tl.name+(S.tool===main?' <span class="star">⭐ הכלי של הפרק</span>':'');
+   $("model").innerHTML='<div class="principle">'+esc(tl.short)+'</div>'+e.models[S.tool].map(function(l){return bubble(l,e.hero,"mb")}).join("");
+   var others=P.tools.filter(function(x){return x.id!==S.tool});
+   var seen=S.seen[S.ep];
+   $("more").innerHTML='<span class="more-t">עוד אפשרויות:</span>'+others.map(function(x){return '<button class="mo" data-t="'+x.id+'" id="mo'+x.id+'">'+x.ic+' '+x.name+(seen[x.id]?' <span class="seen">✓ צפינו בדוגמה</span>':'')+'</button>'}).join("");
+   Array.prototype.forEach.call($("more").querySelectorAll(".mo"),function(b){b.addEventListener("click",function(){S.tool=+b.dataset.t;render.tools();queueFit()})});
+   setBar([btn(BACK,"back",back,"b-back"),btn("🎭 לתרגול","sun",function(){show("task")},"b-task")]);
+ },
+ task:function(){
+   var e=P.episodes[S.ep],k=e.task,tl=P.tools[k.tool-1],h=e.hero,hn=P.cast[h].n;
+   var st=function(l){return '<b>'+P.cast[l[0]].n+':</b> "'+esc(l[1])+'"'};
+   var html='<span class="tag">🎭 משחק תפקידים</span>'+
+    '<div class="safe">✋ מותר לבחור להיות צופה · משתמשים בשמות הדמויות, לא באירועים מהכיתה · בסוף יוצאים מהדמות</div>'+
+    '<div class="tc-row"><div class="tc-k">מי משחק?</div><div class="tc-v roles">'+k.roles.map(function(r){return '<span class="role">'+av(r[0])+'<b>'+P.cast[r[0]].n+'</b> – '+esc(r[1])+'</span>'}).join("")+'</div></div>'+
+    '<div class="tc-row"><div class="tc-k">המשימה</div><div class="tc-v"><ol class="seq">'+
+      '<li><span>משפט לחץ</span>'+st(k.starter)+'</li>'+
+      '<li><span>תגובה</span>'+hn+' '+g(h,'מגיב','מגיבה')+' – למשל ב'+tl.ic+' '+tl.name+', או בכל דרך אחרת</li>'+
+      '<li><span>לחץ נוסף</span>'+st(k.again)+'</li>'+
+      '<li><span>תגובה או יציאה</span>'+hn+' '+g(h,'חוזר על הסירוב, מתרחק, מצטרף לחבר או פונה','חוזרת על הסירוב, מתרחקת, מצטרפת לחברה או פונה')+' למבוגר</li>'+
+      (k.after?'<li class="after"><span>ואחרי זה</span>'+esc(k.after)+'</li>':'')+
+    '</ol></div></div>';
+   $("taskCard").innerHTML=html;
+   setBar([btn(BACK,"back",back,"b-back"),btn("💬 למשוב","primary",function(){show("feedback")},"b-fb")]);
+ },
+ feedback:function(){
+   $("fbQ").innerHTML=P.feedback.map(function(q){return '<li>'+esc(q)+'</li>'}).join("");
+   $("fbShaky").textContent=P.shaky;
+   (S.done=S.done||{})[S.ep]=1;
+   setBar([btn(BACK,"back",back,"b-back"),btn("📚 לפרק אחר","primary",function(){show("menu")},"b-menu"),btn("לסיכום ✨","sun",function(){show("learned")},"b-sum")]);
+ },
+ learned:function(){
+   $("learned").innerHTML=P.learned.map(function(l,i){return '<li style="animation-delay:'+(i*.1)+'s"><span>'+l[0]+'</span>'+esc(l[1])+'</li>'}).join("");
+   $("personal").innerHTML='<b>✍️ משפט אישי לסיום:</b> "'+esc(P.personal)+'"';
+   setBar([btn(BACK,"back",function(){show("menu")},"b-back"),btn("🎉 סיימנו!","sun",function(){show("reward");confetti(160);setTimeout(function(){confetti(90)},700)},"b-done")]);
+ },
+ reward:function(){
+   setBar([btn("🔁 מההתחלה","",function(){S.seen={};S.done={};show("start")},"b-again"),btn("📚 לפרקים","primary",function(){show("menu")},"b-menu2")]);
+ },
+ teacher:function(){
+   var T=P.teacher,tabs=["מערך השיעור","איך משתמשים","מהלך השיעור","למה לוחצים?","שפת גוף","שאלות לפי פרק","רקע מחקרי"];
+   $("tTabs").innerHTML=tabs.map(function(t,i){return '<button class="tab'+(i===S.tab?' on':'')+'" data-i="'+i+'" id="tab'+i+'" role="tab">'+t+'</button>'}).join("");
+   Array.prototype.forEach.call($("tTabs").children,function(b){b.addEventListener("click",function(){S.tab=+b.dataset.i;render.teacher();queueFit()})});
+   var h="",li=function(x){return "<li>"+esc(x)+"</li>"};
+   if(S.tab===0){var L=T.plan;h='<h3>מערך השיעור: מבחן ההפסקה הגדולה</h3><p class="pl-meta">'+esc(L.meta)+'</p>'+
+    '<h4>🎯 מטרות</h4><ul>'+L.goals.map(li).join("")+'</ul>'+
+    '<h4>🧰 הכנה מראש</h4><ul>'+L.prep.map(li).join("")+'</ul>'+
+    '<h4>⏱️ מהלך השיעור</h4><div class="pl-steps">'+L.steps.map(function(x,i){return '<div class="pl-step"><div class="pl-h"><span class="min">'+x[0]+' דק\'</span><b>'+(i+1)+". "+esc(x[1])+'</b></div><ul>'+x[2].map(li).join("")+'</ul></div>'}).join("")+'</div>'+
+    '<h4>✋ כללי בטיחות</h4><ul>'+L.safety.map(li).join("")+'</ul>'+
+    '<h4>🔧 התאמות</h4><ul>'+L.adapt.map(li).join("")+'</ul>';}
+   if(S.tab===1)h='<h3>איך משתמשים</h3><ol>'+T.how.map(li).join("")+'</ol>';
+   if(S.tab===2)h='<h3>מהלך השיעור (45 דקות)</h3><ul class="flow">'+T.flow.map(function(x){return '<li><span class="min">'+x[0]+' דק\'</span>'+esc(x[1])+'</li>'}).join("")+'</ul>';
+   if(S.tab===3)h='<h3>למה איתי ומאיה לוחצים?</h3><ul>'+T.why.map(li).join("")+'</ul>';
+   if(S.tab===4)h='<h3>שפת גוף ודרכי תגובה</h3><div class="three"><div class="yes"><h4>✅ עוזר</h4><ul>'+T.body.help.map(li).join("")+'</ul></div><div class="mid"><h4>🌀 עלול לסבך את השיחה</h4><ul>'+T.body.tangle.map(li).join("")+'</ul></div><div class="no"><h4>✋ תוקפני</h4><ul>'+T.body.hurt.map(li).join("")+'</ul></div></div><p class="note-t">'+esc(P.shaky)+'</p>';
+   if(S.tab===5)h='<h3>שאלות הרחבה לפי פרק</h3>'+P.episodes.map(function(e){return '<h4>פרק '+e.num+': '+e.title+'</h4><ul>'+e.task.reflect.map(li).join("")+'</ul>'}).join("");
+   if(S.tab===6)h='<h3>רקע מחקרי (למורה בלבד)</h3><ul>'+T.research.map(li).join("")+'</ul>';
+   $("tPanel").innerHTML=h;
+   setBar([btn(BACK,"primary",function(){show(S.from||"start")},"b-tback")]);
+ }
+};
+function startEp(i){S.ep=i;S.line=0;S.fact=false;S.q=0;S.tool=0;show("scene")}
+function nextLine(){var e=P.episodes[S.ep];if(S.line<e.lines.length){S.line++;render.scene();queueFit();}}
+function back(){var s=S.scr,e=P.episodes[S.ep];
+  if(s==="scene"){ if(S.line>0){S.line--;render.scene();queueFit();} else show("menu"); }
+  else if(s==="freeze"){S.line=e.lines.length;show("scene")}
+  else if(s==="try")show("freeze");
+  else if(s==="tools")show("try");
+  else if(s==="task"){S.tool=e.task.tool;show("tools")}
+  else if(s==="feedback")show("task");
+  else if(s==="intro"){S.st=P.intro.length-1;show("stage")}
+  else if(s==="stage"){ if(S.st>0){S.st--;show("stage")} else show("start"); }
+}
+function openTeacher(){S.from=(S.scr==="teacher"?S.from:S.scr);S.tab=S.tab||0;show("teacher")}
+$("b-start").addEventListener("click",function(){S.st=0;show("stage")});
+$("b-pick").addEventListener("click",function(){show("menu")});
+$("b-eps").addEventListener("click",function(){show("menu")});
+$("b-teacher").addEventListener("click",openTeacher);
+$("b-plan").addEventListener("click",function(){S.tab=0;openTeacher()});
+$("b-guide").addEventListener("click",openTeacher);
+$("b-home").addEventListener("click",function(){show("start")});
+$("b-fact").addEventListener("click",function(){S.fact=true;render.freeze();queueFit()});
+$("b-timer").addEventListener("click",function(){
+  var b=$("b-timer"),n=60; stopTimer(); b.textContent="⏱️ 1:00";
+  S.timer=setInterval(function(){n--; if(n<=0){stopTimer();b.textContent="⏱️ הזמן נגמר – מי רוצה לשתף?";return}
+    b.textContent="⏱️ 0:"+(n<10?"0":"")+n;},1000);
+});
+/* keyboard: space / arrows / enter advance */
+addEventListener("keydown",function(ev){
+  var k=ev.key; if(["ArrowLeft","ArrowRight","ArrowDown","ArrowUp"," ","Spacebar","Enter","PageDown"].indexOf(k)<0)return;
+  if(ev.target&&ev.target.tagName==="BUTTON"&&(k==="Enter"||k===" "))return;
+  ev.preventDefault();
+  if(S.scr==="start"){S.st=0;show("stage");return}
+  if(S.scr==="scene"){var e=P.episodes[S.ep];if(S.line<e.lines.length){nextLine();return}}
+  if(S.primary)S.primary();
+});
+/* ---------- fit: shrink text a little if a screen would overflow ---------- */
+var fr=0;function queueFit(){if(fr)return;fr=requestAnimationFrame(function(){fr=0;fit()})}
+function over(el){ if(el.classList.contains("model")){var f=el.firstElementChild,l=el.lastElementChild;if(!f)return false;var r=el.getBoundingClientRect();return f.getBoundingClientRect().top<r.top-1||l.getBoundingClientRect().bottom>r.bottom+1;}
+  if(el.classList.contains("screen")){var r2=el.getBoundingClientRect(),m=0;Array.prototype.forEach.call(el.children,function(c){if(c.classList.contains("frost"))return;var b=c.getBoundingClientRect();if(b.height)m=Math.max(m,b.bottom)});return m>r2.bottom+1||el.scrollHeight>el.clientHeight+40;}
+  return el.scrollHeight>el.clientHeight+1}
+function fit(){var scr=$("s-"+S.scr);if(!scr)return;var k=1;scr.style.setProperty("--k",1);scr.style.fontSize="";
+  var inner=scr.querySelectorAll(".model");
+  function bad(){if(over(scr))return true;for(var i=0;i<inner.length;i++)if(over(inner[i]))return true;return false}
+  while(bad()&&k>0.66){k-=0.04;scr.style.fontSize=k+"em";scr.style.setProperty("--k",k);}
+  window.__fit={id:scr.id,k:+k.toFixed(2),zoom:Z};
+}
+addEventListener("resize",sizeUp);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(queueFit);
+sizeUp(); show("start");
+window.__S=S;
+})();
+
+</script>
+
+<script src="../brand.js" data-into="#s-start .start-card" defer></script>
+</body>
+</html>
