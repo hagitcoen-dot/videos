@@ -24,7 +24,7 @@
   var CANPRINT = (function () { try { return window.self === window.top; } catch (e) { return false; } })();
   var SAVEHINT = '<p class="center sub mt noprint">📸 כדי לשמור, צלמו מסך' + (CANPRINT ? " או הדפיסו" : "") + ".</p>";
 
-  var GUIDE = "kit/guide_big.svg";
+  var GUIDE = "kit/guide.webp";
 
   function coach(text) { return '<div class="coach"><img class="guide" src="' + GUIDE + '" alt="יהלומי"><p>' + text + '</p></div>'; }
   function card(i, opt) {
@@ -59,7 +59,7 @@
 
   /* ---------- תחנות ---------- */
   var ST = [
-    { icon: '<img class="st-ic" src="kit/guide_big.svg" alt="">', name: "מה זו חוזקה?", place: "נכון או לא נכון", run: stFacts },
+    { icon: '<img class="st-ic" src="kit/guide.webp" alt="">', name: "מה זו חוזקה?", place: "נכון או לא נכון", run: stFacts },
     { icon: '<img class="st-ic" src="kit/memory.svg" alt="">', name: "זיכרון החוזקות", place: "משחק זיכרון", run: stMemory },
     { icon: '<img class="st-ic" src="kit/detective.svg" alt="">', name: "בלשי החוזקות", place: "איזו חוזקה יש פה?", run: stDetect },
     { icon: '<img class="st-ic" src="kit/quartets.svg" alt="">', name: "חוזקות לעזרה", place: "איזו חוזקה תעזור?", run: stHelp },
