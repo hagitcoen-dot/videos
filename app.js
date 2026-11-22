@@ -28,8 +28,8 @@
     load("data/featured.json", { items: [] }),
     load("data/audience.json", { videos: {} }),
   ]);
-  // קהל יעד: ילדים / נוער / מבוגרים (data/audience.json, ובמשחקים audience או age)
-  const AUD = ["ילדים", "נוער", "מבוגרים"];
+  // קהל יעד: ילדים / נוער / מבוגרים / צוותים (צוותי חינוך וטיפול) (data/audience.json, ובמשחקים audience או age)
+  const AUD = ["ילדים", "נוער", "מבוגרים", "צוותים"];
   try { state.aud = localStorage.getItem("aud") || "all"; } catch { state.aud = "all"; }
   if (state.aud !== "all" && !AUD.includes(state.aud)) state.aud = "all";
   const audOk = (list) => state.aud === "all" || list.includes(state.aud);
