@@ -1,0 +1,77 @@
+/* fun.css: שכבת כיף משותפת */
+.fun-confetti{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:9999}
+.fun-float{position:fixed;z-index:9998;pointer-events:none;transform:translate(-50%,-50%);font-weight:800;font-size:26px;color:#ffd23f;
+  text-shadow:0 2px 0 #b8325a,0 0 12px rgba(255,210,63,.8);animation:funFloat 1.25s ease-out forwards;white-space:nowrap;font-family:inherit;direction:ltr;unicode-bidi:isolate}
+.fun-float.bad{direction:rtl;color:#fff;text-shadow:0 2px 0 #6b44ad;font-size:20px}
+@keyframes funFloat{0%{opacity:0;transform:translate(-50%,-30%) scale(.6)}15%{opacity:1;transform:translate(-50%,-60%) scale(1.15)}100%{opacity:0;transform:translate(-50%,-260%) scale(1)}}
+.fun-banner{position:fixed;left:50%;top:38%;z-index:9998;pointer-events:none;transform:translate(-50%,-50%);font-weight:800;font-size:clamp(30px,9vw,54px);
+  color:#fff;background:linear-gradient(135deg,#ff5d8f,#ff9f43);padding:14px 28px;border-radius:24px;box-shadow:0 14px 40px rgba(0,0,0,.3);
+  animation:funBanner 1.45s cubic-bezier(.2,1.4,.4,1) forwards;white-space:nowrap;font-family:inherit}
+@keyframes funBanner{0%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(-8deg)}20%{opacity:1;transform:translate(-50%,-50%) scale(1.1) rotate(3deg)}35%{transform:translate(-50%,-50%) scale(1) rotate(0)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-80%) scale(.9)}}
+.fun-shake{animation:funShake .45s ease}
+@keyframes funShake{20%{transform:translateX(-9px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(4px)}}
+.fun-bounce{animation:funBounce .6s cubic-bezier(.2,1.6,.4,1)}
+@keyframes funBounce{0%{transform:scale(1)}30%{transform:scale(1.18) rotate(-4deg)}60%{transform:scale(.95) rotate(2deg)}100%{transform:scale(1)}}
+.fun-stars{display:flex;justify-content:center;gap:10px;font-size:52px;margin:6px 0 10px}
+.fun-stars span{opacity:0;animation:funStarIn .55s cubic-bezier(.2,1.6,.4,1) forwards;display:inline-block}
+.fun-stars span.off{filter:grayscale(1) opacity(.35)}
+@keyframes funStarIn{0%{opacity:0;transform:scale(0) rotate(-120deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
+.combo-pill{background:linear-gradient(135deg,#ff9f43,#ff5d8f)!important;border-color:#fff!important;color:#fff;animation:funBounce .5s}
+
+/* ---- מפה ---- */
+.fun-map{background:rgba(255,250,244,.95);border-radius:26px;padding:18px 14px 16px;box-shadow:0 20px 50px rgba(40,20,80,.28);color:#2e2350}
+.fun-map-head{display:flex;gap:12px;align-items:center;margin-bottom:6px}
+.fun-map-head h2{margin:0 0 4px;font-size:22px}
+.fun-map-head p{margin:0;font-size:15px;line-height:1.5;color:#5d5384}
+.fun-map-guide{width:64px;height:64px;flex:none;animation:funFloatY 3s ease-in-out infinite}
+@keyframes funFloatY{50%{transform:translateY(-6px)}}
+.fun-map-board{position:relative;margin:4px 0;border-radius:20px;overflow:hidden;
+  background:radial-gradient(circle at 20% 15%,rgba(255,255,255,.7) 0 8%,transparent 9%),radial-gradient(circle at 85% 55%,rgba(255,255,255,.6) 0 6%,transparent 7%),
+  linear-gradient(180deg,#d9f4ff 0%,#e9fbe8 45%,#fff3d6 100%)}
+.fun-map-path{position:absolute;inset:0;width:100%;height:100%}
+.fun-map-path path{fill:none;stroke:#c9a46a;stroke-width:9;stroke-linecap:round;vector-effect:non-scaling-stroke;opacity:.55}
+.fun-map-path path{stroke-dasharray:2 16}
+.fun-node{position:absolute;transform:translate(50%,-50%);display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:0;
+  cursor:pointer;font-family:inherit;color:#2e2350;padding:0;width:140px}
+.fun-node-ball{width:74px;height:74px;border-radius:50%;display:grid;place-items:center;font-size:36px;background:#fff;
+  box-shadow:0 6px 0 #c9b9e8,0 10px 20px rgba(60,30,100,.2);border:4px solid #fff;transition:transform .2s}
+.fun-node:active .fun-node-ball{transform:scale(.92)}
+.fun-node.open .fun-node-ball{background:linear-gradient(135deg,#ffe27a,#ffb347);box-shadow:0 6px 0 #d98b1c,0 10px 22px rgba(255,160,40,.45)}
+.fun-node.done .fun-node-ball{background:linear-gradient(135deg,#7be0b0,#2fa874);box-shadow:0 6px 0 #1f7a53,0 10px 20px rgba(40,160,110,.35)}
+.fun-node.locked .fun-node-ball{background:#e7e3ef;filter:grayscale(.6);box-shadow:0 6px 0 #c3bdd2;font-size:28px}
+.fun-node.current .fun-node-ball{animation:funPulse 1.4s ease-in-out infinite}
+@keyframes funPulse{0%,100%{transform:scale(1);box-shadow:0 6px 0 #d98b1c,0 0 0 0 rgba(255,180,70,.7)}50%{transform:scale(1.08);box-shadow:0 6px 0 #d98b1c,0 0 0 14px rgba(255,180,70,0)}}
+.fun-node.unlocking .fun-node-ball{animation:funUnlock 1s cubic-bezier(.2,1.6,.4,1)}
+@keyframes funUnlock{0%{transform:scale(.4) rotate(-30deg);filter:grayscale(1)}60%{transform:scale(1.25) rotate(8deg)}100%{transform:scale(1)}}
+.fun-node-name{font-weight:700;font-size:14px;background:rgba(255,255,255,.92);padding:3px 10px;border-radius:12px;line-height:1.25;text-align:center}
+.fun-node-name small{display:block;font-weight:500;font-size:11.5px;color:#5d5384}
+.fun-node-stars{font-size:15px;letter-spacing:1px}
+.fun-node-stars i{font-style:normal;color:#d8d2e6}
+.fun-node-stars i.on{color:#ffb800;text-shadow:0 1px 0 #b07d00}
+.fun-node.locked .fun-node-stars{visibility:hidden}
+.fun-node.final .fun-node-ball{width:88px;height:88px;font-size:44px}
+.fun-map-total{text-align:center;font-weight:800;font-size:18px;margin-top:8px}
+
+/* ---- תעודה ---- */
+.fun-cert{background:#fffdf6;border-radius:22px;padding:22px 18px;text-align:center;color:#2e2350;
+  border:6px double #e0b04a;box-shadow:0 20px 50px rgba(40,20,80,.3);position:relative;animation:funBounce .8s}
+.fun-cert-ribbon{display:inline-block;background:linear-gradient(135deg,#ff5d8f,#a77bff);color:#fff;font-weight:800;padding:6px 18px;border-radius:999px;font-size:17px}
+.fun-cert-chars{display:flex;justify-content:center;gap:6px;margin:10px 0 2px}
+.fun-cert-chars img{width:70px;height:70px;animation:funFloatY 3s ease-in-out infinite}
+.fun-cert-chars img:nth-child(2){animation-delay:.5s}.fun-cert-chars img:nth-child(3){animation-delay:1s}
+.fun-cert h2{margin:6px 0;font-size:24px}
+.fun-cert-name{display:flex;flex-direction:column;gap:4px;align-items:center;margin:8px 0;font-weight:600}
+.fun-cert-name input{font:inherit;font-size:24px;font-weight:800;text-align:center;border:0;border-bottom:3px dashed #e0b04a;background:transparent;
+  color:#b8325a;width:min(260px,90%);padding:4px}
+.fun-cert-line{font-size:16px;line-height:1.55;margin:6px 0}
+.fun-cert-skill{font-weight:800;font-size:18px;background:#fff3c8;border-radius:14px;padding:10px;margin:8px 0}
+.fun-cert-stars{font-size:22px;font-weight:800}
+.fun-cert-credit{font-size:12px;color:#8a80a8;margin:8px 0 0}
+.fun-cert-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}
+@media print{
+  body *{visibility:hidden!important}
+  .fun-cert,.fun-cert *{visibility:visible!important}
+  .fun-cert{position:fixed;inset:20px;box-shadow:none;animation:none}
+  .fun-confetti{display:none}
+}
+@media (prefers-reduced-motion:reduce){.fun-node.current .fun-node-ball,.fun-map-guide,.fun-cert-chars img{animation:none}}
