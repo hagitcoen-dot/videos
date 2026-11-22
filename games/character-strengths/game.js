@@ -1,4 +1,4 @@
-/* ציידי החוזקות: לוגיקת המשחק */
+/* אספני החוזקות: לוגיקת המשחק */
 (function () {
   "use strict";
   var D = window.DATA, S = D.S, FAM = D.FAM;
@@ -90,7 +90,7 @@
     var picks = [0, 6, 10, 18, 23];
     app.innerHTML = '<div class="hero">' +
       '<div class="fan">' + picks.map(function (i, k) { var r = (k - 2) * 14; return '<img src="' + S[i].img + '" alt="" style="transform:translateX(calc(-50% + ' + ((k - 2) * -34) + 'px)) rotate(' + (-r) + 'deg);animation-delay:' + (k * .08) + 's">'; }).join("") + "</div>" +
-      '<h1 class="hero-title">ציידי החוזקות</h1>' +
+      '<h1 class="hero-title">אספני החוזקות</h1>' +
       '<p class="sub">בתוך כל ילד וילדה מסתתר אוצר של 24 חוזקות.<br>בואו נגלה, נשחק, ונמצא את אבני החן שלכם!</p>' +
       '<div class="row mt"><button class="btn pink" id="go" style="font-size:21px;padding:15px 30px">💎 ' + (P.seen ? "ממשיכים במסע" : "יוצאים למסע") + "</button>" +
       (P.seen ? '<button class="btn ghost small" id="reset">🔄 מסע חדש מההתחלה</button>' : "") + "</div>" +
@@ -582,7 +582,7 @@
     app.innerHTML = '<div id="printArea"><div class="fun-cert" style="animation:funBounce .8s">' +
       '<img class="chest-pic small" src="kit/chest.webp" alt=""><div class="fun-cert-ribbon">👑 תיבת האוצר שלי 👑</div>' +
       '<label class="fun-cert-name"><span>השם שלי:</span><input id="nm" maxlength="20" placeholder="כתבו כאן את השם" value="' + esc(name) + '"></label>' +
-      "<p class=\"fun-cert-line\">צייד/ת חוזקות מוסמך/ת! גיליתי שיש לי את כל 24 החוזקות, ושאפשר לחזק אותן כמו שריר.</p>" +
+      "<p class=\"fun-cert-line\">אספן/ית חוזקות מוסמך/ת! גיליתי שיש לי את כל 24 החוזקות, ושאפשר לחזק אותן כמו שריר.</p>" +
       (P.top && P.top.length ? '<h4 style="margin:10px 0 4px">💎 חוזקות שאני מזהה בי</h4><div class="treasure">' + P.top.map(function (s) { return card(s, { noLines: true }); }).join("") + "</div>" : "") +
       (P.grow ? planHTML(P.grow) : "") +
       (P.spot ? '<div class="plan"><h4>👓 חוזקה שראיתי אצל ' + esc(P.spot.who) + ": " + esc(S[P.spot.s].n) + "</h4></div>" : "") +
