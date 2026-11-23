@@ -367,3 +367,7 @@ body .skip{font-size:15px}
 body .pov{display:flex;align-items:center;gap:14px;padding:12px 14px;background:color-mix(in srgb,var(--c) 12%,#fff)}
 .pov-pic{width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid var(--c);flex:none}
 body .pov p{margin:0;font-size:20px;font-weight:700;line-height:1.35}
+/* נקודת מבט מאוירת */
+body .pov.pov-img{display:block;padding:0;margin:12px 0 0;background:#fff}
+.pov-img img{display:block;width:100%;aspect-ratio:2172/724;object-fit:cover}
+.pov-img figcaption{padding:10px 14px;font-size:20px;font-weight:700}
