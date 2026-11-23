@@ -495,22 +495,44 @@
 
   /* ---------------- סיום: הפנס שלי ---------------- */
   function finalStart() {
-    var m = modal('<div class="big-emo">💛🔦</div><h2>הפנס שלי</h2><p>עכשיו אתם הבוחרים! מצאו בתמונה 3 דברים שמעניינים אתכם, מרגיעים או משמחים אתכם. אין כאן תשובה נכונה.</p>' +
+    var m = modal('<div class="big-emo">💛🔦</div><h2>הפנס שלי</h2><p>עכשיו אתם בוחרים! לחצו על כל מה שמרגיע, משמח או מעניין אתכם. אין תשובה נכונה.</p><p>בסוף לוחצים <b>✓ סיימתי</b>.</p>' +
       '<button class="btn" id="mgo">▶ בוחרים</button>');
     m.querySelector("#mgo").addEventListener("click", function () { closeModal(); finalPlay(); });
   }
   function finalPlay() {
     document.body.classList.add("playing"); hud(true); scrollTo(0, 0);
-    var picks = [];
-    app.innerHTML = '<div class="play">' +
-      '<div class="taskbar"><div class="temo">💛</div><div class="tq"><small>הפנס שלי · בחירה 1 מתוך 3</small><b>בחרו דבר שמעניין, מרגיע או משמח אתכם</b><div class="prog"></div></div></div>' +
+    var picks = [], MAX = 8, paid = {};
+    app.innerHTML = '<div class="play final">' +
+      '<div class="taskbar"><div class="temo">💛</div><div class="tq"><small>הפנס שלי</small><b>מה מרגיע, משמח או מעניין אתכם?</b></div>' +
+      '<button class="hint-btn undo-btn" type="button" disabled>↩ חזור</button><button class="hint-btn done-btn" type="button" disabled>✓ סיימתי</button></div>' +
       '<div class="viewport"><div class="world"><img src="' + ROOM.src + '" alt="חדר היצירה" draggable="false"></div>' +
       '</div><div class="tray"><span class="lbl">הבחירות שלי:</span><div class="zoom-ctl"><button class="zin" type="button" aria-label="הגדלה">➕</button><button class="zout" type="button" aria-label="הקטנה">➖</button><button class="zfit" type="button" aria-label="כל התמונה">⤢</button></div></div></div>';
-    var root = app.querySelector(".play"), vp = root.querySelector(".viewport"), tray = root.querySelector(".tray"), prog = root.querySelector(".prog");
-    var zcF = tray.querySelector(".zoom-ctl");
-    var slots = [0, 1, 2].map(function () { var d = document.createElement("div"); d.className = "crop empty"; tray.insertBefore(d, zcF); return d; });
-    function paintProg() { prog.innerHTML = [0, 1, 2].map(function (k) { return '<i class="' + (k < picks.length ? "on" : "") + '"></i>'; }).join(""); }
-    paintProg();
+    var root = app.querySelector(".play"), vp = root.querySelector(".viewport"), tray = root.querySelector(".tray");
+    var undoBtn = root.querySelector(".undo-btn"), doneBtn = root.querySelector(".done-btn"), zcT = tray.querySelector(".zoom-ctl");
+    function paint() {
+      tray.querySelectorAll(".crop").forEach(function (c) { c.remove(); });
+      picks.forEach(function (p, k) {
+        var d = document.createElement("button"); d.type = "button"; d.className = "crop pick";
+        d.setAttribute("style", cropStyle(p.x, p.y, Math.max(p.r, 28) * 1.15, 40));
+        d.setAttribute("aria-label", "מחיקה: " + (p.name || "הבחירה")); d.title = "מחיקה";
+        d.innerHTML = '<span class="x" aria-hidden="true">✕</span>';
+        d.addEventListener("click", function () { removePick(k); });
+        tray.insertBefore(d, zcT);
+      });
+      if (!picks.length) { var e = document.createElement("div"); e.className = "crop empty"; tray.insertBefore(e, zcT); }
+      undoBtn.disabled = doneBtn.disabled = !picks.length;
+      root.querySelector(".tq small").textContent = picks.length ? "הפנס שלי · בחרתם " + picks.length : "הפנס שלי";
+    }
+    function removePick(k) {
+      var p = picks.splice(k, 1)[0]; if (!p) return;
+      if (p.el) p.el.remove(); FUN.sfx("pop"); paint();
+    }
+    undoBtn.addEventListener("click", function () { if (!busy) removePick(picks.length - 1); });
+    doneBtn.addEventListener("click", function () {
+      if (busy || !picks.length) return;
+      P.mine = picks.map(function (p) { return { x: p.x, y: p.y, r: p.r, name: p.name, e: p.e, t: p.t }; }); save(); mineSummary();
+    });
+    paint();
     var busy = false;
     var sc = Scene(vp, { onTap: function (p) {
       if (busy) return;
@@ -519,26 +541,30 @@
         var it = item(id), d = Math.hypot(p.x - it.x, p.y - it.y);
         if (d <= it.r + 12 / s && d / it.r < bd) { bd = d / it.r; best = it; }
       });
+      if (best && picks.some(function (q) { return q.id === best.id; })) { FUN.floatText("כבר בחרתם 💛", vp); return; }
+      if (picks.length >= MAX) { FUN.floatText("אפשר ללחוץ ✓ סיימתי", vp); doneBtn.classList.add("nudge"); return; }
       if (!best) best = { id: "spot", x: Math.round(p.x), y: Math.round(p.y), r: 55, name: "" };
       busy = true;
       var D = Math.max(best.r * 2.2, 70 / s);
       var pop = document.createElement("div"); pop.className = "pop grow";
       pop.style.cssText = "left:" + (best.x - D / 2) + "px;top:" + (best.y - D / 2) + "px;width:" + D + "px;height:" + D + "px;" + cropStyle(best.x, best.y, D / 2, D);
       sc.world.appendChild(pop); FUN.sfx("good"); setTimeout(function () { FUN.confettiAt(pop, 30); }, 200);
-      setTimeout(function () { pop.classList.remove("grow"); pop.classList.add("done"); ask(best); }, 1100);
+      setTimeout(function () { pop.classList.remove("grow"); pop.classList.add("done"); ask(best, pop); }, 1100);
     } });
     G = { stop: function () { sc.destroy(); } };
-    function ask(it) {
+    function ask(it, pop) {
       var m = modal(cropHtml(it.x, it.y, it.r, 130, "hero") + "<h2>" + (it.name ? esc(it.name) + "!" : "בחרתם!") + "</h2><p>מה הדבר הזה מעורר בכם?</p>" +
-        '<div class="feels">' + FEELS.map(function (f, k) { return '<button class="feel" type="button" data-k="' + k + '"><span>' + f.e + "</span>" + f.t + "</button>"; }).join("") + "</div>");
+        '<div class="feels">' + FEELS.map(function (f, k) { return '<button class="feel" type="button" data-k="' + k + '"><span>' + f.e + "</span>" + f.t + "</button>"; }).join("") + "</div>" +
+        '<div class="row mt"><button class="btn ghost small" type="button" id="nope">✕ לא את זה</button></div>');
+      m.querySelector("#nope").addEventListener("click", function () { pop.remove(); closeModal(); FUN.sfx("pop"); busy = false; });
       m.querySelectorAll(".feel").forEach(function (b) {
         b.addEventListener("click", function () {
           var f = FEELS[+b.dataset.k];
-          picks.push({ x: it.x, y: it.y, r: it.r, name: it.name, e: f.e, t: f.t });
-          slots[picks.length - 1].className = "crop"; slots[picks.length - 1].setAttribute("style", cropStyle(it.x, it.y, Math.max(it.r, 28) * 1.15, 40));
-          paintProg(); if (picks.length < 3) root.querySelector(".tq small").textContent = "הפנס שלי · בחירה " + (picks.length + 1) + " מתוך 3"; closeModal(); addXp(10); FUN.sfx("star", picks.length - 1); FUN.floatText(f.e + " +10", vp);
+          picks.push({ id: it.id === "spot" ? "spot" + Date.now() : it.id, x: it.x, y: it.y, r: it.r, name: it.name, e: f.e, t: f.t, el: pop });
+          paint(); closeModal(); FUN.sfx("star", Math.min(picks.length - 1, 4)); doneBtn.classList.add("nudge");
+          var key = it.id === "spot" ? "" : it.id;
+          if (key && !paid[key]) { paid[key] = 1; addXp(10); FUN.floatText(f.e + " +10", vp); } else FUN.floatText(f.e, vp);
           busy = false;
-          if (picks.length >= 3) { P.mine = picks; save(); setTimeout(mineSummary, 700); }
         });
       });
     }

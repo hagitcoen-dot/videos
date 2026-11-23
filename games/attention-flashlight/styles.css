@@ -103,7 +103,7 @@ h1,h2,h3,p{margin:0}
 
 /* לילה */
 .night{position:absolute;inset:0;z-index:4;pointer-events:none;transition:opacity .6s;
-  background:radial-gradient(circle at var(--lx,50%) var(--ly,50%),rgba(255,240,180,.10) 0,rgba(0,0,0,0) var(--lr,70px),rgba(4,3,20,.97) calc(var(--lr,70px) + 40px))}
+  background:radial-gradient(circle at var(--lx,50%) var(--ly,50%),rgba(20,16,45,.22) 0,rgba(14,11,36,.34) calc(var(--lr,85px) * .55),rgba(8,6,26,.7) var(--lr,85px),rgba(4,3,20,.97) calc(var(--lr,85px) + 75px))}
 .night.off{opacity:0}
 .night-tip{position:absolute;top:10px;right:50%;transform:translateX(50%);z-index:6;background:rgba(34,29,69,.9);border:1px solid var(--line);border-radius:99px;padding:6px 14px;font-size:14px;font-weight:700;pointer-events:none;white-space:nowrap}
 
@@ -249,3 +249,12 @@ body.playing{overflow:hidden;height:100vh;height:100dvh}
 .proj .tip-ask p{font-size:clamp(22px,2.8vw,36px)}
 .proj .tip-found b{font-size:clamp(22px,2.4vw,32px)}
 .proj .modal-card{max-width:680px}.proj .modal-card p{font-size:clamp(17px,1.8vw,24px)}.proj .modal-card h2{font-size:clamp(26px,3vw,40px)}
+
+/* final-picks: הפנס שלי, בחירה חופשית עם מחיקה */
+.final .taskbar .hint-btn:disabled{opacity:.4;border-color:var(--line)}
+.final .done-btn{background:var(--gold);color:#2a1a00;border-color:var(--gold)}
+.final .tray .crop.pick{position:relative;padding:0;cursor:pointer}
+.final .tray .crop.pick .x{position:absolute;top:-6px;left:-6px;width:20px;height:20px;border-radius:50%;background:#e5484d;color:#fff;font-size:12px;line-height:20px;font-weight:800;text-align:center}
+.proj .final .tray{background:rgba(20,16,45,.85);padding:6px 10px;border-radius:16px}
+.proj .final .tray .crop{display:block;width:clamp(40px,4vw,60px);height:clamp(40px,4vw,60px)}
+.proj .final .tray .lbl{display:inline;font-size:clamp(14px,1.6vw,20px)}
