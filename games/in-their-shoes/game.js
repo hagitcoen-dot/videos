@@ -11,6 +11,7 @@
   function $(s, r) { return (r || document).querySelector(s); }
   function top() { scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" }); }
   function key() { return "shoes-" + LV; }
+  var TEENS_ON = /[?&]teens/.test(location.search); // רמת בוגרים מוסתרת עד אישור חגית
   function loadP() { P = FUN.load(key(), null) || { stars: [], unlocked: 1, thieves: [] }; }
   function saveP() { FUN.save(key(), P); }
   function teen() { return LV === "teens"; }
@@ -141,7 +142,7 @@
       '<h1>בנעליים של<br>מישהו אחר</h1><p class="lead">משחק אמפתיה: נכנסים לנעליים של כל דמות, מגלים מה היא יודעת, מנחשים מה היא מרגישה וחושבת, ובוחרים תגובה שבאמת עוזרת.</p></section>' +
       '<div class="pick">' +
       '<button class="pick-card kids-card" data-lv="kids" type="button"><img class="pc-img" src="' + LEVELS.kids.hero + '" alt=""><b>צעירים</b><small>דמויות, סיפורים מהכיתה ומהבית · 5 תחנות</small></button>' +
-      '<button class="pick-card teens-card" data-lv="teens" type="button"><img class="pc-img" src="' + LEVELS.teens.hero + '" alt=""><b>בוגרים</b><small>בסגנון טלפון · צ\'אטים, סטוריז וקבוצות · 5 תחנות</small></button>' +
+      (TEENS_ON ? '' : '<!--') + '<button class="pick-card teens-card" data-lv="teens" type="button"><img class="pc-img" src="' + LEVELS.teens.hero + '" alt=""><b>בוגרים</b><small>בסגנון טלפון · צ\'אטים, סטוריז וקבוצות · 5 תחנות</small></button>' + (TEENS_ON ? '' : '-->') +
       '</div>' + adultBox();
     Array.prototype.forEach.call(app.querySelectorAll(".pick-card"), function (b) {
       b.addEventListener("click", function () {
