@@ -45,7 +45,7 @@ main{position:relative;z-index:1;max-width:560px;margin:0 auto;padding:6px 16px 
 .btn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line);box-shadow:none}
 .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 .dots{display:flex;gap:6px;justify-content:center;margin-top:14px}.dots i{width:9px;height:9px;border-radius:50%;background:var(--line)}.dots i.on{background:var(--gold)}
-.hand{display:flex;justify-content:center;gap:8px;margin:14px 0 4px;direction:rtl}
+.hand{display:flex;justify-content:center;gap:8px;margin:14px 0 4px;direction:ltr}
 .hand span{display:flex;flex-direction:column;align-items:center;gap:2px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:8px 6px;min-width:54px;font-size:13px;color:var(--soft)}
 .hand span b{font-size:24px;color:var(--ink)}
 details{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:4px 14px;text-align:right}
@@ -79,6 +79,52 @@ details p{font-size:15px!important;color:var(--soft);line-height:1.6!important}
 .feel span{display:block;font-size:32px}
 .feel.sel{border-color:var(--gold)}
 .answer{min-height:0;margin-top:10px}
+/* איורים והנפשות */
+.stage{position:relative;width:min(250px,58vw);aspect-ratio:1;margin:6px auto 10px;border-radius:24px;overflow:hidden;box-shadow:0 0 0 3px var(--accent),0 10px 30px rgba(0,0,0,.35);animation:fadeUp .9s ease}
+.stage img{width:100%;height:100%;display:block;object-fit:cover}
+.stage .fx{position:absolute;pointer-events:none}
+.sense-top{display:flex;align-items:center;justify-content:center;gap:16px;direction:ltr}
+.sense-top .num{font-size:92px}.sense-top .stage{margin:6px 0 10px}
+.cap{left:0;right:0;bottom:0;padding:10px 8px;font-weight:800;font-size:19px;background:linear-gradient(transparent,rgba(15,20,48,.85));opacity:0;animation:capIn .8s ease 3.2s forwards}
+@keyframes capIn{to{opacity:1}}
+/* פנס: אלומה עוברת מבועת הדאגה אל העציץ */
+.a-flashlight .bubble{top:4%;left:40%;background:#fff;color:#1a1640;border-radius:20px;padding:5px 10px;font-weight:800;font-size:15px;animation:bubbleOut 4.5s ease forwards}
+@keyframes bubbleOut{0%,30%{opacity:1;transform:none}70%,100%{opacity:.18;transform:scale(.85)}}
+.a-flashlight .beam{width:44%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(255,236,170,.75),rgba(255,216,107,.25) 45%,transparent 70%);mix-blend-mode:screen;top:-6%;left:38%;animation:beamGo 4.5s ease-in-out forwards}
+@keyframes beamGo{0%,25%{top:-6%;left:38%}80%,100%{top:42%;left:62%}}
+/* רואים: המבט נמשך אל העציץ */
+.a-see img{transform-origin:92% 75%;animation:lookAt 3.2s ease-in-out forwards}
+@keyframes lookAt{to{transform:scale(1.18)}}
+/* מגע: ליטוף קצר על השרוול */
+.a-touch img{animation:stroke 2.6s ease-in-out forwards}
+@keyframes stroke{0%{transform:scale(1.08) translateX(0)}25%{transform:scale(1.08) translateX(-3%)}50%{transform:scale(1.08) translateX(1%)}75%{transform:scale(1.08) translateX(-3%)}100%{transform:scale(1.08) translateX(0)}}
+.a-touch .shine{top:20%;left:30%;width:40%;height:30%;border-radius:50%;background:radial-gradient(rgba(255,255,255,.35),transparent 70%);opacity:0;animation:shine 2.6s ease-in-out forwards}
+@keyframes shine{30%,60%{opacity:1}100%{opacity:0;transform:translateX(-30%)}}
+/* שומעים: הטיה קלה ושני קווים ליד האוזן */
+.a-hear img{transform-origin:40% 80%;animation:tilt 2.4s ease-in-out forwards}
+@keyframes tilt{to{transform:scale(1.05) rotate(-3deg)}}
+.a-hear .wave{top:26%;left:74%;width:16%;height:22%;border:3px solid rgba(255,255,255,.85);border-color:transparent rgba(255,255,255,.85) transparent transparent;border-radius:50%;opacity:0;animation:wave 1.2s ease-out 3 .3s}
+.a-hear .wave.w2{left:80%;top:22%;height:30%;width:20%;animation-delay:.6s}
+@keyframes wave{0%{opacity:0;transform:translateX(-10%)}40%{opacity:1}100%{opacity:0;transform:translateX(10%)}}
+/* ריח: מקרבת את השרוול לאף ועוצרת */
+.a-smell img{transform-origin:45% 45%;animation:sniff 2.4s ease-in-out forwards}
+@keyframes sniff{0%{transform:translateY(5%) scale(1.06)}100%{transform:none}}
+.a-smell .wisp{bottom:42%;left:52%;width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.7);filter:blur(2px);opacity:0;animation:wisp 2.2s ease-out .4s 2}
+.a-smell .wisp.w2{left:60%;animation-delay:.9s}
+@keyframes wisp{0%{opacity:0;transform:none}30%{opacity:1}100%{opacity:0;transform:translate(-30px,-50px)}}
+/* טעם: לוגם ומוריד את הכוס */
+.a-taste img{transform-origin:70% 60%;animation:sip 3s ease-in-out forwards}
+@keyframes sip{0%{transform:scale(1.04) rotate(0)}40%{transform:scale(1.06) rotate(-3deg)}70%,100%{transform:scale(1.02) translateY(3%) rotate(0)}}
+.top b{white-space:nowrap}@media (max-width:430px){.lbl{display:none}}
+.ctrl{display:flex;flex-direction:column;align-items:center;gap:4px}
+.btn.found{font-size:22px;padding:14px 34px;margin-top:6px}
+.btn.skipit{font-size:16px;padding:10px 16px;margin-top:8px}
+.hand.anim span{opacity:0;transform:translateY(12px) scale(.8);animation:finger .6s ease forwards}
+@keyframes finger{to{opacity:1;transform:none}}
+.hand.anim span b{display:inline-block;animation:pop .6s ease}
+@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.35)}100%{transform:none}}
+@media (prefers-reduced-motion:reduce){.cap,.a-flashlight .bubble,.hand.anim span{opacity:1!important}.a-flashlight .beam{top:42%;left:62%}}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media print{.top,.sky,.mote,.btn,details{display:none!important}body{background:#fff;color:#000}.card{border:2px solid #333}}
 </style>
@@ -88,13 +134,14 @@ main{max-width:640px}
 .hint{font-size:17px!important}.hand span{font-size:15px;min-width:58px}.hand span b{font-size:26px}
 details p{font-size:17px!important}.credit{display:none}.sub{font-size:21px}
 .btn{font-size:20px}.feel{font-size:18px}.breath-word{font-size:27px}.top b{font-size:19px}.ib{font-size:16px;height:42px}
-@media (min-width:900px) and (min-height:700px){main{max-width:760px}.card p{font-size:26px}.card p.soft{font-size:22px}.instr{font-size:30px!important}.hint{font-size:19px!important}.num{font-size:150px}.c{width:62px;height:62px;font-size:32px}}
+@media (min-width:900px) and (min-height:700px){main{max-width:760px}.card p{font-size:26px}.card p.soft{font-size:22px}.instr{font-size:30px!important}.hint{font-size:19px!important}.num{font-size:150px}.sense-top .num{font-size:120px}.stage{width:300px}.c{width:62px;height:62px;font-size:32px}}
 </style>
 </head>
 <body>
 <div class="sky" id="sky"></div>
 <header class="top"><b>🖐️ 5-4-3-2-1</b><div class="tools">
   <button class="ib" id="voiceBtn" type="button" aria-label="הקראה בקול">🗣️ הקראה</button>
+  <button class="ib" id="autoBtn" type="button" aria-pressed="false" aria-label="מעבר אוטומטי" title="העיגולים יתמלאו לבד, והתרגיל יעבור לחוש הבא מעצמו">⏱️<span class="lbl"> אוטומטי</span></button>
   <button class="ib" id="soundBtn" type="button" aria-label="צלילים">🔔</button></div></header>
 <main id="app"></main>
 <script>
@@ -104,7 +151,7 @@ details p{font-size:17px!important}.credit{display:none}.sub{font-size:21px}
   var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   var timers = [];
   function later(fn, ms) { var t = setTimeout(fn, ms); timers.push(t); return t; }
-  function clearAll() { timers.forEach(clearTimeout); timers = []; stopSpeak(); }
+  function clearAll() { timers.forEach(clearTimeout); timers = []; stopSpeak(); quiet = false; onAuto = null; }
 
   /* כוכבים ברקע */
   var sky = document.getElementById("sky");
@@ -115,8 +162,9 @@ details p{font-size:17px!important}.credit{display:none}.sub{font-size:21px}
   /* צלילים רכים */
   var actx = null, muted = false;
   function ctx() { if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} } if (actx && actx.state === "suspended") actx.resume(); return actx; }
+  var quiet = false;
   function bell(f, vol, dur) {
-    if (muted) return; var c = ctx(); if (!c) return;
+    if (muted || quiet) return; var c = ctx(); if (!c) return;
     var t = c.currentTime;
     [1, 2.01, 3.02].forEach(function (h, k) {
       var o = c.createOscillator(), g = c.createGain(); o.type = "sine"; o.frequency.value = f * h;
@@ -142,6 +190,17 @@ details p{font-size:17px!important}.credit{display:none}.sub{font-size:21px}
     speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(text); u.voice = heVoice; u.lang = heVoice.lang; u.rate = .85; u.pitch = 1.05; speechSynthesis.speak(u);
   }
   function stopSpeak() { if (window.speechSynthesis) speechSynthesis.cancel(); }
+  var FX = {
+    flashlight: '<div class="fx bubble">💭 ומה אם...?</div><div class="fx beam"></div>',
+    see: '<div class="fx cap">עכשיו הסתכלו סביבכם</div>',
+    touch: '<div class="fx shine"></div>',
+    hear: '<div class="fx wave"></div><div class="fx wave w2"></div>',
+    smell: '<div class="fx wisp"></div><div class="fx wisp w2"></div>',
+    taste: ''
+  };
+  function stage(name) { return '<div class="stage a-' + name + '"><img src="art/' + name + '.webp" alt="" width="480" height="480">' + FX[name] + '</div>'; }
+  var autoMode = false, onAuto = null, autoBtn = document.getElementById("autoBtn");
+  autoBtn.addEventListener("click", function () { autoMode = !autoMode; autoBtn.classList.toggle("on", autoMode); autoBtn.setAttribute("aria-pressed", autoMode); if (onAuto) onAuto(); });
   function accent(c) { document.documentElement.style.setProperty("--accent", c); }
 
   /* ---------- פתיחה ---------- */
@@ -163,12 +222,12 @@ details p{font-size:17px!important}.credit{display:none}.sub{font-size:21px}
   var WHY = [
     { e: "🧠💭", t: "כשאנחנו מודאגים, הראש רץ: \"ומה אם...?\", \"מה יקרה מחר?\". המחשבות קופצות לעתיד או למה שכבר קרה." },
     { e: "🖐️👀👂", t: "לחושים יש סוד: הם תמיד נמצאים כאן ועכשיו. העיניים רואות רק את מה שיש עכשיו, והאוזניים שומעות רק את מה שקורה עכשיו." },
-    { e: "🔦", t: "בתרגיל 5-4-3-2-1 מזיזים את פנס הקשב מהמחשבות אל החושים. הדאגה לא חייבת להיעלם, אבל הראש מקבל הפסקה קטנה, והגוף מקבל זמן להתארגן." }
+    { e: "🔦", img: "flashlight", t: "בתרגיל 5-4-3-2-1 מזיזים את פנס הקשב מהמחשבות אל החושים. הדאגה לא חייבת להיעלם, אבל הראש מקבל הפסקה קטנה, והגוף מקבל זמן להתארגן." }
   ];
   function why(i) {
     clearAll();
     var w = WHY[i], dots = WHY.map(function (_, k) { return '<i class="' + (k === i ? "on" : "") + '"></i>'; }).join("");
-    app.innerHTML = '<div class="card"><h2 style="font-size:24px;margin-bottom:6px">למה זה עוזר?</h2><div class="big">' + w.e + '</div><p>' + w.t + '</p>' +
+    app.innerHTML = '<div class="card"><h2 style="font-size:24px;margin-bottom:6px">למה זה עוזר?</h2>' + (w.img ? stage(w.img) : '<div class="big">' + w.e + '</div>') + '<p>' + w.t + '</p>' +
       '<div class="row"><button class="btn" id="next">' + (i < WHY.length - 1 ? "הבא ←" : "🌙 מתחילים את התרגול") + '</button></div><div class="dots">' + dots + '</div></div>';
     speak(w.t);
     app.querySelector("#next").addEventListener("click", function () { bell(NOTES[i + 1]); i < WHY.length - 1 ? why(i + 1) : ready(); });
@@ -197,42 +256,60 @@ details p{font-size:17px!important}.credit{display:none}.sub{font-size:21px}
 
   /* ---------- החושים ---------- */
   var SENSES = [
-    { n: 5, e: "👀", c: "var(--c5)", t: "הרימו את העיניים מהמסך והסתכלו סביבכם לאט.", q: "מצאו 5 דברים שאתם רואים", how: "שימו לב לצבע ולצורה. אמרו כל דבר בלב או בקול." },
-    { n: 4, e: "✋", c: "var(--c4)", t: "עכשיו שימו לב לגוף.", q: "מצאו 4 דברים שאתם מרגישים במגע", how: "הרגליים על הרצפה, הבגד על העור, הידיים על הברכיים. חלק? רך? חם? קר?" },
-    { n: 3, e: "👂", c: "var(--c3)", t: "אם נוח לכם, עצמו עיניים.", q: "הקשיבו. מצאו 3 קולות", how: "קול רחוק, קול קרוב, ואפילו הנשימה שלכם." },
-    { n: 2, e: "👃", c: "var(--c2)", t: "שאפו לאט דרך האף.", q: "מצאו 2 ריחות", how: "הריחו את היד, את הבגד או את האוויר. אם אין ריח, אפשר להיזכר בריח שאתם אוהבים." },
-    { n: 1, e: "👅", c: "var(--c1)", t: "ועכשיו שימו לב לפה.", q: "מצאו טעם אחד", how: "איזה טעם יש בפה עכשיו? אפשר ללגום קצת מים ולהרגיש את הטעם." }
+    { n: 5, img: "see", miss: "", e: "👀", c: "var(--c5)", t: "הרימו את העיניים מהמסך והסתכלו סביבכם לאט.", q: "מצאו 5 דברים שאתם רואים", how: "שימו לב לצבע ולצורה. אמרו כל דבר בלב או בקול." },
+    { n: 4, img: "touch", miss: "", e: "✋", c: "var(--c4)", t: "עכשיו שימו לב לגוף.", q: "מצאו 4 דברים שאתם מרגישים במגע", how: "הרגליים על הרצפה, הבגד על העור, הידיים על הברכיים. חלק? רך? חם? קר?" },
+    { n: 3, img: "hear", miss: "", e: "👂", c: "var(--c3)", t: "אם נוח לכם, עצמו עיניים.", q: "הקשיבו. מצאו 3 קולות", how: "קול רחוק, קול קרוב, ואפילו הנשימה שלכם." },
+    { n: 2, img: "smell", miss: "לא שמתי לב לריח, אפשר להמשיך", e: "👃", c: "var(--c2)", t: "שאפו לאט דרך האף.", q: "מצאו 2 ריחות", how: "הריחו את היד, את הבגד או את האוויר. אם אין ריח, אפשר להיזכר בריח שאתם אוהבים." },
+    { n: 1, img: "taste", miss: "לא שמתי לב לטעם, אפשר להמשיך", e: "👅", c: "var(--c1)", t: "ועכשיו שימו לב לפה.", q: "מצאו טעם אחד", how: "איזה טעם יש בפה עכשיו? אפשר ללגום קצת מים ולהרגיש את הטעם." }
   ];
   var STEP_MS = 7000;
   function sense(i) {
     clearAll();
-    var s = SENSES[i], got = 0;
+    var s = SENSES[i], got = 0, last = i === SENSES.length - 1;
     accent(s.c);
-    var circles = ""; for (var k = 0; k < s.n; k++) circles += '<button type="button" class="c" aria-label="מצאתי"></button>';
-    app.innerHTML = '<div class="card"><div class="num">' + s.n + '</div><div class="sense-emo">' + s.e + '</div>' +
+    var circles = ""; for (var k = 0; k < s.n; k++) circles += '<button type="button" class="c" aria-label="מצאתי ' + (k + 1) + '"></button>';
+    app.innerHTML = '<div class="card"><div class="sense-top">' + stage(s.img) + '<div class="num">' + s.n + '</div></div>' +
       '<p class="soft">' + s.t + '</p><p class="instr">' + s.q + '</p><p class="soft">' + s.how + '</p>' +
       '<div class="circles">' + circles + '</div><div class="prog"><i id="pg"></i></div>' +
-      '<p class="hint">העיגולים יתמלאו לאט לבד. מצאתם מהר יותר? לחצו על עיגול.</p></div>';
+      '<div class="ctrl"><button class="btn found" id="found" type="button">✔ מצאתי</button>' +
+      '<button class="btn" id="nextS" type="button" hidden>' + (last ? "לסיום ←" : "לחוש הבא ←") + '</button>' +
+      (s.miss ? '<button class="btn ghost skipit" id="miss" type="button">' + s.miss + '</button>' : '') + '</div>' +
+      '<p class="hint" id="hint"></p></div>';
     speak(s.t + " " + s.q + ". " + s.how);
     bell(NOTES[4 - i] / 2, .1, 3);
-    var cs = app.querySelectorAll(".c"), pg = app.querySelector("#pg"), auto = null;
+    if (s.img === "hear") later(function () { quiet = true; }, 100);
+    var cs = app.querySelectorAll(".c"), pg = app.querySelector("#pg"), auto = null,
+      foundB = app.querySelector("#found"), nextB = app.querySelector("#nextS"), hint = app.querySelector("#hint");
+    function go() { quiet = false; last ? finish() : sense(i + 1); }
+    function setHint() {
+      hint.textContent = s.img === "hear" ? "הצלילים של המשחק שקטים עכשיו, כדי לשמוע את הקולות בחדר." :
+        autoMode ? "העיגולים מתמלאים לבד. מצאתם מהר יותר? לחצו ״מצאתי״." : "בכל פעם שמצאתם, לחצו ״מצאתי״. אין צורך למהר.";
+    }
     function arm() {
+      clearTimeout(auto); pg.className = "";
       if (got >= s.n) return;
       cs[got].classList.add("next");
-      pg.className = ""; pg.style.transitionDuration = "0ms"; void pg.offsetWidth;
+      if (!autoMode) return;
+      pg.style.transitionDuration = "0ms"; void pg.offsetWidth;
       pg.className = "run"; pg.style.transitionDuration = STEP_MS + "ms";
-      clearTimeout(auto); auto = later(fill, STEP_MS + (got === 0 ? 3000 : 0));
+      auto = later(fill, STEP_MS + (got === 0 ? 3000 : 0));
     }
     function fill() {
       if (got >= s.n) return;
       clearTimeout(auto);
       var c = cs[got]; c.classList.remove("next"); c.classList.add("on"); c.textContent = s.e;
       bell(NOTES[got % 5], .09, 2.2); got++;
-      if (got >= s.n) { pg.className = ""; later(function () { i < SENSES.length - 1 ? sense(i + 1) : finish(); }, 2800); }
-      else arm();
+      if (got >= s.n) {
+        pg.className = ""; foundB.hidden = true; nextB.hidden = false;
+        if (autoMode) auto = later(go, 2800); else nextB.focus();
+      } else arm();
     }
+    onAuto = function () { setHint(); if (got >= s.n) { if (autoMode) auto = later(go, 1500); else clearTimeout(auto); } else arm(); };
     cs.forEach(function (c) { c.addEventListener("click", function () { if (!c.classList.contains("on")) fill(); }); });
-    arm();
+    foundB.addEventListener("click", fill);
+    nextB.addEventListener("click", go);
+    if (s.miss) app.querySelector("#miss").addEventListener("click", go);
+    setHint(); arm();
   }
 
   /* ---------- סיום ---------- */
@@ -265,14 +342,17 @@ details p{font-size:17px!important}.credit{display:none}.sub{font-size:21px}
   function takeaway() {
     clearAll(); accent("var(--c3)");
     app.innerHTML = '<div class="card"><h2 style="font-size:26px">🖐️ היד של 5-4-3-2-1</h2><p class="soft">היד תמיד איתכם, אז גם התרגיל תמיד איתכם.</p>' +
-      '<div class="hand"><span><b>👀</b>5 רואים</span><span><b>✋</b>4 מרגישים</span><span><b>👂</b>3 שומעים</span><span><b>👃</b>2 מריחים</span><span><b>👅</b>1 טועמים</span></div>' +
+      '<div class="hand anim">' + [["👀","5 רואים"],["✋","4 מרגישים"],["👂","3 שומעים"],["👃","2 מריחים"],["👅","1 טועמים"]].map(function (h, k) {
+        return '<span style="animation-delay:' + (k * .6 + .3) + 's"><b style="animation-delay:' + (k * .6 + .3) + 's">' + h[0] + '</b>' + h[1] + '</span>'; }).join("") + '</div>' +
       '<p><b>מתי אפשר להשתמש בזה?</b></p><p class="soft">לפני מבחן, לפני השינה, כשהראש מלא ב"ומה אם...", או בכל פעם שרוצים לחזור לכאן ועכשיו.</p>' +
       '<p class="soft">💡 טיפ: תרגלו גם כשאתם רגועים. ככה יהיה קל יותר להיזכר בזה ברגע קשה.</p>' +
       '<div class="row"><button class="btn" id="again">🔄 עוד פעם</button><button class="btn ghost" id="pr">🖨️ הדפסה</button></div></div>';
+    for (var k = 0; k < 5; k++) (function (k) { later(function () { bell(NOTES[4 - k], .07, 1.8); }, k * 600 + 300); })(k);
     app.querySelector("#again").addEventListener("click", function () { ready(); });
     app.querySelector("#pr").addEventListener("click", function () { print(); });
   }
 
+  ["flashlight", "see", "touch", "hear", "smell", "taste"].forEach(function (n) { new Image().src = "art/" + n + ".webp"; });
   home();
 })();
 </script>
