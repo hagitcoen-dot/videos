@@ -214,13 +214,14 @@
   /* ---------------- תעודה ----------------
      opts: { el, title, line, skill, stars, maxStars, chars:[img], onAgain, onMap, storeKey } */
   FUN.renderCertificate = function (opts) {
-    var name = store("fun-name") || "";
+    var name = ""; /* השם לא נשמר: כל משחק מתחיל בתעודה ריקה */
+    try { localStorage.removeItem("fun-name"); } catch (e) {}
     var el = opts.el;
     el.innerHTML = '<div class="fun-cert" id="funCert">' +
       '<div class="fun-cert-ribbon">🏅 תעודת הצטיינות 🏅</div>' +
       '<div class="fun-cert-chars">' + (opts.chars || []).map(function (c) { return '<img src="' + c + '" alt="">'; }).join("") + '</div>' +
       '<h2>' + opts.title + '</h2>' +
-      '<label class="fun-cert-name"><span>השם שלי:</span><input id="funName" maxlength="20" placeholder="כתבו כאן את השם" value="' + name.replace(/"/g, "") + '"></label>' +
+      '<label class="fun-cert-name"><span>השם שלי:</span><input id="funName" autocomplete="off" maxlength="20" placeholder="כתבו כאן את השם" value="' + name.replace(/"/g, "") + '"></label>' +
       '<p class="fun-cert-line">' + opts.line + '</p>' +
       '<div class="fun-cert-skill">' + opts.skill + '</div>' +
       '<div class="fun-cert-stars">⭐ ' + opts.stars + ' מתוך ' + opts.maxStars + ' כוכבים</div>' +
@@ -229,7 +230,6 @@
       '<button type="button" class="btn primary" id="funPrint">🖨️ הדפסת התעודה</button>' +
       (opts.onMap ? '<button type="button" class="btn ghost" id="funMap">🗺️ חזרה למפה</button>' : "") +
       '<button type="button" class="btn ghost" id="funAgain">🔄 משחקים מההתחלה</button></div>';
-    el.querySelector("#funName").addEventListener("input", function () { store("fun-name", this.value); });
     el.querySelector("#funPrint").addEventListener("click", function () { window.print(); });
     el.querySelector("#funAgain").addEventListener("click", opts.onAgain);
     if (opts.onMap) el.querySelector("#funMap").addEventListener("click", opts.onMap);

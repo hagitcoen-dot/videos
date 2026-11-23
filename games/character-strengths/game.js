@@ -578,10 +578,10 @@
   /* ---------- סיום: האוצר שלי ---------- */
   function finale() {
     gen++; hud(true);
-    var name = FUN.store("fun-name") || "";
+    var name = ""; /* השם לא נשמר בין משחקים */
     app.innerHTML = '<div id="printArea"><div class="fun-cert" style="animation:funBounce .8s">' +
       '<img class="chest-pic small" src="kit/chest.webp" alt=""><div class="fun-cert-ribbon">👑 תיבת האוצר שלי 👑</div>' +
-      '<label class="fun-cert-name"><span>השם שלי:</span><input id="nm" maxlength="20" placeholder="כתבו כאן את השם" value="' + esc(name) + '"></label>' +
+      '<label class="fun-cert-name"><span>השם שלי:</span><input id="nm" autocomplete="off" maxlength="20" placeholder="כתבו כאן את השם" value="' + esc(name) + '"></label>' +
       "<p class=\"fun-cert-line\">אספן/ית חוזקות מוסמך/ת! גיליתי שיש לי את כל 24 החוזקות, ושאפשר לחזק אותן כמו שריר.</p>" +
       (P.top && P.top.length ? '<h4 style="margin:10px 0 4px">💎 חוזקות שאני מזהה בי</h4><div class="treasure">' + P.top.map(function (s) { return card(s, { noLines: true }); }).join("") + "</div>" : "") +
       (P.grow ? planHTML(P.grow) : "") +
@@ -589,7 +589,6 @@
       '<div class="fun-cert-stars mt">⭐ ' + P.stars.reduce(function (a, b) { return a + (b || 0); }, 0) + " / " + ST.length * 3 + " &nbsp; 💎 " + P.gems + "</div>" +
       '<p class="fun-cert-credit">חגית כהן CBT | חברתי</p></div></div>' +
       '<div class="row mt noprint">' + (CANPRINT ? '<button class="btn pink" id="pr">🖨️ הדפסה</button>' : "") + '<button class="btn ghost" id="mp"><img class="mini-chest" src="kit/chest_ic.webp" alt=""> לתיבה</button><button class="btn ghost" id="ag">🔄 מסע חדש</button></div>' + SAVEHINT;
-    $("#nm").oninput = function () { FUN.store("fun-name", this.value); };
     if ($("#pr")) $("#pr").onclick = function () { window.print(); };
     $("#mp").onclick = function () { map(); };
     $("#ag").onclick = function () { P = fresh(); P.seen = true; save(); hud(); map(); };

@@ -426,13 +426,14 @@
   /* ---------- certificate ---------- */
   function cert() {
     var w = screen("cert", "final");
+    save.name = ""; /* השם לא נשמר בין משחקים: כל פעם כותבים מחדש */
     var f = el("label", "namef", '<span>השם שלי:</span>');
     var inp = el("input"); inp.id = "nameInput"; inp.maxLength = 24; inp.placeholder = "כתבו כאן את השם"; inp.value = save.name; inp.autocomplete = "off";
     f.appendChild(inp); w.appendChild(f);
     var c = el("div", "cert");
     c.innerHTML = '<p class="kicker">CERTIFICATE · ' + G.en + "</p><h2>📜 " + G.certTitle + '</h2><p class="cname" id="certName">' + (save.name || "_____") + "</p><p>" + G.certLine + '</p><p class="cmeta">🗺️ ' + doneCount() + " מתוך " + N + " תחנות · " + save.badges.length + " תגים</p>" + '<div class="cbadges">' + save.badges.map(function (b) { return "<span>" + b.icon + "</span>"; }).join("") + '</div><p class="cr hfoot"><img class="hlogo-sm" src="hagit-logo-sm.png" alt="" width="132" height="119"><span>חגית כהן CBT | טיפול חברתי · ' + new Date().toLocaleDateString("he-IL") + "</span></p>";
     w.appendChild(c);
-    inp.oninput = function () { save.name = inp.value.trim(); persist(); $("certName").textContent = save.name || "_____"; };
+    inp.oninput = function () { save.name = inp.value.trim(); $("certName").textContent = save.name || "_____"; };
     var o = el("div", "other");
     o.innerHTML = "<p>" + G.other.line + "</p>";
     var a = el("a", "btn hot", G.other.label); a.href = G.other.url; a.id = "otherGame"; o.appendChild(a);
