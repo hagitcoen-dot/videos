@@ -1,4 +1,4 @@
-/* ציידי החוזקות הקטנים: גרסה קצרה לילדים צעירים (א'-ג'). האיורים מ"רביעיות חוזקות" של חגית כהן. */
+/* אספני החוזקות הקטנים: גרסה קצרה לילדים צעירים (א'-ג'). האיורים מ"רביעיות חוזקות" של חגית כהן. */
 (function () {
   "use strict";
   var GUIDE = "kit/guide.svg";
@@ -150,7 +150,7 @@
   ];
   function intro(n) {
     var s = SLIDES[n]; top();
-    app.innerHTML = (n === 0 ? '<h1 class="hero-title">ציידי החוזקות</h1>' : "") +
+    app.innerHTML = (n === 0 ? '<h1 class="hero-title">אספני החוזקות</h1>' : "") +
       '<div class="panel center">' + s.art + '<img class="guide sm" src="' + GUIDE + '" alt="יהלומי">' +
       '<p class="big-t">' + s.t + " " + sayBtn(s.t) + "</p>" +
       '<div class="row mt"><button class="btn pink big" id="next">' + (n < SLIDES.length - 1 ? "הבא ←" : "יוצאים למסע! 🚀") + "</button></div>" +
