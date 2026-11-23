@@ -337,7 +337,7 @@
     } else {
       cast(c);
       var sh2 = sheet('<div class="walk" aria-hidden="true"><i>👣</i><img class="swap" src="art/swap.webp" alt=""><i>👣</i></div><div class="wear"><span class="wear-shoe">' + shoe(c.color, 70) + '</span><h3>' + (c.me ? "נכנסים לנעליים של עצמכם" : "נעלתם את הנעליים של " + esc(c.name)) + '</h3></div>' +
-        (c.pov ? '<div class="pov" style="--c:' + c.color + '"><div class="pov-view">' + c.pov[0] + '</div><small>👁️ ' + esc(c.pov[1]) + '</small></div>' : "") +
+        (c.pov ? '<div class="pov" style="--c:' + c.color + '">' + (c.pic ? '<img class="pov-pic" src="' + c.pic + '" alt="">' : "") + '<p>' + esc(c.pov[1]) + '</p></div>' : "") +
         '<div class="clue"><b>' + (c.me ? "💭" : "🔍 מה " + esc(c.name) + " " + g(c, "יודע", "יודעת") + " שאתם לא ידעתם:") + '</b><p>' + esc(c.clue) + '</p></div>');
       nextBtn(sh2, "מה " + (c.me ? "אתם מרגישים" : g(c, "הוא עשוי להרגיש", "היא עשויה להרגיש")) + "? ←");
     }

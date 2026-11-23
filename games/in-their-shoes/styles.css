@@ -362,3 +362,8 @@ body .skip{font-size:15px}
 @keyframes rc{0%{opacity:0;transform:scale(1.08)}6%{opacity:1}20%{opacity:1;transform:scale(1)}26%,100%{opacity:0}}
 @keyframes rcl{0%{opacity:0;transform:scale(1.08)}6%{opacity:1}30%,100%{opacity:1;transform:scale(1)}}
 @media (prefers-reduced-motion:reduce){.comic.race img{animation:none;opacity:0}.comic.race .r4{opacity:1}}
+
+/* נקודת המבט: דיוקן הדמות במקום אימוג'י */
+body .pov{display:flex;align-items:center;gap:14px;padding:12px 14px;background:color-mix(in srgb,var(--c) 12%,#fff)}
+.pov-pic{width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid var(--c);flex:none}
+body .pov p{margin:0;font-size:20px;font-weight:700;line-height:1.35}
