@@ -321,7 +321,7 @@ window.LEVELS = {
         ],
         scene: "אופק כותבת לכם ב-23:40.",
         chars: [
-          { id: "ofek", pic: "art/faces/sil3.webp", name: "אופק", g: "f", color: "#9b8cff", mood: "sad",
+          { id: "ofek", pic: "art/faces/t-ofek.webp", name: "אופק", g: "f", color: "#9b8cff", mood: "sad",
             clueTitle: "מה שאופק לא כתבה",
             clue: [{ sys: "היא הפסיקה ללכת לחוג. היא כתבה דווקא לכם." }],
             feel: { opts: ["עצב", "עייפות", "בדידות", "התרגשות", "גאווה", "כעס"], a: [0, 1, 2] },
