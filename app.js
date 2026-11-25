@@ -174,7 +174,17 @@
     if (push) history.replaceState(null, "", v === "games" ? "#games" : location.pathname + location.search);
     render();
   }
-  if (cfg.contact_url) { const c = $("contact"); c.href = cfg.contact_url; c.hidden = false; if (cfg.contact_url.startsWith("mailto:")) c.removeAttribute("target"); }
+  if (cfg.contact_url) { const c = $("contact"); c.href = cfg.contact_url; c.hidden = false; if (cfg.contact_url.startsWith("mailto:")) {
+    // mailto לבד לא עושה כלום אצל מי שאין לו תוכנת מייל, אז פותחים תפריט קטן
+    c.removeAttribute("target");
+    const mu = new URL(cfg.contact_url), addr = decodeURIComponent(mu.pathname), subj = mu.searchParams.get("subject") || "";
+    const cm = $("contactMenu");
+    $("ctGmail").href = "https://mail.google.com/mail/?view=cm&fs=1&to=" + encodeURIComponent(addr) + "&su=" + encodeURIComponent(subj);
+    $("ctMail").href = cfg.contact_url;
+    c.onclick = (e) => { e.preventDefault(); e.stopPropagation(); gc("צור-קשר/", "צור קשר"); $("ctCopy").textContent = "העתקת כתובת המייל"; cm.hidden = !cm.hidden; };
+    $("ctCopy").onclick = async (e) => { e.stopPropagation(); try { await navigator.clipboard.writeText(addr); $("ctCopy").textContent = "✓ הועתק: " + addr; } catch { prompt("כתובת המייל:", addr); } };
+    document.addEventListener("click", (e) => { if (!cm.hidden && !cm.contains(e.target)) cm.hidden = true; });
+  } }
   $("tabVideos").onclick = () => setView("videos");
   $("tabGames").onclick = () => setView("games");
   $("nGames").textContent = games.length || "";
