@@ -325,10 +325,12 @@
       if (isNew(v.published)) th.append(newBadge());
       const body = document.createElement("div"); body.className = "cbody";
       if (v.audLabel) { const s = document.createElement("span"); s.className = "adultb"; s.textContent = "👥 " + v.audLabel; body.append(s); }
+      if (v.mats.some((m) => m.buy)) { const s = document.createElement("span"); s.className = "buyb"; s.textContent = "🎁 הסדרה המלאה להורדה"; body.append(s); }
       const h = document.createElement("h3"); highlight(h, v.title, words);
       const meta = document.createElement("p"); meta.className = "meta"; meta.textContent = fmtDate(v.published);
       if (gamesFor(v.id).length) { const g = document.createElement("span"); g.className = "mat"; g.textContent = " · משחק"; meta.append(g); }
-      if (v.mats.length) { const m = document.createElement("span"); m.className = "mat"; m.textContent = ` · חומרים (${v.mats.length})`; meta.append(m); }
+      const nMat = v.mats.filter((m) => !m.buy).length;
+      if (nMat) { const m = document.createElement("span"); m.className = "mat"; m.textContent = ` · חומרים (${nMat})`; meta.append(m); }
       const tags = document.createElement("div"); tags.className = "tags";
       v.topics.slice(0, 4).forEach((t) => { const s = document.createElement("span"); s.className = "tag"; s.textContent = t; tags.append(s); });
       body.append(h, meta, tags); c.append(th, body);

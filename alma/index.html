@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>עלמה ומוקה – הסדרה המלאה</title>
+<meta name="description" content="עלמה ומוקה: סדרה מצוירת שמנגישה לילדים את השפה הרגשית והקוגניטיבית-התנהגותית (CBT). 5 פרקים להורדה, עם מדריך להורים.">
+<meta property="og:title" content="עלמה ומוקה – הסדרה המלאה">
+<meta property="og:description" content="סדרה שמנגישה לילדים את השפה הרגשית והקוגניטיבית-התנהגותית. 5 פרקים להורדה, בלי פרסומות.">
+<meta property="og:image" content="https://hagitcbt.co.il/alma/img/hero.jpg">
+<meta property="og:type" content="website">
+<link rel="icon" href="../logo.png">
+<script src="../a11y.js?v=1" data-text="rem"></script>
+<link rel="stylesheet" href="../fonts/fonts.css">
+<style>
+/* Layout: a storybook "shelf" — sky hero, then episodes as large picture cards in order, then the box with price. */
+:root{
+  --bg:#F4F7F6; --surface:#FFFFFF; --ink:#18302E; --muted:#526764;
+  --accent:#23665F; --accent-ink:#FFFFFF; --sky:#CFE8F2; --sky2:#EAF5F8;
+  --sun:#F2A93B; --sun-ink:#8A520C; --line:#D5E0DD; --chip:#E3EDEA; --draft:#FCE3A6;
+  --display:"Secular One","Assistant",system-ui,sans-serif;
+  --body:"Assistant",system-ui,"Segoe UI",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#101A19; --surface:#172423; --ink:#E4EEEC; --muted:#A4B7B3;
+  --accent:#6CC1B6; --accent-ink:#0D1716; --sky:#1C3540; --sky2:#152A31;
+  --sun:#F2B457; --sun-ink:#F7CB86; --line:#2A3D3A; --chip:#21322F; --draft:#4A3A12; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#101A19; --surface:#172423; --ink:#E4EEEC; --muted:#A4B7B3;
+  --accent:#6CC1B6; --accent-ink:#0D1716; --sky:#1C3540; --sky2:#152A31;
+  --sun:#F2B457; --sun-ink:#F7CB86; --line:#2A3D3A; --chip:#21322F; --draft:#4A3A12; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:1.25rem/1.6 var(--body);direction:rtl}
+.wrap{max-width:1040px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.15;text-wrap:balance;margin:0}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--sun);outline-offset:3px;border-radius:6px}
+
+.skip{position:absolute;right:-999px;top:0;background:var(--surface);padding:.5rem 1rem;z-index:5}.skip:focus{right:1rem}
+.back{display:inline-block;margin-bottom:.4rem;color:var(--accent);font-weight:700;text-decoration:none}
+.draft{background:var(--draft);color:var(--ink);text-align:center;font-weight:700;font-size:1rem;padding-block:.5rem}
+
+/* hero */
+.hero{background:linear-gradient(180deg,var(--sky) 0%,var(--sky2) 100%);overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:1fr;gap:1.2rem;padding-block:1.5rem 3rem}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.brand{display:flex;align-items:center;gap:.6rem;font-size:1rem;color:var(--muted);font-weight:600}
+.brand img{width:52px;height:auto;border-radius:8px;background:#fff;padding:3px;object-fit:contain}
+.hero h1{font-size:clamp(2.8rem,7vw,4.6rem);margin-top:1rem}
+.hero .lead{font-size:clamp(1.4rem,2.6vw,1.8rem);margin-top:.8rem;max-width:40ch}
+.facts{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.4rem;padding:0;list-style:none}
+.facts li{background:var(--surface);border-radius:999px;padding:.35rem 1rem;font-weight:600;font-size:1.05rem;font-variant-numeric:tabular-nums}
+.cta{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.6rem;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:700;font-size:1.3rem;padding:.8rem 1.8rem;border-radius:14px;border:0;cursor:pointer;font-family:var(--body)}
+.cta:hover{filter:brightness(1.08)}
+.hero-art{max-width:100%;order:-1}
+.hero-art img{display:block;width:100%;height:auto;border-radius:20px;box-shadow:0 10px 30px rgba(24,48,46,.15)}
+.hero-art svg{width:100%;height:auto;display:block}
+
+/* learn */
+section{padding-block:3rem}
+.sec-title{font-size:clamp(2rem,4vw,2.6rem);margin-bottom:1.4rem}
+.learn{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;padding:0;list-style:none;margin:0}
+.learn li{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:1.2rem 1.3rem}
+.learn b{display:block;font-family:var(--display);font-weight:400;font-size:1.5rem;color:var(--accent)}
+
+/* episodes */
+.eps{display:grid;gap:1.4rem;padding:0;margin:0;list-style:none}
+.ep{display:grid;grid-template-columns:300px 1fr;gap:1.6rem;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:1.2rem;align-items:start}
+.cover{border-radius:14px;overflow:hidden;aspect-ratio:16/10;max-width:100%;position:relative}
+.cover svg,.cover img{width:100%;height:100%;display:block;object-fit:cover}
+.num{position:absolute;top:.5rem;right:.5rem;background:var(--surface);color:var(--ink);font-family:var(--display);font-size:1.15rem;padding:.1rem .8rem;border-radius:999px}
+.ep-body{min-width:0;display:grid;gap:.6rem}
+.ep h3{font-size:clamp(1.6rem,3vw,2rem)}
+.meta{display:flex;flex-wrap:wrap;gap:.5rem;font-size:1rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.tag{background:var(--chip);color:var(--ink);border-radius:999px;padding:.1rem .75rem;font-weight:600}
+.talk{background:var(--sky2);border-radius:12px;padding:.7rem 1rem}
+.talk span{font-weight:700;color:var(--accent)}
+.btns{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.2rem}
+.btn{display:inline-flex;align-items:center;gap:.45rem;font:700 1.1rem var(--body);padding:.55rem 1.2rem;border-radius:12px;border:2px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer;text-decoration:none}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn[disabled]{opacity:.45;cursor:default}
+.ep.soon{border-style:dashed}
+.ep.soon .ep h3{color:var(--muted)}
+
+/* bonus + price */
+.box{display:grid;grid-template-columns:1.2fr .8fr;gap:1.4rem;align-items:stretch}
+.bonus{list-style:none;padding:0;margin:0;display:grid;gap:.8rem}
+.bonus li{display:flex;gap:.8rem;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:.9rem 1.1rem}
+.bonus .ic{flex:none;width:40px;height:40px;border-radius:10px;background:var(--chip);display:grid;place-items:center}
+.bonus .ic svg{width:24px;height:24px}
+.price{background:var(--accent);color:var(--accent-ink);border-radius:20px;padding:1.6rem;display:flex;flex-direction:column;gap:.6rem;justify-content:center;text-align:center}
+.price .old{text-decoration:line-through;opacity:.75;font-size:1.2rem}
+.price .now{font-family:var(--display);font-size:4rem;line-height:1;font-variant-numeric:tabular-nums}
+.price .cta{background:var(--sun);color:#2A1A04;justify-content:center;margin-top:.6rem}
+.price small{font-size:1rem;opacity:.9}
+.edu{margin-top:1rem;font-size:1.1rem;color:var(--muted)}
+.how{background:rgba(255,255,255,.14);border-radius:12px;padding:.8rem;margin-top:.4rem;font-size:1.15rem}
+.contact{font-family:var(--display);font-size:1.7rem;user-select:all;font-variant-numeric:tabular-nums}
+.wa{display:inline-block;margin-top:.5rem;background:var(--sun);color:#2A1A04;text-decoration:none;font-weight:700;padding:.5rem 1.2rem;border-radius:12px}
+.agree{display:flex;gap:.5rem;align-items:center;justify-content:center;font-size:1.05rem;cursor:pointer}
+.agree input{width:1.2rem;height:1.2rem;accent-color:var(--sun)}
+.terms{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:1.2rem 1.4rem}
+.terms ul{margin:.8rem 0 0;padding-inline-start:1.2rem;display:grid;gap:.4rem}
+
+/* faq */
+.faq{display:grid;gap:.7rem}
+details{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:.9rem 1.2rem}
+summary{cursor:pointer;font-weight:700;font-size:1.25rem}
+details p{margin-top:.5rem;color:var(--muted)}
+
+.about{display:flex;gap:1.2rem;align-items:center;background:var(--sky2);border-radius:20px;padding:1.4rem}
+.about img{width:110px;height:auto;border-radius:12px;background:#fff;padding:6px;object-fit:contain;flex:none}
+footer{padding-block:2rem 3rem;text-align:center;color:var(--muted);font-size:1rem}
+
+.note{display:none;margin-top:.8rem;background:var(--draft);color:var(--ink);border-radius:12px;padding:.6rem 1rem;font-size:1.05rem}
+.note.on{display:block}
+
+@media (max-width:820px){
+  .hero .wrap{padding-block:1rem 2.5rem}
+  .hero-art{order:-1;max-width:100%}
+  .learn{grid-template-columns:1fr}
+  .ep{grid-template-columns:1fr}
+  .box{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:no-preference){
+  .plane{animation:fly 6s ease-in-out infinite}
+  @keyframes fly{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">דילוג לתוכן</a>
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <div class="brand"><img src="../logo.png" alt="">חגית כהן · CBT | טיפול חברתי</div>
+      <h1 class="sr">עלמה ומוקה</h1>
+      <p class="lead">סדרה שמנגישה לילדים את השפה הרגשית והקוגניטיבית-התנהגותית (CBT).</p>
+      <ul class="facts">
+        <li>5 פרקים</li><li>כ־50 דקות</li><li>גן חובה עד כיתה ו'</li><li>להורדה וצפייה בלי פרסומות</li>
+      </ul>
+      <a class="cta" href="#buy">איך רוכשים?</a>
+    </div>
+    <div class="hero-art"><img src="img/hero.webp" alt="עלמה עם זכוכית מגדלת ומוקה הכלב. עלמה ומוקה, מאת חגית כהן"></div>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+<section class="wrap" aria-labelledby="learn-t">
+  <h2 class="sec-title" id="learn-t">מה הילדים לוקחים מהסדרה</h2>
+  <ul class="learn">
+    <li><b>רגשות הם שליחים</b>גם רגש לא נעים בא לעזור.</li>
+    <li><b>מחשבה היא לא עובדה</b>מה שאנחנו חושבים משפיע על מה שאנחנו מרגישים.</li>
+    <li><b>"אופס, רגע!"</b>לעצור ולבדוק אם המחשבה מדויקת.</li>
+    <li><b>לזהות טעויות חשיבה</b>"תמיד", "אף פעם", "כולם", "הכול או כלום".</li>
+    <li><b>חשיבה גמישה</b>לראות גוונים, לא רק שחור ולבן.</li>
+    <li><b>ויסות רגשי</b>לעצור רגע לפני שמגיבים.</li>
+    <li><b>לא חייב להיות מושלם</b>להתמודד עם טעות ועם הפסד.</li>
+    <li><b>חברות</b>שיתוף פעולה, וההבנה שכל אחד שונה.</li>
+    <li><b>סקרנות וטבע</b>שלדג, תורמוס ופרחי בר מהארץ.</li>
+  </ul>
+</section>
+
+<section class="wrap" aria-labelledby="eps-t">
+  <h2 class="sec-title" id="eps-t">הפרקים</h2>
+  <ol class="eps">
+
+    <li class="ep">
+      <div class="cover"><span class="num">פרק 1</span>
+        <img src="img/ep1.webp" alt="עלמה ומוקה – פרק ראשון">
+      </div>
+      <div class="ep-body">
+        <h3>טיסה חלומית</h3>
+        <div class="meta"><span class="tag">רגשות</span><span>5:20 דק'</span></div>
+        <p>עלמה טסה לעיר שבה כולם רק שמחים, ולעיר שבה אף אחד לא מפחד.</p>
+        <p class="talk"><span>לשיחה אחרי הצפייה:</span> מה היה קורה אם לא היינו מפחדים בכלל?</p>
+      </div>
+    </li>
+
+    <li class="ep">
+      <div class="cover"><span class="num">פרק 2</span>
+        <img src="img/ep2.webp" alt="עלמה ומוקה – פרק שני">
+      </div>
+      <div class="ep-body">
+        <h3>שדון המשקפיים</h3>
+        <div class="meta"><span class="tag">טעויות חשיבה</span><span>6:29 דק'</span></div>
+        <p>משקפי "כולמתמידאפעם" הופכים יום רגיל ליום שהכול בו נגדה.</p>
+        <p class="talk"><span>לשיחה אחרי הצפייה:</span> מתי זה באמת "תמיד"? ומתי רק נדמה לנו?</p>
+      </div>
+    </li>
+
+    <li class="ep">
+      <div class="cover"><span class="num">פרק 3</span>
+        <img src="img/ep3.webp" alt="עלמה עם זכוכית מגדלת ומוקה הכלב">
+      </div>
+      <div class="ep-body">
+        <h3>סודות בין ענפים</h3>
+        <div class="meta"><span class="tag">חשיבה גמישה</span><span>10:14 דק'</span></div>
+        <p>בתצפית ציפורים עלמה מגלה שמה שרואים הוא לא תמיד כל הסיפור.</p>
+        <p class="talk"><span>לשיחה אחרי הצפייה:</span> מתי חשבתם משהו, וגיליתם שזה אחרת?</p>
+      </div>
+    </li>
+
+    <li class="ep">
+      <div class="cover"><span class="num">פרק 4</span>
+        <img src="img/ep4.webp" alt="עלמה ומוקה – פרק רביעי">
+      </div>
+      <div class="ep-body">
+        <h3>בין שחור ללבן</h3>
+        <div class="meta"><span class="tag">הכול או כלום</span><span>16:24 דק'</span></div>
+        <p>חידון פרחים, חברים ותורמוסים מלמדים את עלמה לראות גוונים.</p>
+        <p class="talk"><span>לשיחה אחרי הצפייה:</span> מה טוב במשהו גם אם הוא לא מושלם?</p>
+      </div>
+    </li>
+
+    <li class="ep soon">
+      <div class="cover"><span class="num">פרק 5</span>
+        <svg viewBox="0 0 320 200" aria-hidden="true"><rect width="320" height="200" fill="#E3EDEA"/><circle cx="160" cy="100" r="46" fill="#fff"/><text x="160" y="122" font-size="64" text-anchor="middle" fill="#23665F" font-family="Secular One,sans-serif">?</text></svg>
+      </div>
+      <div class="ep-body">
+        <h3>הפרק האחרון</h3>
+        <div class="meta"><span class="tag">בקרוב</span><span>10 דק'</span></div>
+        <p>מצטרף לסדרה ברגע שעולה. מי שקנה מקבל אותו אוטומטית.</p>
+      </div>
+    </li>
+  </ol>
+</section>
+
+<section class="wrap" id="buy" aria-labelledby="buy-t">
+  <h2 class="sec-title" id="buy-t">מה מקבלים</h2>
+  <div class="box">
+    <ul class="bonus">
+      <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 20h16"/></svg></span><div><b>5 פרקים להורדה</b><br>קבצי וידאו למחשב או לטלפון. בלי אינטרנט ובלי פרסומות.</div></li>
+      <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4h10l4 4v12H5z M9 12h6M9 16h6"/></svg></span><div><b>מדריך שיחה להורים</b><br>שאלות ופעילות קצרה לכל פרק (PDF).</div></li>
+      <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7" cy="14" r="4"/><circle cx="17" cy="14" r="4"/><path d="M11 13h2"/></svg></span><div><b>משקפי "אופס, רגע!" להדפסה</b><br>לגזור, לצבוע ולהרכיב בבית.</div></li>
+      <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-7-10a4 4 0 017-2.6A4 4 0 0119 11c0 5.5-7 10-7 10z"/></svg></span><div><b>גישה לתמיד</b><br>כולל הפרק האחרון כשיעלה.</div></li>
+    </ul>
+    <div class="price">
+      <div>כל הסדרה</div>
+      <div class="now">60 ₪</div>
+      <small>תשלום בפייבוקס או בביט · קבלה נשלחת במייל</small>
+      <div class="how"><b>לרכישה, צרו איתי קשר:</b><br><span class="contact" dir="ltr">050-8619771</span><br><a class="wa" href="https://wa.me/972508619771?text=%D7%94%D7%99%D7%99%20%D7%97%D7%92%D7%99%D7%AA%2C%20%D7%90%D7%A0%D7%99%20%D7%A8%D7%95%D7%A6%D7%94%20%D7%9C%D7%A8%D7%9B%D7%95%D7%A9%20%D7%90%D7%AA%20%D7%A2%D7%9C%D7%9E%D7%94%20%D7%95%D7%9E%D7%95%D7%A7%D7%94" target="_blank" rel="noopener">להודעה בוואטסאפ</a></div>
+      <small>הרכישה כפופה ל<a href="#terms">תנאי השימוש</a>.</small>
+    </div>
+  </div>
+  <p class="edu">מתאים גם לצפייה בגן ובכיתה.</p>
+</section>
+
+<section class="wrap" id="terms" aria-labelledby="terms-t">
+  <h2 class="sec-title" id="terms-t">תנאי שימוש</h2>
+  <div class="terms">
+    <p><b>© כל הזכויות שמורות לחגית כהן.</b> הסיפורים, האיורים, הדמויות, המוזיקה והחומרים.</p>
+    <ul>
+      <li><b>מותר:</b> לצפות בבית, ולהקרין לילדים שאתם עובדים איתם (כיתה, גן, קבוצה או טיפול).</li>
+      <li><b>אסור:</b> להעביר את הקבצים או הקישור לאחרים.</li>
+      <li><b>אסור:</b> להעלות לרשת, לקבוצות או לרשתות חברתיות.</li>
+      <li><b>אסור:</b> להעתיק, לערוך, למכור או להשתמש במסגרת מסחרית.</li>
+      <li>מוצר דיגיטלי: אחרי שליחת הקישור לא ניתן לבטל. בעיה טכנית? נפתור יחד.</li>
+      <li>הסדרה היא תוכן חינוכי, ואינה תחליף לטיפול מקצועי.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="wrap" aria-labelledby="faq-t">
+  <h2 class="sec-title" id="faq-t">שאלות</h2>
+  <div class="faq">
+    <details><summary>הפרקים לא חינמיים ביוטיוב?</summary><p>ביוטיוב הם נשארים. כאן מקבלים קבצים להורדה, בלי פרסומות, עם מדריך להורים.</p></details>
+    <details><summary>אפשר לצפות בלי יוטיוב?</summary><p>כן. מורידים את הקבצים ורואים בכל נגן.</p></details>
+    <details><summary>לאיזה גיל זה מתאים?</summary><p>מגן חובה ועד כיתה ו', בהתאמה לגיל. הכי טוב לצפות יחד ולדבר אחרי.</p></details>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="about">
+    <img src="../logo.png" alt="">
+    <p><b>חגית כהן</b>, מטפלת CBT לילדים ונוער. כותבת ומפיקה את עלמה ומוקה כדי להנגיש לילדים את השפה הרגשית והקוגניטיבית-התנהגותית.</p>
+  </div>
+</section>
+</main>
+
+<footer class="wrap"><a href="../">לכל הסרטונים והמשחקים באתר</a> · <a href="../accessibility.html">הצהרת נגישות</a> · <a href="../privacy.html">פרטיות</a></footer>
+<script data-goatcounter="https://hagitcbt.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
+
