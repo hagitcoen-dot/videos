@@ -247,7 +247,27 @@
     // sort_with: משחק ישן שמוצג ליד ההמשך שלו (למשל חלק 1 ליד חלק 2 החדש)
     const addedOf = (g) => g.added || ((games.find((o) => o.id === g.sort_with) || {}).added) || "";
     list.sort((x, y) => addedOf(y).localeCompare(addedOf(x)));
+    // בלי חיפוש ובלי מועדפים: מציגים בקבוצות עם כותרת
+    const groups = gd.groups || [];
+    const grouped = groups.length && !words.length && !state.onlyFav;
+    box.classList.toggle("grouped", !!grouped);
+    let target = box;
+    const sections = {};
+    if (grouped) {
+      const order = groups.map((x) => x.id);
+      list.sort((x, y) => ((order.indexOf(x.group) + 1 || 99) - (order.indexOf(y.group) + 1 || 99)) || (games.indexOf(x) - games.indexOf(y)));
+      groups.forEach((gr) => {
+        const items = list.filter((g) => g.group === gr.id);
+        if (!items.length) return;
+        const sec = document.createElement("section"); sec.className = "ggroup";
+        const h = document.createElement("h2"); h.className = "gghead"; h.textContent = gr.name;
+        const n = document.createElement("span"); n.className = "n"; n.textContent = items.length; h.append(n);
+        const grid = document.createElement("div"); grid.className = "games";
+        sec.append(h, grid); box.append(sec); sections[gr.id] = grid;
+      });
+    }
     list.forEach((g) => {
+      if (grouped) target = sections[g.group] || box;
       const card = gameCard(g);
       const vids = (g.videos || []).map((id) => state.videos.find((v) => v.id === id)).filter(Boolean);
       const rel = document.createElement("div"); rel.className = "grel";
@@ -255,7 +275,7 @@
         const lbl = document.createElement("span"); lbl.textContent = "סרטון מתאים:"; rel.append(lbl);
         vids.slice(0, 2).forEach((v) => { const b = document.createElement("button"); b.type = "button"; b.className = "linkish"; b.textContent = v.title.split("|")[0].trim(); b.title = b.textContent; b.onclick = () => openVideo(v.id); rel.append(b); });
       }
-      const wrap = document.createElement("div"); wrap.className = "gwrap"; wrap.append(card, favBtn("g:" + g.id, g.title), rel); box.append(wrap);
+      const wrap = document.createElement("div"); wrap.className = "gwrap"; wrap.append(card, favBtn("g:" + g.id, g.title), rel); target.append(wrap);
     });
     if (words.length && !list.length) logMiss(state.q, "games"); else clearTimeout(missTimer);
     if (state.onlyFav && !list.length) { $("status").textContent = ""; showFavEmpty("משחקים"); return; }
