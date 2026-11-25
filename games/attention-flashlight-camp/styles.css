@@ -164,3 +164,6 @@ body.playing{overflow:hidden;height:100vh;height:100dvh}
 .proj .final .tray{background:rgba(20,16,45,.85);padding:6px 10px;border-radius:16px}
 .proj .final .tray .crop{display:block;width:clamp(40px,4vw,60px);height:clamp(40px,4vw,60px)}
 .proj .final .tray .lbl{display:inline;font-size:clamp(14px,1.6vw,20px)}
+
+/* רמז מדורג: מלבן של רבע או שמינית תמונה */
+.hintring.rect{border-radius:calc(18px / var(--s,1))}

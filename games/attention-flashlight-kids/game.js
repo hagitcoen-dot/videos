@@ -128,6 +128,11 @@
       if (!reduce) { world.style.transition = "transform .5s ease"; setTimeout(function () { world.style.transition = ""; }, 520); }
       apply();
     }
+    function fitRect(x0, y0, w, h) {
+      s = Math.min(vw / w, vh / h) * 0.94; tx = vw / 2 - (x0 + w / 2) * s; ty = vh / 2 - (y0 + h / 2) * s;
+      if (!reduce) { world.style.transition = "transform .5s ease"; setTimeout(function () { world.style.transition = ""; }, 520); }
+      apply();
+    }
     function local(e) { var r = vp.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
     function light(p) { if (!nightEl) return; nightEl.style.setProperty("--lx", p.x + "px"); nightEl.style.setProperty("--ly", p.y + "px"); }
     vp.addEventListener("pointerdown", function (e) {
@@ -206,7 +211,7 @@
     measure(false);
     if (night) light({ x: vw / 2, y: vh / 2 });
     return {
-      world: world, centerOn: centerOn, scale: function () { return s; },
+      world: world, centerOn: centerOn, fitRect: fitRect, scale: function () { return s; },
       toScreen: function (x, y) { return { x: tx + x * s, y: ty + y * s }; },
       size: function () { return { w: vw, h: vh }; },
       destroy: function () { removeEventListener("resize", onR); }
@@ -241,7 +246,7 @@
 
     function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
     function showTask() {
-      var t = st.tasks[ti]; wrong = 0; hinted = false; t0 = Date.now(); busy = false;
+      var t = st.tasks[ti]; wrong = 0; hinted = false; t0 = Date.now(); busy = false; hintLv = 0; hintIt = null; hintBtn.textContent = "💡 רמז";
       temo.textContent = t.e; tq.textContent = t.q; tsm.textContent = st.icon + " " + st.name + " · משימה " + (ti + 1) + " מתוך " + st.tasks.length;
       prog.innerHTML = st.tasks.map(function (_, k) { return '<i class="' + (k < ti ? "on" : "") + '"></i>'; }).join("");
       root.classList.remove("newtask"); void root.offsetWidth; root.classList.add("newtask");
@@ -310,22 +315,43 @@
       });
     }
 
+    /* רמז מדורג: קודם רבע מהתמונה, אחר כך שמינית, ורק בסוף עיגול סביב המקום */
+    var hintLv = 0, hintIt = null;
     hintBtn.addEventListener("click", function () {
       if (busy) return;
       if (!hinted) hints++; hinted = true; hintBtn.classList.remove("nudge"); FUN.sfx("pop");
-      var t = st.tasks[ti], it = item(t.hits[0]);
-      if (t.hits.length > 1) { // רמז לפריט הכי קרוב למרכז המסך
-        var sz = sc.size(), c = { x: sz.w / 2, y: sz.h / 2 }, bd = 1e9;
-        t.hits.forEach(function (id) { var j = item(id), q = sc.toScreen(j.x, j.y), d = Math.hypot(q.x - c.x, q.y - c.y); if (d < bd) { bd = d; it = j; } });
+      if (!hintIt || hintLv === 0) {
+        var t = st.tasks[ti], left = t.hits.slice(), it0 = item(left[0]);
+        if (left.length > 1) { // רמז לפריט הכי קרוב למרכז המסך
+          var sz = sc.size(), c = { x: sz.w / 2, y: sz.h / 2 }, bd = 1e9;
+          left.forEach(function (id) { var j = item(id), q = sc.toScreen(j.x, j.y), d = Math.hypot(q.x - c.x, q.y - c.y); if (d < bd) { bd = d; it0 = j; } });
+        }
+        hintIt = it0;
       }
-      var R = Math.max(it.r * 2.6, 120), ox = (Math.random() - .5) * R * .5, oy = (Math.random() - .5) * R * .5;
+      var it = hintIt, W = ROOM.w, H = ROOM.h, cx, cy;
+      hintLv = Math.min(hintLv + 1, 3);
       vp.querySelectorAll(".hintring").forEach(function (h) { h.remove(); });
-      var h = document.createElement("div"); h.className = "hintring";
-      h.style.cssText = "left:" + (it.x + ox - R) + "px;top:" + (it.y + oy - R) + "px;width:" + (2 * R) + "px;height:" + (2 * R) + "px";
-      sc.world.appendChild(h);
-      sc.centerOn(it.x + ox, it.y + oy, 1.6);
-      if (nightEl) { var q = sc.toScreen(it.x + ox, it.y + oy); nightEl.style.setProperty("--lx", q.x + "px"); nightEl.style.setProperty("--ly", q.y + "px"); }
-      FUN.floatText("חפשו בתוך העיגול 👀", hintBtn);
+      var h = document.createElement("div");
+      if (hintLv < 3) {
+        var w = W / 2, hh = H / 2, x0 = it.x >= W / 2 ? W / 2 : 0, y0 = it.y >= H / 2 ? H / 2 : 0;
+        if (hintLv === 2) { if (hh >= w) { hh = H / 4; y0 = it.y >= y0 + hh ? y0 + hh : y0; } else { w = W / 4; x0 = it.x >= x0 + w ? x0 + w : x0; } }
+        h.className = "hintring rect";
+        h.style.cssText = "left:" + x0 + "px;top:" + y0 + "px;width:" + w + "px;height:" + hh + "px";
+        cx = x0 + w / 2; cy = y0 + hh / 2;
+        sc.world.appendChild(h);
+        sc.fitRect(x0, y0, w, hh);
+        FUN.floatText(hintLv === 1 ? "זה ברבע הזה של התמונה 👀" : "עכשיו בחלק הקטן הזה 👀", hintBtn);
+        hintBtn.textContent = "💡 עוד רמז";
+      } else {
+        var R = Math.max(it.r * 2.6, 120), ox = (Math.random() - .5) * R * .5, oy = (Math.random() - .5) * R * .5;
+        cx = it.x + ox; cy = it.y + oy;
+        h.className = "hintring";
+        h.style.cssText = "left:" + (cx - R) + "px;top:" + (cy - R) + "px;width:" + (2 * R) + "px;height:" + (2 * R) + "px";
+        sc.world.appendChild(h);
+        sc.centerOn(cx, cy, 1.6);
+        FUN.floatText("חפשו בתוך העיגול 👀", hintBtn);
+      }
+      if (nightEl) { var q = sc.toScreen(cx, cy); nightEl.style.setProperty("--lx", q.x + "px"); nightEl.style.setProperty("--ly", q.y + "px"); }
     });
 
     /* ענני הסחה */
