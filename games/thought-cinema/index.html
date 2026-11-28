@@ -417,7 +417,7 @@ function intro1(){
 }
 function intro2(){
   go('<div class="fade-in">'+hall('<div class="art">🍿</div><div class="say">איזה סרט נקרין?</div>',true)+
-   guide('היי! אני <b>קרני</b>, המקרן של הקולנוע. 🎞️<br>נזכרים בסרט שראיתם פעם, בקולנוע או במסך בבית? <b>בחרו סרט ונקרין אותו!</b>')+
+   guide('היי! אני <b>קרני</b>, המקרן. 🎞️<br><b>בחרו סרט ונקרין אותו!</b>')+
    '<div class="types">'+MOVIES.map(function(m,i){return '<button class="tbtn" style="--c:'+["var(--scary)","var(--logic)","var(--real)","var(--weird)"][i]+'" data-m="'+i+'"><span class="ic">'+m.ic+'</span><span><b>'+m.name+'</b></span></button>';}).join("")+'</div></div>');
   var cur=null,shown=false;
   app.querySelectorAll("[data-m]").forEach(function(b){b.onclick=function(){
@@ -428,7 +428,7 @@ function intro2(){
     document.getElementById("hall").scrollIntoView({behavior:"smooth",block:"start"});
     if(shown)return;shown=true;
     setTimeout(function(){
-      app.insertAdjacentHTML("beforeend",guide('וואו, איזה סרט! על המסך הכול נראה כמעט אמיתי... 🤩<br>אפשר לבחור עוד סרט, וכשמסיימים, הסרט נגמר ויוצאים החוצה.')+'<div class="row"><button class="btn" id="out">🚪 יוצאים מהקולנוע</button></div>');
+      app.insertAdjacentHTML("beforeend",guide('וואו! על המסך זה נראה כמעט אמיתי 🤩<br>אפשר לבחור עוד סרט, או לצאת החוצה.')+'<div class="row"><button class="btn" id="out">🚪 יוצאים מהקולנוע</button></div>');
       document.getElementById("out").onclick=function(){intro3(cur);};
     },3000);
   };});
@@ -441,7 +441,7 @@ function intro3(m){
   function next(ok){
     document.getElementById("yes").disabled=document.getElementById("no").disabled=true;document.getElementById("no").classList.remove("ghost");
     if(ok){FUN.sfx("good");FUN.confetti(60);addPop(10,document.getElementById("no"));}else FUN.sfx("pop");
-    document.getElementById("fb").innerHTML=guide((ok?'<b>נכון!</b> ':'חחח, בואו נבדוק... 👀 אין פה אף '+m.who+'! ')+'ה'+m.who+' היה <b>רק על המסך</b>. כשיוצאים מהסרט, ברור לנו שזה היה סרט, ולא מחפשים אותו ברחוב.',"wow")+
+    document.getElementById("fb").innerHTML=guide((ok?'<b>נכון!</b> ':'חחח, בואו נבדוק... 👀 אין פה אף '+m.who+'! ')+'ה'+m.who+' היה <b>רק על המסך</b>. ברחוב לא מחפשים אותו.',"wow")+
       '<div class="row"><button class="btn" id="n">והנה הסוד הגדול ⬅️</button></div>';
     document.getElementById("n").onclick=function(){intro4(m);};
     document.getElementById("n").scrollIntoView({behavior:"smooth",block:"center"});
@@ -461,15 +461,15 @@ function headSVG(){
 function intro4(m){
   FUN.sfx("unlock");
   go('<div class="fade-in"><div class="street" id="scr"><video src="video/head.mp4" playsinline autoplay muted preload="auto" disablepictureinpicture disableremoteplayback></video></div>'+
-   guide('<b>זה כאילו יש לנו קולנוע בתוך הראש!</b> 🧠🎬<br>המוח שלנו עובד כמו מקרן שמקרין סרטים על מסך פנימי. הסרטים האלה נקראים <b>מחשבות</b>.')+
-   guide('לפעמים הסרט רגיל, כמו "מה אוכל לארוחת בוקר?". ולפעמים הוא מוזר, דמיוני, מטריד, או סרט של משאלה.')+
-   guide('והכי חשוב: <b>זה שסרט מוקרן בראש, לא הופך אותו למציאות.</b> '+(m?m.whoIc+' ה'+m.who:'🐉 הדרקון')+' נשאר על המסך, לא ברחוב.<br>ומחשבות הן לא רעות! לכל הראשים יש סרטים מכל הסוגים.')+
+   guide('<b>יש לנו קולנוע בתוך הראש!</b> 🧠🎬<br>המוח מקרין סרטים, והם נקראים <b>מחשבות</b>.')+
+   guide('יש סרטים רגילים, מוזרים, מטרידים, וסרטים של משאלה.')+
+   guide('והכי חשוב: <b>סרט בראש הוא לא המציאות.</b> '+(m?m.whoIc+' ה'+m.who:'🐉 הדרקון')+' נשאר על המסך.<br>ולכל ראש יש סרטים מכל הסוגים, וזה בסדר.')+
    '<div class="row"><button class="btn" id="n">🕶️ קבלו משקפי צופה</button></div></div>');
   startVid();
   document.getElementById("n").onclick=intro5;
 }
 function intro5(){
-  go('<div class="fade-in"><div class="street" id="scr" style="margin-bottom:12px"><video src="video/glasses.mp4" data-once="1" playsinline autoplay muted preload="auto" disablepictureinpicture disableremoteplayback></video></div>'+guide('כל צופה מקצועי צריך <b>משקפי צופה</b>! 🕶️<br>כשמרכיבים אותם, עוברים למצב של <b>צופים מהצד</b>: רואים את הסרט, ויודעים שזה רק סרט. <b>בחרו צבע:</b>')+
+  go('<div class="fade-in"><div class="street" id="scr" style="margin-bottom:12px"><video src="video/glasses.mp4" data-once="1" playsinline autoplay muted preload="auto" disablepictureinpicture disableremoteplayback></video></div>'+guide('עם <b>משקפי צופה</b> 🕶️ מסתכלים <b>מהצד</b>: רואים את הסרט, ויודעים שזה רק סרט. <b>בחרו צבע:</b>')+
    '<div class="glasses-pick">'+Object.keys(GLASSES).map(function(k){return '<button class="gl" data-g="'+k+'" aria-label="משקפיים '+{red:"אדומים",blue:"כחולים",green:"ירוקים",purple:"סגולים"}[k]+'">'+glassesSVG(GLASSES[k])+'</button>';}).join("")+'</div>'+
    '<div class="row" style="margin-top:16px"><button class="btn" id="n" disabled>🎟️ ללובי של הקולנוע</button></div></div>');
   startVid();
@@ -598,7 +598,7 @@ function st3(){
   function render(){
     var it=items[i];tried=false;
     var opts=shuffle([{s:it.f,f:1},{s:it.th,f:0}]);
-    go('<div class="fade-in">'+(i===0?'<div class="street" id="scr" style="margin-bottom:12px"><video src="video/camera.mp4" data-once="1" playsinline autoplay muted preload="auto" disablepictureinpicture disableremoteplayback></video></div>':'')+(i===0?guide('בכל רגע יש <b>מה שקורה באמת</b>, ויש <b>סרט שהראש מקרין</b>. נשאל את עצמנו: <b>אם מצלמה הייתה מצלמת את הרגע הזה, מה היינו רואים או שומעים?</b>'):'')+
+    go('<div class="fade-in">'+(i===0?'<div class="street" id="scr" style="margin-bottom:12px"><video src="video/camera.mp4" data-once="1" playsinline autoplay muted preload="auto" disablepictureinpicture disableremoteplayback></video></div>':'')+(i===0?guide('יש <b>מה שקורה באמת</b>, ויש <b>סרט בראש</b>. נשאל: <b>מה מצלמה הייתה רואה או שומעת ברגע הזה?</b>'):'')+
       '<div class="prog"><span>🎥 '+(i+1)+'/'+items.length+'</span><div class="bar"><i style="width:'+(i/items.length*100)+'%"></i></div></div>'+
       '<div class="card" style="margin-top:12px"><div class="ctx">'+it.ctx+'</div>'+(it.img?'<img class="moment" src="'+it.img+'" alt="">':'<div class="art">'+it.a+'</div>')+
       '<div class="txt" style="font-size:clamp(17px,4.4vw,21px)">'+it.f+'<br><span style="color:#7a5a6e">ו</span>'+it.th.replace(/^חשבתי/,"חשבתי").replace(/^דמיינתי/,"דמיינתי")+'</div></div>'+
@@ -657,7 +657,7 @@ function st4(){
       var s=document.getElementById("scr");s.className="screen off";s.innerHTML='<video src="video/off.mp4" data-once="1" playsinline autoplay muted preload="auto" disablepictureinpicture disableremoteplayback></video><div class="end-cap">סוף</div>';startVid();
       document.getElementById("hall").classList.remove("on");FUN.sfx("soft");
       setTimeout(function(){wear(false);made++;
-        step.innerHTML=guide('הסרט נגמר והמסך כבה. 🎞️<br><b>ובמציאות?</b> אתם כאן, בדיוק איפה שהייתם. המחשבה <b>עברה על המסך</b>, והיא לא שינתה את מה שקורה באמת.')+
+        step.innerHTML=guide('הסרט נגמר והמסך כבה. 🎞️<br><b>ובמציאות?</b> אתם עדיין כאן. המחשבה <b>עברה</b>, והמציאות לא השתנתה.')+
           '<div class="row"><button class="btn" id="n">'+(made<NEED?"🍿 לסרט הבא ("+made+"/"+NEED+")":"⭐ סיום")+'</button></div>';
         document.getElementById("n").onclick=function(){made<NEED?choose():finish(3,3);};
         document.getElementById("n").scrollIntoView({behavior:"smooth",block:"center"});
