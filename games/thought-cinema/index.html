@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<script src="../../a11y.js?v=1"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>קולנוע המחשבות</title>
+<link rel="stylesheet" href="gfonts/fonts.css">
+<link rel="stylesheet" href="fun.css">
+<style>
+video::-webkit-media-controls,video::-webkit-media-controls-start-playback-button,video::-webkit-media-controls-overlay-play-button,video::-webkit-media-controls-panel{display:none!important;-webkit-appearance:none;opacity:0!important}
+video{pointer-events:none;visibility:hidden}
+video.on{visibility:visible}
+
+/* קולנוע לילי: אולם קטיפה כהה, מסך מואר באמצע, אלומת מקרן. מראה כהה אחד בכוונה. */
+:root{
+  --velvet:#1b0a17; --velvet2:#2b0f22; --curtain:#b3173f; --curtain-d:#6e0c27;
+  --gold:#f6c453; --screen:#fbf7ec; --ink:#2a1a2e; --cream:#fff6e4; --muted:#d9c3cf;
+  --logic:#4fa3ff; --weird:#b07cff; --scary:#ff7d5c; --wish:#ffcf3d; --real:#3fcf8e;
+  --display:"Secular One","Rubik",system-ui,sans-serif; --body:"Rubik",system-ui,"Segoe UI",Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{margin:0;background:radial-gradient(ellipse at 50% -10%,#4a1534 0%,var(--velvet) 55%) fixed,var(--velvet);color:var(--cream);
+  font-family:var(--body);direction:rtl;-webkit-tap-highlight-color:transparent}
+button{font-family:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding-block:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  background:rgba(27,10,23,.92);backdrop-filter:blur(6px);border-bottom:1px solid rgba(246,196,83,.25)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--velvet)}
+.brand{display:flex;align-items:center;gap:8px;background:none;border:0;color:var(--gold);font-family:var(--display);font-size:20px;cursor:pointer;padding:4px}
+.hud{display:flex;gap:6px;align-items:center}
+.pill{background:rgba(255,255,255,.08);border:1px solid rgba(246,196,83,.35);border-radius:999px;padding:5px 11px;font-weight:700;font-size:15px;white-space:nowrap}
+.icon-btn{width:40px;height:40px;border-radius:50%;border:1px solid rgba(246,196,83,.35);background:rgba(255,255,255,.08);font-size:19px;cursor:pointer;color:var(--cream)}
+main{max-width:760px;margin:0 auto;padding-block:16px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0}
+p{line-height:1.6}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:18px;padding:14px 22px;font-size:18px;font-weight:800;cursor:pointer;
+  color:var(--ink);background:linear-gradient(180deg,#ffd978,var(--gold));box-shadow:0 5px 0 #b8861f,0 10px 24px rgba(0,0,0,.35);transition:transform .12s}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #b8861f}
+.btn.ghost{background:rgba(255,255,255,.1);color:var(--cream);box-shadow:0 4px 0 rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.2)}
+.btn.big{font-size:21px;padding:16px 30px}
+.row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.center{text-align:center}
+.fade-in{animation:fadeIn .45s ease both}
+@keyframes fadeIn{from{opacity:.001;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ---------- אולם ומסך ---------- */
+.hall{position:relative;border-radius:24px;padding:14px 14px 0;background:linear-gradient(180deg,rgba(27,10,23,.25),rgba(27,10,23,.55)),url(img/hall.webp) center 40%/cover,#1f0919;padding:22px 22px 0;box-shadow:inset 0 0 0 2px rgba(246,196,83,.25),0 20px 50px rgba(0,0,0,.5);overflow:hidden}
+.screen-wrap{position:relative;aspect-ratio:16/9;max-width:100%;border-radius:10px;overflow:hidden;background:#111;
+  box-shadow:0 0 0 6px #120610,0 0 40px rgba(255,240,200,.18)}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:14px;text-align:center;
+  background:radial-gradient(ellipse at 50% 40%,#ffffff 0%,var(--screen) 55%,#e8ddc6 100%);color:var(--ink);transition:filter .4s}
+.screen.off{background:#16101a;color:#6b5a6c}
+.screen .art{font-size:clamp(46px,13vw,92px);line-height:1.1;animation:artIn .7s cubic-bezier(.2,1.5,.4,1) both}
+.screen .art.fly{animation:artIn .7s cubic-bezier(.2,1.5,.4,1) both,fly 3.2s ease-in-out .7s infinite}
+@keyframes artIn{0%{opacity:0;transform:scale(.3) rotate(-10deg)}100%{opacity:1;transform:none}}
+@keyframes fly{0%,100%{transform:translate(0,0) rotate(0)}25%{transform:translate(-30px,-8px) rotate(-6deg)}75%{transform:translate(30px,6px) rotate(6deg)}}
+.screen .say{font-weight:800;font-size:clamp(20px,5.4vw,30px);line-height:1.35;max-width:92%;animation:fadeIn .5s .25s both}
+.screen .tag{font-size:14px;font-weight:800;padding:4px 12px;border-radius:999px;color:#1b0a17;animation:fadeIn .4s .5s both}
+.screen.flicker{animation:flicker .55s steps(6)}
+@keyframes flicker{0%{filter:brightness(2.2)}20%{filter:brightness(.5)}40%{filter:brightness(1.6)}60%{filter:brightness(.8)}100%{filter:none}}
+.screen video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000;animation:fadeIn .5s both}
+.screen .cap{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:max-content;max-width:94%;text-align:center;z-index:1;background:rgba(10,4,10,.68);color:#fff;font-weight:800;font-size:clamp(15px,4vw,22px);line-height:1.35;padding:6px 14px;border-radius:12px;animation:capIn .5s .3s both}
+@keyframes capIn{from{opacity:0}to{opacity:1}}
+.screen .cap .tag{display:inline-block;margin-inline-start:6px;font-size:13px;vertical-align:middle}
+.screen .grain{position:absolute;inset:0;pointer-events:none;opacity:.08;background:repeating-linear-gradient(0deg,#000 0 1px,transparent 1px 3px);mix-blend-mode:multiply}
+.curtain{position:absolute;top:0;bottom:0;width:51%;z-index:3;background:repeating-linear-gradient(90deg,var(--curtain) 0 18px,var(--curtain-d) 18px 22px,var(--curtain) 22px 40px);
+  box-shadow:inset 0 -20px 30px rgba(0,0,0,.4);transition:transform 1.4s cubic-bezier(.7,0,.3,1)}
+.curtain.l{left:0;transform-origin:left}.curtain.r{right:0}
+.hall.open .curtain.l{transform:translateX(-96%)}.hall.open .curtain.r{transform:translateX(96%)}
+.seats{height:40px;margin-top:0;background:none;opacity:.9}
+.beam{position:absolute;left:50%;bottom:-6px;width:70%;height:120%;transform:translateX(-50%);pointer-events:none;z-index:2;
+  background:conic-gradient(from 160deg at 50% 100%,transparent 0deg,rgba(255,246,210,.18) 18deg,rgba(255,246,210,.22) 22deg,rgba(255,246,210,.18) 26deg,transparent 40deg);opacity:0;transition:opacity .3s}
+.hall.on .beam{opacity:1}
+
+/* ---------- מדריך ---------- */
+.guide{display:flex;gap:12px;align-items:flex-end;margin:14px 0}
+.guide .g{width:74px;height:74px;flex:none;animation:funFloatY 3s ease-in-out infinite}
+.bubble{position:relative;background:var(--cream);color:var(--ink);border-radius:18px;padding:12px 16px;font-size:17.5px;line-height:1.55;min-width:0;box-shadow:0 8px 20px rgba(0,0,0,.3)}
+.bubble::after{content:"";position:absolute;right:-8px;bottom:14px;border:8px solid transparent;border-left-color:var(--cream);border-right:0}
+.bubble b{color:#9b1238}
+
+/* ---------- כפתורי סוגי מחשבה ---------- */
+.types{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+.tbtn{position:relative;display:flex;align-items:center;gap:10px;text-align:right;border:0;border-radius:18px;padding:12px 12px;cursor:pointer;color:#1b0a17;min-width:0;
+  background:var(--c);box-shadow:0 5px 0 rgba(0,0,0,.35),inset 0 2px 0 rgba(255,255,255,.4);transition:transform .12s}
+.tbtn:active{transform:translateY(3px)}
+.tbtn .ic{font-size:42px;flex:none}
+.tbtn b{display:block;font-size:23px}
+.tbtn small{display:block;font-size:17px;opacity:.9;line-height:1.35}
+.tbtn{padding:14px 14px}
+.tbtn .cnt{position:absolute;top:-8px;left:-6px;background:#1b0a17;color:var(--gold);border:2px solid var(--gold);border-radius:999px;font-size:12px;font-weight:800;padding:1px 7px}
+.tbtn.pick{outline:4px solid #fff}
+.tbtn.no{filter:grayscale(.3) brightness(.85)}
+.real{margin-top:12px;background:rgba(63,207,142,.12);border:1px solid rgba(63,207,142,.5);border-radius:16px;padding:10px 14px;font-size:16.5px;line-height:1.55}
+.real b{color:var(--real)}
+.prog{display:flex;align-items:center;gap:10px;margin:10px 0 0;font-weight:700}
+.bar{flex:1;height:12px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),#ff8a5c);border-radius:99px;transition:width .4s}
+
+/* ---------- סרט או מציאות ---------- */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.zone{border:0;border-radius:20px;padding:14px 8px;cursor:pointer;color:var(--cream);font-weight:800;font-size:18px;min-height:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:transform .12s}
+.zone:active{transform:scale(.97)}
+.zone .ic{font-size:40px}
+.zone small{font-weight:500;font-size:13px;opacity:.85}
+.zone.head{background:linear-gradient(160deg,#5b2a83,#2c1145);box-shadow:0 5px 0 #1a0a2a}
+.zone.world{background:linear-gradient(160deg,#1f8a62,#0f4d37);box-shadow:0 5px 0 #08301f}
+.card{background:var(--cream);color:var(--ink);border-radius:22px;padding:16px;text-align:center;box-shadow:0 12px 30px rgba(0,0,0,.4);animation:cardIn .45s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes cardIn{from{opacity:0;transform:translateY(-30px) rotate(-3deg) scale(.9)}to{opacity:1;transform:none}}
+.card .moment{display:block;width:100%;max-width:100%;border-radius:14px;margin:4px 0 2px;aspect-ratio:16/9;object-fit:cover;background:#eee}
+.card .art{font-size:54px;line-height:1.1}
+.card .txt{font-size:clamp(19px,5vw,24px);font-weight:800;line-height:1.4;margin-top:6px}
+.card .ctx{font-size:14px;color:#7a5a6e;margin-bottom:4px}
+.fb{margin-top:12px;border-radius:16px;padding:12px 14px;font-size:16.5px;line-height:1.55;animation:fadeIn .35s both}
+.fb.ok{background:rgba(63,207,142,.15);border:1px solid rgba(63,207,142,.55)}
+.fb.no{background:rgba(255,125,92,.13);border:1px solid rgba(255,125,92,.5)}
+
+/* ---------- הסרט שלי ---------- */
+.ideas{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.idea{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:var(--cream);border-radius:14px;padding:11px 14px;text-align:right;font-size:16.5px;cursor:pointer}
+.idea:hover{background:rgba(255,255,255,.13)}
+.own{display:flex;gap:8px;margin-top:4px}
+.own input{flex:1;min-width:0;border-radius:14px;border:2px solid rgba(246,196,83,.5);background:rgba(0,0,0,.25);color:var(--cream);padding:11px 12px;font-size:16.5px;font-family:inherit}
+.glasses-say{margin-top:14px;text-align:center}
+.glasses-say .quote{display:inline-block;font-family:var(--display);font-size:clamp(20px,5.4vw,27px);color:var(--gold);background:rgba(246,196,83,.1);border:2px dashed rgba(246,196,83,.6);border-radius:18px;padding:12px 18px;line-height:1.4}
+.end-cap{position:absolute;inset:0;display:grid;place-items:center;z-index:1;font-family:var(--display);font-size:clamp(40px,12vw,70px);color:var(--gold);text-shadow:0 4px 18px rgba(0,0,0,.8);animation:capIn .8s 2.4s both}
+.end-title{font-family:var(--display);font-size:clamp(40px,12vw,70px);color:#6b5a6c;letter-spacing:.06em}
+
+/* ---------- משקפיים ---------- */
+.glasses-pick{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:12px}
+.gl{border:3px solid transparent;background:rgba(255,255,255,.08);border-radius:18px;padding:10px;cursor:pointer}
+.gl.sel{border-color:var(--gold);background:rgba(246,196,83,.15)}
+.gl svg{width:110px;height:48px;display:block}
+.wearing{position:fixed;inset:0;pointer-events:none;z-index:40;opacity:0;transition:opacity .5s}
+.wearing.show{opacity:1}
+
+/* ---------- רחוב ---------- */
+.street{position:relative;aspect-ratio:16/9;max-width:100%;border-radius:18px;overflow:hidden;background:linear-gradient(180deg,#8fd3ff 0%,#c9ecff 60%,#7a7f8c 60%,#5d616c 100%)}
+.street .bld{position:absolute;bottom:40%;font-size:clamp(34px,10vw,64px)}
+.street .walker{position:absolute;bottom:14%;right:-15%;font-size:clamp(36px,10vw,60px);animation:walk 3.2s linear forwards}
+@keyframes walk{to{right:60%}}
+.street video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.street .q{z-index:1;text-shadow:0 4px 12px rgba(0,0,0,.5);position:absolute;top:8%;left:50%;transform:translateX(-50%);font-size:clamp(40px,12vw,72px);opacity:0;animation:capIn .5s 1.5s both}
+
+/* ---------- ראש ---------- */
+.hero{position:relative;border-radius:22px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.5),0 0 0 2px rgba(246,196,83,.3)}
+.hero img{display:block;width:100%;height:auto}
+.hero-screen{position:absolute;left:8.1%;top:9.2%;width:63.6%;height:69%;display:flex;align-items:center;justify-content:center;text-align:center;padding:4%}
+.hero-screen h1{font-size:clamp(26px,7.4vw,58px);color:#6e0c27;line-height:1.1;animation:capIn 1s .3s both;text-shadow:0 2px 0 rgba(255,255,255,.5)}
+.hero.on .hero-screen{animation:flicker .6s steps(6)}
+.hero.on .hero-screen h1{animation:fadeOut .8s .3s both}
+@keyframes fadeOut{to{opacity:0;transform:scale(1.15)}}
+.chal{margin-top:12px;background:rgba(246,196,83,.15);border:2px dashed var(--gold);border-radius:14px;padding:8px 12px;text-align:center;font-weight:800;color:var(--gold)}
+.idea.cam{font-weight:700;font-size:17px}
+.idea.cam.yes{background:rgba(63,207,142,.25);border-color:var(--real)}
+.idea.cam.head{background:rgba(176,124,255,.2);border-color:var(--weird);opacity:.85}
+.guide .g{border-radius:50%;object-fit:cover;border:3px solid var(--gold);background:#3a1029}
+.fun-map-guide{border-radius:50%;object-fit:cover;border:3px solid var(--gold)}
+.headpic{display:block;width:min(320px,80%);margin:6px auto 0}
+
+/* ---------- מפה ---------- */
+.fun-map{background:linear-gradient(180deg,#2b0f22,#1b0a17);color:var(--cream);box-shadow:inset 0 0 0 2px rgba(246,196,83,.3),0 20px 50px rgba(0,0,0,.5)}
+.fun-map-head p{color:var(--muted)}
+.fun-map-head h2{font-family:var(--display);font-weight:400;color:var(--gold)}
+.fun-map-board{background:radial-gradient(circle at 50% -20%,rgba(255,246,210,.25),transparent 45%),
+  radial-gradient(circle at 20px 22px,#5c1430 0 12px,transparent 13px) 0 0/44px 44px,linear-gradient(180deg,#3a1029,#250b1c)}
+.fun-map-path path{stroke:var(--gold);opacity:.7}
+.fun-node-name{background:rgba(255,246,228,.95);color:#2a1a2e}
+.fun-node-name small{color:#7a5a6e}
+.fun-map-total{color:var(--gold)}
+
+/* ---------- תעודה ---------- */
+.cert{background:var(--cream);color:var(--ink);border-radius:22px;padding:22px 18px;text-align:center;border:6px double #d9a83c;box-shadow:0 20px 50px rgba(0,0,0,.5);animation:funBounce .8s}
+.cert .ribbon{display:inline-block;background:linear-gradient(135deg,var(--curtain),#ff6a8f);color:#fff;font-weight:800;padding:6px 18px;border-radius:999px;font-size:16px}
+.cert h2{font-size:clamp(26px,7vw,36px);margin:10px 0 4px;color:#9b1238}
+.cert input{font-family:inherit;font-size:20px;font-weight:700;text-align:center;border:0;border-bottom:3px dashed #d9a83c;background:transparent;color:var(--ink);padding:6px;width:min(280px,90%)}
+.cert .skill{margin:12px auto 0;max-width:460px;font-size:17.5px;line-height:1.6;background:#fff;border-radius:14px;padding:12px}
+.cert .credit{font-size:13px;color:#7a5a6e;margin-top:10px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+@media (max-width:420px){.tbtn .ic{font-size:30px}.tbtn b{font-size:18px}.tbtn small{font-size:14px}.bubble{font-size:16px}}
+/* ---------- לובי עם כרזות ---------- */
+.lobby{background:radial-gradient(ellipse at 50% 0%,rgba(255,200,110,.22),transparent 60%),repeating-linear-gradient(90deg,#5a0f2a 0 22px,#4b0b23 22px 44px);
+  border-radius:22px;padding:16px 14px 18px;box-shadow:inset 0 0 60px rgba(0,0,0,.55),0 10px 30px rgba(0,0,0,.4);border:2px solid #7a4a1c}
+.lobby-head{display:flex;gap:12px;align-items:center;margin-bottom:16px}
+.lobby-head img{width:58px;height:58px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);flex:none}
+.lobby-head h2{margin:0;font-family:var(--display);color:var(--gold);font-size:clamp(21px,5.4vw,28px)}
+.lobby-head p{margin:2px 0 0;font-size:15px;color:var(--muted)}
+.posters{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding-top:10px}
+@media (max-width:720px){.posters{grid-template-columns:repeat(2,1fr);gap:12px}}
+.poster{position:relative;display:flex;flex-direction:column;align-items:stretch;text-align:center;padding:8px 8px 10px;border-radius:12px;cursor:pointer;color:var(--cream);font:inherit;
+  background:linear-gradient(#2b0f22,#1b0a17);border:3px solid #c9973a;box-shadow:0 0 0 3px #3a1a0c,0 8px 18px rgba(0,0,0,.5);transition:transform .2s,filter .3s}
+.poster:hover:not(.locked){transform:translateY(-3px) rotate(-.5deg)}
+.pnum{font-size:12px;font-weight:700;color:var(--gold);margin-bottom:5px}
+.pimg{display:block;aspect-ratio:3/4;border-radius:6px;background:#000 center/cover no-repeat;box-shadow:inset 0 0 0 1px rgba(255,255,255,.15)}
+.ptitle{font-family:var(--display);font-size:clamp(17px,4.4vw,21px);margin-top:7px;line-height:1.15;color:#fff}
+.psub{font-size:13px;color:var(--muted);line-height:1.3;margin-top:3px;min-height:2.6em}
+.pstars{margin-top:4px;font-size:20px;letter-spacing:2px;color:rgba(255,255,255,.22)}
+.pstars i{font-style:normal}.pstars i.on{color:var(--gold);text-shadow:0 0 8px rgba(246,196,83,.7)}
+.poster.locked{filter:grayscale(.85) brightness(.55);cursor:not-allowed}
+.plock{position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);font-size:44px;filter:drop-shadow(0 4px 8px #000)}
+.poster.current{animation:pglow 1.8s ease-in-out infinite}
+.poster.current::before{content:"";position:absolute;top:-30px;left:50%;width:130%;height:70px;transform:translateX(-50%);pointer-events:none;
+  background:radial-gradient(ellipse at 50% 0%,rgba(255,225,150,.7),transparent 70%)}
+@keyframes pglow{0%,100%{box-shadow:0 0 0 3px #3a1a0c,0 0 22px 6px rgba(255,205,110,.55)}50%{box-shadow:0 0 0 3px #3a1a0c,0 0 36px 14px rgba(255,205,110,.85)}}
+.poster.unlocking{animation:punlock .9s ease both}
+@keyframes punlock{0%{filter:grayscale(1) brightness(.5);transform:scale(.92)}60%{transform:scale(1.06)}100%{filter:none;transform:none}}
+.lobby-exit{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-top:26px}
+.certframe{position:relative;display:flex;gap:12px;align-items:center;text-align:right;padding:12px 18px 12px 22px;border-radius:10px;cursor:pointer;color:var(--cream);font:inherit;
+  background:linear-gradient(#3a2412,#24150a);border:4px double #c9973a;filter:brightness(.6);min-width:min(320px,100%)}
+.certframe b{display:block;font-family:var(--display);font-size:20px}.certframe small{font-size:13px;color:var(--muted)}
+.cf-ic{font-size:34px}
+.certframe .lamp{position:absolute;top:-14px;left:50%;width:36px;height:10px;transform:translateX(-50%);border-radius:0 0 18px 18px;background:#6b5a3a}
+.certframe.lit{filter:none;box-shadow:0 -14px 40px 6px rgba(255,214,120,.5)}
+.certframe.lit .lamp{background:#ffe08a;box-shadow:0 6px 26px 10px rgba(255,214,120,.8)}
+.lobby-total{font-weight:700;font-size:18px;background:rgba(0,0,0,.35);padding:8px 14px;border-radius:999px}
+@media (prefers-reduced-motion:reduce){.poster.current,.poster.unlocking{animation:none}}
+</style>
+
+<style id="a11y-fix">/* טקסט גדול לכיתה ולמקרן, ניגודיות לפי ת"י 5568 */
+.bubble{font-size:20px}.guide .g{width:84px;height:84px}
+.tbtn small{font-size:18px}.tbtn b{font-size:25px}
+.real,.fb{font-size:19.5px}.idea{font-size:19.5px}.idea.cam{font-size:20px}
+.card .ctx{font-size:17px}.card .txt{font-size:clamp(21px,5vw,26px)!important}
+.pill{font-size:17px}.screen .tag{font-size:16px}.screen .cap{font-size:clamp(17px,4.4vw,24px)}
+.lobby-head p{font-size:18px}.pnum{font-size:15px}.psub{font-size:16px}.ptitle{font-size:clamp(19px,4.6vw,23px)}
+.certframe b{font-size:22px}.certframe small{font-size:16px}.lobby-total{font-size:20px}
+.chal{font-size:19px}.glasses-say p{font-size:20px!important}.own input{font-size:19px}
+.cert .skill{font-size:19.5px}.cert .credit{font-size:15px}.zone small{font-size:16px}
+main h3{font-size:24px!important}
+@media (max-width:420px){.tbtn .ic{font-size:32px}.tbtn b{font-size:20px}.tbtn small{font-size:16px}.bubble{font-size:18px}.real,.fb,.idea{font-size:18px}.psub{font-size:14.5px}}
+</style>
+<script src="../brand.js" defer></script>
+<script src="../back.js" defer></script>
+</head>
+<body>
+<header class="top">
+  <button class="brand" id="homeBtn" type="button" aria-label="לפתיחה"><span aria-hidden="true">🎬</span><span>קולנוע המחשבות</span></button>
+  <div class="hud">
+    <span class="pill" id="popPill" title="פופקורן">🍿 <b id="pop">0</b></span>
+    <span class="pill" id="comboPill" hidden>🔥 <b id="combo">0</b></span>
+    <button class="icon-btn" id="mapBtn" type="button" aria-label="ללובי" hidden>🎟️</button>
+    <button class="icon-btn" id="soundBtn" type="button" aria-label="צלילים">🔊</button>
+  </div>
+</header>
+<main id="app" aria-live="polite"></main>
+<div class="wearing" id="wearing" aria-hidden="true"></div>
+
+<script src="fun.js"></script>
+<script>
+/* צלילי קולנוע: מחליפים את הצלילים הכלליים רק במשחק הזה */
+(function(){
+  var A=null,NB=null;
+  function ac(){if(!A){try{A=new(window.AudioContext||window.webkitAudioContext)();}catch(e){return null;}}if(A.state==="suspended")A.resume();return A;}
+  function noiseBuf(a){if(!NB){NB=a.createBuffer(1,a.sampleRate,a.sampleRate);var d=NB.getChannelData(0);for(var i=0;i<d.length;i++)d[i]=Math.random()*2-1;}return NB;}
+  function env(a,g,t0,att,dur,vol){g.gain.setValueAtTime(0.0001,t0);g.gain.exponentialRampToValueAtTime(vol,t0+att);g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);}
+  /* רעש מסונן: טיק מקרן, פופקורן, גלילת סרט */
+  function nz(t,dur,freq,q,vol,sweepTo,type){var a=ac();if(!a)return;var t0=a.currentTime+t,s=a.createBufferSource(),f=a.createBiquadFilter(),g=a.createGain();
+    s.buffer=noiseBuf(a);f.type=type||"bandpass";f.frequency.setValueAtTime(freq,t0);if(sweepTo)f.frequency.exponentialRampToValueAtTime(sweepTo,t0+dur);f.Q.value=q;
+    env(a,g,t0,0.004,dur,vol);s.connect(f);f.connect(g);g.connect(a.destination);s.start(t0,Math.random()*0.5);s.stop(t0+dur+0.05);}
+  /* צליל פעמון/מרימבה חם */
+  function bell(f,t,dur,vol){var a=ac();if(!a)return;var t0=a.currentTime+t;[[1,1],[2.76,0.35],[5.4,0.12]].forEach(function(h){var o=a.createOscillator(),g=a.createGain();o.type="sine";o.frequency.value=f*h[0];env(a,g,t0,0.008,dur/(h[0]>1?2:1),vol*h[1]);o.connect(g);g.connect(a.destination);o.start(t0);o.stop(t0+dur+0.05);});}
+  /* כלי נשיפה רך לפתיחת סרט */
+  function brass(f,t,dur,vol){var a=ac();if(!a)return;var t0=a.currentTime+t,o=a.createOscillator(),lp=a.createBiquadFilter(),g=a.createGain();o.type="sawtooth";o.frequency.value=f;lp.type="lowpass";lp.frequency.setValueAtTime(400,t0);lp.frequency.linearRampToValueAtTime(2200,t0+0.12);
+    g.gain.setValueAtTime(0.0001,t0);g.gain.exponentialRampToValueAtTime(vol,t0+0.06);g.gain.setValueAtTime(vol,t0+dur*0.7);g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);o.connect(lp);lp.connect(g);g.connect(a.destination);o.start(t0);o.stop(t0+dur+0.05);}
+  function pop1(t,v){nz(t,0.05,900+Math.random()*900,3,v||0.35);nz(t+0.005,0.03,3000,1,(v||0.35)*0.4,0,"highpass");}
+  var C={
+    click:function(){nz(0,0.03,2500,4,0.18);nz(0.035,0.025,1800,4,0.12);},
+    pop:function(){pop1(0);},
+    good:function(){bell(784,0,0.5,0.12);bell(1175,0.09,0.7,0.12);pop1(0.02,0.18);},
+    combo:function(n){var k=Math.min(3+(n||1),8);for(var i=0;i<k;i++)pop1(i*0.055+Math.random()*0.03,0.25);},
+    soft:function(){bell(440,0,0.35,0.07);bell(392,0.13,0.45,0.06);},
+    whoosh:function(){nz(0,0.4,500,1.2,0.12,3500);for(var i=0;i<6;i++)nz(i*0.06,0.02,2200,5,0.06);},
+    unlock:function(){for(var i=0;i<10;i++)nz(i*(0.09-i*0.006),0.025,2200,5,0.12);bell(1046,0.6,0.8,0.1);bell(1568,0.68,0.9,0.06);},
+    star:function(i){var f=880*Math.pow(2,(i||0)*4/12);bell(f,0,0.7,0.1);bell(f*2,0.04,0.5,0.04);},
+    win:function(){[523,659,784,1046].forEach(function(f,i){bell(f,i*0.11,0.8,0.1);});pop1(0.5);pop1(0.58);pop1(0.63);},
+    fanfare:function(){[[392,0,0.5],[523,0.18,0.5],[659,0.36,0.5],[784,0.54,1.1]].forEach(function(x){brass(x[0],x[1],x[2],0.05);brass(x[0]/2,x[1],x[2],0.04);});
+      [523,659,784].forEach(function(f){brass(f,0.54,1.1,0.03);});bell(1568,0.6,1.2,0.06);for(var i=0;i<6;i++)pop1(0.9+i*0.07,0.2);}
+  };
+  var orig=FUN.sfx;
+  FUN.sfx=function(name,arg){if(FUN.isMuted())return;if(C[name]){try{C[name](arg);}catch(e){}return;}orig(name,arg);};
+})();
+</script>
+
+<script>
+(function(){
+"use strict";
+var app=document.getElementById("app");
+
+/* ===================== דמות: קרני ===================== */
+function projectorSVG(mood){
+  var mouth=mood==="wow"?'<ellipse cx="60" cy="82" rx="7" ry="8" fill="#5a1a2e"/>':'<path d="M48 78 Q60 90 72 78" stroke="#5a1a2e" stroke-width="4" fill="none" stroke-linecap="round"/>';
+  return '<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">'+
+  '<circle cx="38" cy="30" r="20" fill="#3b3b4f" stroke="#f6c453" stroke-width="4"/><circle cx="38" cy="30" r="5" fill="#f6c453"/>'+
+  '<circle cx="80" cy="26" r="17" fill="#3b3b4f" stroke="#f6c453" stroke-width="4"/><circle cx="80" cy="26" r="4" fill="#f6c453"/>'+
+  '<rect x="16" y="46" width="84" height="56" rx="16" fill="#c8193f"/><rect x="16" y="46" width="84" height="14" rx="7" fill="#e8355d"/>'+
+  '<rect x="98" y="62" width="16" height="24" rx="5" fill="#3b3b4f"/><circle cx="114" cy="74" r="6" fill="#fff6c8"/>'+
+  '<circle cx="46" cy="68" r="7" fill="#fff"/><circle cx="74" cy="68" r="7" fill="#fff"/><circle cx="47" cy="69" r="3.6" fill="#1b0a17"/><circle cx="75" cy="69" r="3.6" fill="#1b0a17"/>'+
+  '<circle cx="36" cy="80" r="4" fill="#ff8fa8" opacity=".7"/><circle cx="84" cy="80" r="4" fill="#ff8fa8" opacity=".7"/>'+mouth+
+  '<rect x="30" y="102" width="10" height="12" rx="3" fill="#3b3b4f"/><rect x="78" y="102" width="10" height="12" rx="3" fill="#3b3b4f"/></svg>';
+}
+function svgURI(s){return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(s);}
+var GUIDE="img/makreni.webp";
+function guide(html,mood){return '<div class="guide fade-in"><img class="g" src="'+GUIDE+'" alt="קרני"><div class="bubble">'+html+'</div></div>';}
+
+/* ===================== משקפי צופה ===================== */
+var GLASSES={red:"#ff4d6d",blue:"#4fa3ff",green:"#3fcf8e",purple:"#b07cff"};
+function glassesSVG(col){
+  return '<svg viewBox="0 0 220 96" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="14" width="88" height="66" rx="22" fill="'+col+'" fill-opacity=".35" stroke="'+col+'" stroke-width="10"/>'+
+  '<rect x="124" y="14" width="88" height="66" rx="22" fill="'+col+'" fill-opacity=".35" stroke="'+col+'" stroke-width="10"/><path d="M96 40 Q110 26 124 40" stroke="'+col+'" stroke-width="9" fill="none"/>'+
+  '<circle cx="34" cy="34" r="6" fill="#fff" opacity=".8"/><circle cx="150" cy="34" r="6" fill="#fff" opacity=".8"/></svg>';
+}
+
+/* ===================== נתונים ===================== */
+var T={
+  logic:{name:"מחשבה רגילה",short:"רגילה",ic:"🏠",c:"var(--logic)",desc:"משהו רגיל ושגרתי, בלי פחד ובלי משאלה",vid:"video/logic.mp4",
+    real:"זה <b>יכול</b> לקרות ביום יום. אבל ברגע זה? זה עדיין רק סרט על המסך, עוד לא קרה."},
+  weird:{name:"מחשבה מוזרה / דמיונית",short:"מוזרה / דמיונית",ic:"🦄",c:"var(--weird)",desc:"משהו לא הגיוני או מצחיק",vid:"video/weird.mp4",
+    real:"חחח! המוח יודע להמציא סרטים מצחיקים. <b>במציאות</b> זה לא קורה, וזה בסדר גמור לדמיין."},
+  scary:{name:"מחשבה מטרידה",short:"מטרידה",ic:"😟",c:"var(--scary)",desc:"משהו שמדאיג או מלחיץ אותי",vid:"video/scary.mp4",
+    real:"מחשבה מטרידה יכולה להביא איתה רגש של דאגה או פחד, וזה בסדר. אבל <b>מה שמטריד נמצא על המסך</b>, עוד לא בחדר."},
+  wish:{name:"מחשבה של משאלה",short:"משאלה",ic:"⭐",c:"var(--wish)",desc:"משהו שהייתי רוצה שיקרה",vid:"video/wish.mp4",
+    real:"נעים לדמיין משאלה. אבל <b>לחשוב</b> על משהו לא גורם לו לקרות באמת."}
+};
+var ORDER=["logic","weird","scary","wish"];
+/* דוגמאות חד־משמעיות לשאלות עם תשובה אחת */
+/* תחנה 4: לכל בחירה סרטון משלה (vid:null = עדיין אין סרטון, מוצג טקסט ואימוג'י) */
+var DIRECTOR={
+  logic:[["מה אוכל לארוחת בוקר? אולי לחם עם גבינה","🍞🧀","video/logic.mp4"],["צריך לזכור לקחת את בקבוק המים","💧🎒","video/d_bottle.mp4"],["כדאי לקחת מעיל, אולי יירד גשם","🌧️🧥","video/d_coat.mp4"]],
+  weird:[["החתול שלי פתח מסעדת פיצה ומגיש עם כובע של שף","🐱🍕","video/weird.mp4"],["הנעליים שלי התחילו לרקוד לבד","👟🎶","video/d_shoes.mp4"],["דג זהב נוהג באוטובוס של בית הספר","🐠🚌","video/d_fish.mp4"]],
+  scary:[["אולי יש מפלצת בתוך הארון","🚪👾","video/scary.mp4"],["מה אם אלך לאיבוד בקניון?","🏬❓","video/d_mall.mp4"],["מה אם הכלב הגדול בשכונה ינבח עליי?","🐕‍🦺💥","video/d_dog.mp4"]],
+  wish:[["הלוואי שיירד שלג ליד הבית","❄️⛄","video/wish.mp4"],["הייתי רוצה לקבל כלבלב ליום ההולדת","🐶🎁","video/d_puppy.mp4"],["הלוואי שנלך לים בחופש","🏖️🌊","video/d_beach.mp4"]]
+};
+var POOL={
+  logic:[["מה אוכל לארוחת בוקר? אולי לחם עם גבינה","🍞🧀"],["צריך לזכור לקחת את בקבוק המים","💧🎒"],["מחר יש לנו שיעור חשבון","🔢📐"],["אחרי בית הספר אכין את שיעורי הבית","📒✏️"],
+    ["כדאי לקחת מעיל, אולי יירד גשם","🌧️🧥"],["בשיעור הבא כנראה נלמד על חיות","📚🦒"],["צריך להטעין את הטאבלט לפני השינה","🔋📱"],["הדרך לחוג לוקחת בערך עשר דקות","🚶⏱️"]],
+  weird:[["החתול שלי פתח מסעדת פיצה ומגיש עם כובע של שף","🐱🍕"],["הנעליים שלי התחילו לרקוד לבד","👟🎶"],["ענן בצורת גלידה ירד לחצר וכולם ליקקו אותו","☁️🍦"],["דג זהב נוהג באוטובוס של בית הספר","🐠🚌"],
+    ["הכלב של השכנים התחיל לדבר בסינית","🐶💬"],["המורה הפכה לפינגווין ולימדה אותנו להחליק על קרח","🐧⛸️"],["על העץ בחצר גדלות סוכריות","🌳🍬"],["הכיתה שלנו התמלאה בבלונים ועפה לירח","🎈🌙"]],
+  scary:[["מה אם אשכח את המילים בהצגה?","🎭😶"],["מה אם יצחקו עליי כשאקריא בכיתה?","📖😬"],["מה אם אלך לאיבוד בקניון?","🏬❓"],["מה אם הכלב הגדול בשכונה ינבח עליי?","🐕‍🦺💥"],
+    ["אולי יש מפלצת בתוך הארון","🚪👾"],["מה אם הכלב שלי יברח מהחצר?","🐕💨"],["מה אם במבחן יהיו שאלות שלא למדתי?","📝❔"],["מה אם בטיול לא יהיה לי עם מי לשבת באוטובוס?","🚌💺"]],
+  wish:[["הלוואי שיירד שלג ליד הבית","❄️⛄"],["הייתי רוצה לקבל כלבלב ליום ההולדת","🐶🎁"],["הלוואי שנלך לים בחופש","🏖️🌊"],["הלוואי שהקבוצה שלי תנצח במשחק","🏆⚽"],
+    ["הלוואי שיבואו אליי חברים היום","🧒🧒🏠"],["הייתי רוצה טלפון חדש","📱✨"],["הייתי רוצה לטוס לראות פינגווינים אמיתיים","✈️🐧"],["הלוואי שהיום לא יהיו שיעורי בית","📚🚫"]]
+};
+/* שאלות אתגר: אותה מחשבה יכולה להשתייך לשני סוגים */
+var CHALLENGE=[
+  {t:"מה אם בסערה החשמל ייכבה ויהיה חושך?",a:"⛈️🕯️",k:["logic","scary"],why:"בחורף זה קורה לא מעט, אז זו מחשבה <b>רגילה</b>. ואם החושך מלחיץ אותי, זו גם מחשבה <b>מטרידה</b>."},
+  {t:"אולי אבא יכין פסטה לארוחת ערב",a:"🍝",k:["logic","wish"],why:"זה יכול לקרות ביום יום, אז זו מחשבה <b>רגילה</b>. ואם אני מאוד רוצה פסטה, זו גם <b>משאלה</b>."},
+  {t:"אולי בהפסקה נשחק כדורגל",a:"⚽🏃",k:["logic","wish"],why:"זה דבר רגיל שקורה בהפסקה, אז זו מחשבה <b>רגילה</b>. ואם אני מחכה לזה, זו גם <b>משאלה</b>."},
+  {t:"מה אם המורה תבחר בי לענות מול כל הכיתה?",a:"🙋‍♂️🏫",k:["logic","scary"],why:"זה יכול לקרות ביום יום, אז זו מחשבה <b>רגילה</b>. ואם זה מלחיץ אותי, זו גם מחשבה <b>מטרידה</b>."}
+];
+/* מבחן המצלמה: בכל רגע יש מה שהמצלמה רואה ושומעת, ומה שהראש מקרין */
+var PAIRS=[
+  {ctx:"בהפסקה",a:"🏐🧒🧒🧒",img:"img/m_ball.webp",f:"ראיתי שלושה ילדים משחקים בכדור",cam:"בהקלטה היינו רואים שלושה ילדים משחקים בכדור",th:"חשבתי שאולי הם לא ירצו שאצטרף",k:"scary"},
+  {ctx:"אחרי הצהריים",a:"📱⏳",img:"img/m_phone.webp",f:"שלחתי הודעה לחבר, ועוד אין תשובה",cam:"בהקלטה היינו רואים הודעה שנשלחה, ועוד אין תשובה",th:"חשבתי שאולי הוא כועס עליי",k:"scary"},
+  {ctx:"בסוף השיעור",a:"🧑‍🏫🚪",img:"img/m_teacher.webp",f:"המורה ביקשה ממני להישאר אחרי השיעור",cam:"בהקלטה היינו שומעים את המורה מבקשת ממני להישאר אחרי השיעור",th:"חשבתי: מה אם עשיתי משהו לא בסדר?",k:"scary"},
+  {ctx:"במסדרון",a:"😄😄🚶",img:"img/m_hall.webp",f:"שתי בנות מהכיתה צחקו כשעברתי לידן",cam:"בהקלטה היינו רואים ושומעים שתי בנות צוחקות כשעברתי לידן",th:"חשבתי שאולי הן צוחקות עליי",k:"scary"},
+  {ctx:"בשיעור",a:"🪟🐉",img:"img/m_window.webp",f:"ישבתי בכיתה והסתכלתי מהחלון",cam:"בהקלטה היינו רואים אותי יושב/ת בכיתה ומסתכל/ת מהחלון",th:"דמיינתי דרקון ענק נוחת בחצר",k:"weird"},
+  {ctx:"בבוקר",a:"📋🚌",img:"img/m_bus.webp",f:"על הלוח כתוב: מחר טיול שנתי",cam:"בהקלטה היינו רואים על הלוח: מחר טיול שנתי",th:"חשבתי: הלוואי שיהיה מזג אוויר טוב",k:"wish"},
+  {ctx:"בערב",a:"🐕💤",img:"img/m_dog.webp",f:"הכלב שלי נרדם על השטיח",cam:"בהקלטה היינו רואים את הכלב ישן על השטיח",th:"חשבתי שהוא בטח חולם על עצם",k:"logic"},
+  {ctx:"לפני השינה",a:"🚪🔊",img:"img/m_bed2.webp",f:"שמעתי רעש מכיוון הארון",cam:"בהקלטה היינו שומעים רעש מכיוון הארון",th:"חשבתי שאולי יש שם מפלצת",k:"scary"},
+  {ctx:"בכיתה",a:"🧑‍🤝‍🧑🪑",img:"img/m_seat.webp",f:"החבר שיושב לידי עבר לשבת ליד מישהו אחר",cam:"בהקלטה היינו רואים את החבר עובר לשבת ליד מישהו אחר",th:"חשבתי שאולי הוא כבר לא רוצה להיות חבר שלי",k:"scary"}
+];
+var MOVIES=[
+  {id:"dragon",ic:"🐉",name:"הרפתקה עם דרקונים",scene:"🐉🔥🏰",vid:"video/dragon.mp4",who:"דרקון",whoIc:"🐉"},
+  {id:"space",ic:"🚀",name:"מסע לחלל",scene:"🚀👽🪐",vid:"video/space.mp4",who:"חייזר",whoIc:"👽"},
+  {id:"dino",ic:"🦖",name:"דינוזאורים",scene:"🦖🌋🌴",vid:"video/dino.mp4",who:"דינוזאור",whoIc:"🦖"},
+  {id:"magic",ic:"🪄",name:"קסמים ומכשפים",scene:"🧙🪄✨",vid:"video/magic.mp4",who:"קוסם שעף על מטאטא",whoIc:"🧹"}
+];
+
+/* ===================== מצב ===================== */
+var ST=FUN.load("cinema-v1",null)||{stars:[0,0,0,0],unlocked:1,pop:0,glasses:null,intro:false};
+function save(){FUN.save("cinema-v1",ST);}
+var popEl=document.getElementById("pop"),comboPill=document.getElementById("comboPill"),comboEl=document.getElementById("combo"),mapBtn=document.getElementById("mapBtn");
+function paintPop(){popEl.textContent=ST.pop;}
+function addPop(n,el){ST.pop+=n;save();paintPop();FUN.bounce(document.getElementById("popPill"));FUN.floatText("+"+n+" 🍿",el);}
+var combo=0;
+function setCombo(n){combo=n;comboEl.textContent=n;comboPill.hidden=n<2;if(n>=2)FUN.bounce(comboPill);}
+FUN.bindMute(document.getElementById("soundBtn"));
+paintPop();
+document.getElementById("homeBtn").onclick=function(){intro1();};
+mapBtn.onclick=function(){showMap();};
+function wear(on){var w=document.getElementById("wearing");
+  if(on&&ST.glasses){w.innerHTML='<div style="position:absolute;inset:0;box-shadow:inset 0 0 0 10px '+GLASSES[ST.glasses]+'88,inset 0 0 60px '+GLASSES[ST.glasses]+'55;border-radius:30px"></div>';w.classList.add("show");}
+  else w.classList.remove("show");}
+function rattle(){FUN.sfx("whoosh");for(var i=0;i<7;i++)setTimeout(function(){FUN.sfx("click");},120+i*65);}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.random()*(i+1)|0,t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function go(html){app.innerHTML=html;window.scrollTo({top:0});}
+function hall(inner,open){return '<div class="hall'+(open?" open":"")+'" id="hall"><div class="beam"></div><div class="screen-wrap"><div class="screen" id="scr">'+inner+'<div class="grain"></div></div><div class="curtain l"></div><div class="curtain r"></div></div><div class="seats"></div></div>';}
+/* סרטון על המסך: מתנגן פעם אחת עם קול (אם הצלילים פועלים), ואז ממשיך בלולאה בשקט */
+function vidHTML(src,cap,art){return '<video src="'+src+'" data-art="'+(art||"🎬")+'" playsinline autoplay muted preload="auto" disablepictureinpicture disableremoteplayback></video><div class="cap">'+cap+'</div>';}
+/* אם הסרטון לא נטען, מציגים במקומו את האימוג'י, כדי שהמסך לא יישאר לבן */
+function startVid(){var v=document.querySelector("#scr video");if(!v)return;
+  var done=false;
+  function fallback(){if(done||!v.isConnected)return;done=true;
+    var a=document.createElement("div");a.className="art";a.textContent=v.dataset.art||"🎬";v.replaceWith(a);}
+  function ok(){done=true;v.classList.add("on");var a=v.parentNode&&v.parentNode.querySelector(".art.tmp");if(a)a.remove();}
+  v.addEventListener("playing",ok);
+  v.volume=0.3;v.muted=FUN.isMuted();var pr=v.play();if(pr&&pr.catch)pr.catch(function(){v.muted=true;var p2=v.play();if(p2&&p2.catch)p2.catch(function(){document.addEventListener("pointerdown",function(){if(v.isConnected)v.play().catch(function(){});},{once:true});});});
+  v.addEventListener("ended",function(){if(v.dataset.once)return;v.muted=true;v.loop=true;v.play();});
+  v.addEventListener("error",function(){if(!v.dataset.retry){v.dataset.retry=1;v.load();v.play();}else fallback();});
+  setTimeout(function(){if(done||!v.isConnected)return;if(v.readyState<2)fallback();else if(!v.parentNode.querySelector(".art.tmp")){var a=document.createElement("div");a.className="art tmp";a.textContent=v.dataset.art||"🎬";v.after(a);}},4000);}
+function project(html,cls){var h=document.getElementById("hall"),s=document.getElementById("scr");h.classList.add("on");s.className="screen flicker "+(cls||"");s.innerHTML=html+'<div class="grain"></div>';rattle();startVid();}
+
+/* ===================== פתיחה ===================== */
+function intro1(){
+  mapBtn.hidden=!ST.intro;wear(false);
+  go('<div class="fade-in"><div class="hero" id="hero"><img src="img/opening.webp" alt="אולם קולנוע עם וילונות בורדו, מסך גדול וקרני המקרן"><div class="hero-screen"><h1>קולנוע המחשבות</h1></div></div>'+
+   '<p class="center" style="font-size:18px;color:var(--muted);margin:14px 0 16px">מסע לגלות מה זו מחשבה, ומה ההבדל בינה לבין מה שקורה באמת</p>'+
+   '<div class="row"><button class="btn big" id="go">🎟️ נכנסים לאולם</button></div></div>');
+  document.getElementById("go").onclick=function(){
+    this.disabled=true;var h=document.getElementById("hero");h.classList.add("on");rattle();FUN.sfx("unlock");
+    setTimeout(intro2,1100);
+  };
+}
+function intro2(){
+  go('<div class="fade-in">'+hall('<div class="art">🍿</div><div class="say">איזה סרט נקרין?</div>',true)+
+   guide('היי! אני <b>קרני</b>, המקרן של הקולנוע. 🎞️<br>נזכרים בסרט שראיתם פעם, בקולנוע או במסך בבית? <b>בחרו סרט ונקרין אותו!</b>')+
+   '<div class="types">'+MOVIES.map(function(m,i){return '<button class="tbtn" style="--c:'+["var(--scary)","var(--logic)","var(--real)","var(--weird)"][i]+'" data-m="'+i+'"><span class="ic">'+m.ic+'</span><span><b>'+m.name+'</b></span></button>';}).join("")+'</div></div>');
+  var cur=null,shown=false;
+  app.querySelectorAll("[data-m]").forEach(function(b){b.onclick=function(){
+    var m=MOVIES[+b.dataset.m];cur=m;
+    app.querySelectorAll("[data-m]").forEach(function(x){x.classList.toggle("pick",x===b);});
+    project(m.vid?vidHTML(m.vid,'🎬 '+m.name):'<div class="art fly">'+m.scene+'</div><div class="say">'+m.name+'</div>');
+    FUN.confettiAt(b,20);
+    document.getElementById("hall").scrollIntoView({behavior:"smooth",block:"start"});
+    if(shown)return;shown=true;
+    setTimeout(function(){
+      app.insertAdjacentHTML("beforeend",guide('וואו, איזה סרט! על המסך הכול נראה כמעט אמיתי... 🤩<br>אפשר לבחור עוד סרט, וכשמסיימים, הסרט נגמר ויוצאים החוצה.')+'<div class="row"><button class="btn" id="out">🚪 יוצאים מהקולנוע</button></div>');
+      document.getElementById("out").onclick=function(){intro3(cur);};
+    },3000);
+  };});
+}
+function intro3(m){
+  FUN.sfx("whoosh");
+  go('<div class="fade-in"><div class="street" id="scr"><video src="video/street.mp4" playsinline autoplay muted preload="auto" disablepictureinpicture disableremoteplayback></video><span class="q">❓</span></div>'+
+   guide('יצאנו לרחוב. תגידו, אנחנו מצפים לפגוש פה עכשיו <b>'+m.who+'</b> '+m.whoIc+'?')+
+   '<div class="row"><button class="btn ghost" id="yes">😮 כן, בטח!</button><button class="btn ghost" id="no">😄 ברור שלא!</button></div><div id="fb"></div></div>');
+  function next(ok){
+    document.getElementById("yes").disabled=document.getElementById("no").disabled=true;document.getElementById("no").classList.remove("ghost");
+    if(ok){FUN.sfx("good");FUN.confetti(60);addPop(10,document.getElementById("no"));}else FUN.sfx("pop");
+    document.getElementById("fb").innerHTML=guide((ok?'<b>נכון!</b> ':'חחח, בואו נבדוק... 👀 אין פה אף '+m.who+'! ')+'ה'+m.who+' היה <b>רק על המסך</b>. כשיוצאים מהסרט, ברור לנו שזה היה סרט, ולא מחפשים אותו ברחוב.',"wow")+
+      '<div class="row"><button class="btn" id="n">והנה הסוד הגדול ⬅️</button></div>';
+    document.getElementById("n").onclick=function(){intro4(m);};
+    document.getElementById("n").scrollIntoView({behavior:"smooth",block:"center"});
+  }
+  startVid();
+  document.getElementById("yes").onclick=function(){next(false);};
+  document.getElementById("no").onclick=function(){next(true);};
+}
+function headSVG(){
+  return '<svg class="headpic" viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ראש ובתוכו מקרן ומסך">'+
+  '<path d="M150 14c70 0 118 46 118 108 0 34-12 54-22 70v40c0 8-6 14-14 14h-52v-26h-30c-62 0-118-40-118-98C32 60 80 14 150 14z" fill="#f2c9a8" stroke="#f6c453" stroke-width="5"/>'+
+  '<rect x="74" y="52" width="130" height="84" rx="8" fill="#fbf7ec" stroke="#2a1a2e" stroke-width="5"/>'+
+  '<text x="139" y="108" font-size="44" text-anchor="middle">💭</text>'+
+  '<path d="M222 150 L204 136 L204 52 Z" fill="#fff6c8" opacity=".55"/>'+
+  '<rect x="214" y="138" width="34" height="26" rx="6" fill="#c8193f"/><circle cx="222" cy="134" r="8" fill="#3b3b4f"/><circle cx="240" cy="134" r="7" fill="#3b3b4f"/></svg>';
+}
+function intro4(m){
+  FUN.sfx("unlock");
+  go('<div class="fade-in"><div class="street" id="scr"><video src="video/head.mp4" playsinline autoplay muted preload="auto" disablepictureinpicture disableremoteplayback></video></div>'+
+   guide('<b>זה כאילו יש לנו קולנוע בתוך הראש!</b> 🧠🎬<br>המוח שלנו עובד כמו מקרן שמקרין סרטים על מסך פנימי. הסרטים האלה נקראים <b>מחשבות</b>.')+
+   guide('לפעמים הסרט רגיל, כמו "מה אוכל לארוחת בוקר?". ולפעמים הוא מוזר, דמיוני, מטריד, או סרט של משאלה.')+
+   guide('והכי חשוב: <b>זה שסרט מוקרן בראש, לא הופך אותו למציאות.</b> '+(m?m.whoIc+' ה'+m.who:'🐉 הדרקון')+' נשאר על המסך, לא ברחוב.<br>ומחשבות הן לא רעות! לכל הראשים יש סרטים מכל הסוגים.')+
+   '<div class="row"><button class="btn" id="n">🕶️ קבלו משקפי צופה</button></div></div>');
+  startVid();
+  document.getElementById("n").onclick=intro5;
+}
+function intro5(){
+  go('<div class="fade-in"><div class="street" id="scr" style="margin-bottom:12px"><video src="video/glasses.mp4" data-once="1" playsinline autoplay muted preload="auto" disablepictureinpicture disableremoteplayback></video></div>'+guide('כל צופה מקצועי צריך <b>משקפי צופה</b>! 🕶️<br>כשמרכיבים אותם, עוברים למצב של <b>צופים מהצד</b>: רואים את הסרט, ויודעים שזה רק סרט. <b>בחרו צבע:</b>')+
+   '<div class="glasses-pick">'+Object.keys(GLASSES).map(function(k){return '<button class="gl" data-g="'+k+'" aria-label="משקפיים '+{red:"אדומים",blue:"כחולים",green:"ירוקים",purple:"סגולים"}[k]+'">'+glassesSVG(GLASSES[k])+'</button>';}).join("")+'</div>'+
+   '<div class="row" style="margin-top:16px"><button class="btn" id="n" disabled>🎟️ ללובי של הקולנוע</button></div></div>');
+  startVid();
+  app.querySelectorAll(".gl").forEach(function(b){b.onclick=function(){
+    app.querySelectorAll(".gl").forEach(function(x){x.classList.toggle("sel",x===b);});
+    ST.glasses=b.dataset.g;save();wear(true);FUN.sfx("pop");FUN.confettiAt(b,16);
+    setTimeout(function(){wear(false);},1200);
+    document.getElementById("n").disabled=false;
+  };});
+  document.getElementById("n").onclick=function(){ST.intro=true;save();FUN.bigBanner("🕶️ צופים מקצועיים!");showMap();};
+}
+
+/* ===================== מפה ===================== */
+var STATIONS=[
+  {icon:"📽️",name:"חדר ההקרנה",place:"מקרינים 4 סוגי סרטים",img:"img/p_room.webp"},
+  {icon:"🎞️",name:"איזה סרט זה?",place:"מזהים את סוג המחשבה",img:"img/p_sort.webp"},
+  {icon:"🎥",name:"מבחן המצלמה",place:"מה רואים ושומעים, ומה הראש מקרין",img:"img/p_camera.webp"},
+  {icon:"🍿",name:"הסרט שלי",place:"מקרינים מחשבה משלי",img:"img/p_mine.webp"}
+];
+function showMap(just){
+  wear(false);mapBtn.hidden=true;setCombo(0);
+  var n=STATIONS.length,tot=0,cur=-1;
+  for(var k=0;k<n;k++){tot+=ST.stars[k]||0;if(cur<0&&k<ST.unlocked&&!ST.stars[k])cur=k;}
+  var all=ST.stars.filter(Boolean).length>=n;
+  var h='<div class="lobby fade-in"><div class="lobby-head"><img src="'+GUIDE+'" alt=""><div><h2>הלובי של קולנוע המחשבות</h2><p>בוחרים כרזה ונכנסים לאולם. בכל אולם אוספים פופקורן וכוכבים.</p></div></div><div class="posters">';
+  for(var i=0;i<n;i++){var st=STATIONS[i],lock=i>=ST.unlocked,sc=ST.stars[i]||0,stars="";
+    for(var j=0;j<3;j++)stars+='<i class="'+(j<sc?"on":"")+'">★</i>';
+    h+='<button type="button" class="poster'+(lock?" locked":"")+(i===cur?" current":"")+(sc?" done":"")+'" data-i="'+i+'"><span class="pnum">אולם '+(i+1)+'</span>'+
+      '<span class="pimg" style="background-image:url('+st.img+')"></span>'+(lock?'<span class="plock">🔒</span>':'')+
+      '<span class="ptitle">'+st.name+'</span><span class="psub">'+st.place+'</span><span class="pstars">'+stars+'</span></button>';}
+  h+='</div><div class="lobby-exit"><button type="button" class="certframe'+(all?" lit":"")+'" id="certBtn"><span class="lamp"></span><span class="cf-ic">'+(all?"🏆":"🔒")+'</span><span><b>תעודת צופה</b><small>'+(all?"התעודה מחכה לכם!":"נפתחת אחרי ארבעת האולמות")+'</small></span></button>'+
+    '<div class="lobby-total">⭐ '+tot+' / '+(n*3)+'</div></div></div>';
+  app.innerHTML=h;
+  Array.prototype.forEach.call(app.querySelectorAll(".poster"),function(b){b.onclick=function(){
+    if(b.classList.contains("locked")){FUN.shake(b);FUN.sfx("soft");return;}
+    FUN.sfx("pop");mapBtn.hidden=false;[st1,st2,st3,st4][+b.dataset.i]();};});
+  var cb=document.getElementById("certBtn");cb.onclick=function(){if(!all){FUN.shake(cb);FUN.sfx("soft");return;}FUN.sfx("pop");cert();};
+  if(just!=null){var u=just>=n?cb:app.querySelector('.poster[data-i="'+just+'"]');
+    if(u){u.classList.add("unlocking");setTimeout(function(){FUN.sfx("unlock");FUN.confettiAt(u,22);},500);}}
+  var c=app.querySelector(".poster.current")||(all?cb:null);
+  if(c)setTimeout(function(){c.scrollIntoView({block:"center",behavior:"smooth"});},80);
+}
+function finish(i,stars,right,total){
+  var first=!ST.stars[i];
+  ST.stars[i]=Math.max(ST.stars[i]||0,stars);
+  var unlockedNow=null;
+  if(ST.unlocked<=i+1&&i+1<=STATIONS.length){ST.unlocked=Math.min(STATIONS.length,i+2);unlockedNow=i+1;}
+  save();
+  FUN.sfx("win");FUN.confettiSides(60);
+  go('<div class="fade-in center"><h2 style="font-size:32px;color:var(--gold)">🎉 סיימתם את '+STATIONS[i].name+'!</h2><div id="stars"></div>'+
+    (total?'<p style="margin:0 0 6px;font-weight:700">'+right+' מתוך '+total+' נכון בניסיון הראשון</p>':'')+
+    guide(["כל הכבוד! ראיתם שיש סרטים מכל מיני סוגים, וכולם מוקרנים רק על המסך.","מזהים מקצועיים! עכשיו אתם יודעים לתת שם לסרט שמוקרן בראש.","מעולה! עכשיו אתם יודעים להפריד בין מה שהמצלמה רואה ושומעת לבין הסרט שהראש מקרין.","איזה במאים! הקרנתם מחשבות משלכם, ושמתם לב שהן עוברות על המסך."][i])+
+    '<div class="row"><button class="btn" id="n">🎟️ חזרה ללובי</button>'+(i===1||i===2?'<button class="btn ghost" id="again">🔁 סבב נוסף</button>':'')+'</div></div>');
+  FUN.revealStars(document.getElementById("stars"),stars);
+  document.getElementById("n").onclick=function(){showMap(first&&unlockedNow!=null?(ST.stars.filter(Boolean).length>=4?4:unlockedNow):null);};
+  var ag=document.getElementById("again");if(ag)ag.onclick=function(){[st2,st3][i-1]();};
+}
+/* מסך עם מחשבה: סרטון אם יש לסוג הזה, אחרת אימוג'י */
+function thoughtHTML(k,txt,art,tag){
+  var t=T[k],tg=tag?'<span class="tag" style="background:'+t.c+'">'+t.ic+' '+t.short+'</span>':'';
+  if(t.vid)return vidHTML(t.vid,txt?'"'+txt+'"'+tg:t.ic+' '+t.name,art);
+  return '<div class="art'+(k==="weird"?" fly":"")+'">'+art+'</div><div class="say">"'+txt+'"</div>'+(tag?'<div class="tag" style="background:'+t.c+'">'+t.ic+' '+t.name+'</div>':'');
+}
+
+/* ===================== תחנה 1: חדר ההקרנה ===================== */
+function st1(){
+  var seen={logic:0,weird:0,scary:0,wish:0},idx={logic:0,weird:0,scary:0,wish:0};
+  go('<div class="fade-in">'+hall('<div class="art">📽️</div><div class="say">איזו מחשבה אני בוחר/ת להקרין עכשיו?</div>',true)+
+   '<div class="types" id="tb">'+ORDER.map(function(k){var t=T[k];return '<button class="tbtn" style="--c:'+t.c+'" data-k="'+k+'"><span class="ic">'+t.ic+'</span><span><b>'+t.short+'</b><small>'+t.desc+'</small></span><span class="cnt" id="c-'+k+'">0/1</span></button>';}).join("")+'</div>'+
+   '<div id="real"></div><div class="prog"><span>🎟️</span><div class="bar"><i id="bar" style="width:0"></i></div><span id="pc">0/4</span></div>'+
+   guide('לחצו על סוג של מחשבה, ואקרין לכם סרט כזה. <b>הקרינו סרט אחד מכל סוג.</b>')+'<div id="done"></div></div>');
+  app.querySelectorAll("[data-k]").forEach(function(b){b.onclick=function(){
+    var k=b.dataset.k,t=T[k],it=POOL[k][idx[k]%POOL[k].length];idx[k]++;
+    project(thoughtHTML(k,"",it[1],true));
+    document.getElementById("real").innerHTML='<div class="real fade-in">🌍 <b>ובמציאות?</b> '+t.real+'</div>';
+    if(!seen[k]){seen[k]=1;addPop(5,b);document.getElementById("c-"+k).textContent="1/1";FUN.confettiAt(b,14);}
+    var tot=ORDER.reduce(function(s,x){return s+seen[x];},0);
+    document.getElementById("bar").style.width=(tot/4*100)+"%";document.getElementById("pc").textContent=tot+"/4";
+    if(tot===4&&!document.getElementById("fin")){
+      FUN.sfx("win");
+      document.getElementById("done").innerHTML='<p class="center" style="color:var(--muted)">אפשר להמשיך ללחוץ ולראות עוד סרטים, או לסיים.</p><div class="row"><button class="btn big" id="fin">⭐ סיימתי את חדר ההקרנה</button></div>';
+      document.getElementById("fin").onclick=function(){finish(0,3);};
+    }
+  };});
+}
+
+/* ===================== תחנה 2: איזה סרט זה? ===================== */
+function st2(){
+  var base=ORDER.map(function(k){var x=shuffle(POOL[k])[0];return {t:x[0],a:x[1],k:k};});
+  var extraK=ORDER[Math.random()*4|0],ex=shuffle(POOL[extraK].filter(function(x){return x[0]!==base[ORDER.indexOf(extraK)].t;}))[0];
+  var items=shuffle(base.concat([{t:ex[0],a:ex[1],k:extraK}])).concat([Object.assign({ch:1},shuffle(CHALLENGE)[0])]),
+      i=0,right=0,tried=false;
+  setCombo(0);
+  function render(){
+    var it=items[i];tried=false;
+    go('<div class="fade-in">'+hall('<div class="art'+(it.k==="weird"?" fly":"")+'">'+it.a+'</div><div class="say">"'+it.t+'"</div>',true)+
+      '<div class="prog"><span>🎞️ '+(i+1)+'/'+items.length+'</span><div class="bar"><i style="width:'+(i/items.length*100)+'%"></i></div></div>'+
+      (it.ch?'<div class="chal">⭐ שאלת אתגר! לפעמים אותה מחשבה שייכת ליותר מסוג אחד.</div>':'')+
+      '<h3 class="center" style="margin-top:14px;font-size:22px">'+(it.ch?'לאיזה סוג המחשבה הזו יכולה להשתייך?':'איזה סרט מוקרן עכשיו על המסך?')+'</h3>'+
+      '<div class="types">'+ORDER.map(function(k){var t=T[k];return '<button class="tbtn" style="--c:'+t.c+'" data-k="'+k+'"><span class="ic">'+t.ic+'</span><span><b>'+t.short+'</b><small>'+t.desc+'</small></span></button>';}).join("")+'</div><div id="fb"></div></div>');
+    document.getElementById("hall").classList.add("on");rattle();
+    app.querySelectorAll("[data-k]").forEach(function(b){b.onclick=function(){pick(b);};});
+  }
+  function pick(b){
+    var it=items[i],k=b.dataset.k,ks=[].concat(it.k),fb=document.getElementById("fb");
+    if(ks.indexOf(k)>=0){
+      if(!tried){right++;setCombo(combo+1);addPop(it.ch?20:10,b);if(combo>=3){FUN.sfx("combo",combo);FUN.bigBanner("🔥 רצף "+combo+"!");}else FUN.sfx("good");}else FUN.sfx("good");
+      FUN.confettiAt(b,18);
+      app.querySelectorAll("[data-k]").forEach(function(x){x.disabled=true;var on=ks.indexOf(x.dataset.k)>=0;x.classList.toggle("no",!on);x.classList.toggle("pick",on);});
+      if(!it.ch)project('<div class="art'+(k==="weird"?" fly":"")+'">'+it.a+'</div><div class="say">"'+it.t+'"</div><div class="tag" style="background:'+T[k].c+'">'+T[k].ic+' '+T[k].name+'</div>');
+      fb.innerHTML='<div class="fb ok">'+(it.ch?'🌟 <b>נכון, ויש כאן שתי תשובות!</b> '+it.why+'<br>אותה מחשבה יכולה להיות מכמה סוגים, וזה בסדר.':'✅ <b>נכון! '+T[k].name+'</b>: '+T[k].desc+'.')+'<br>📽️ וזה עדיין רק סרט על המסך בראש.</div><div class="row" style="margin-top:12px"><button class="btn" id="n">'+(i+1<items.length?"לסרט הבא ⬅️":"⭐ סיום")+'</button></div>';
+      document.getElementById("n").onclick=function(){i++;if(i<items.length)render();else finish(1,FUN.starsFor(right,items.length),right,items.length);};
+      document.getElementById("n").scrollIntoView({behavior:"smooth",block:"center"});
+    }else{
+      tried=true;setCombo(0);FUN.sfx("soft");FUN.shake(b);b.disabled=true;b.classList.add("no");
+      fb.innerHTML='<div class="fb no">🤔 כמעט! הנה רמז: '+hint(ks[0])+' נסו שוב.</div>';
+    }
+  }
+  function hint(k){return {logic:"זה משהו רגיל מהיום יום, בלי 'הלוואי' ובלי משהו מאיים.",weird:"האם זה יכול לקרות בעולם האמיתי? 😄",scary:"האם הסרט הזה מדאיג או מלחיץ? הוא מתחיל הרבה פעמים ב'מה אם...'.",wish:"שימו לב למילים 'הלוואי' או 'הייתי רוצה'."}[k];}
+  render();
+}
+
+/* ===================== תחנה 3: מבחן המצלמה ===================== */
+function st3(){
+  var items=shuffle(PAIRS).slice(0,5),i=0,right=0,tried=false;setCombo(0);
+  function render(){
+    var it=items[i];tried=false;
+    var opts=shuffle([{s:it.f,f:1},{s:it.th,f:0}]);
+    go('<div class="fade-in">'+(i===0?'<div class="street" id="scr" style="margin-bottom:12px"><video src="video/camera.mp4" data-once="1" playsinline autoplay muted preload="auto" disablepictureinpicture disableremoteplayback></video></div>':'')+(i===0?guide('בכל רגע יש <b>מה שקורה באמת</b>, ויש <b>סרט שהראש מקרין</b>. נשאל את עצמנו: <b>אם מצלמה הייתה מצלמת את הרגע הזה, מה היינו רואים או שומעים?</b>'):'')+
+      '<div class="prog"><span>🎥 '+(i+1)+'/'+items.length+'</span><div class="bar"><i style="width:'+(i/items.length*100)+'%"></i></div></div>'+
+      '<div class="card" style="margin-top:12px"><div class="ctx">'+it.ctx+'</div>'+(it.img?'<img class="moment" src="'+it.img+'" alt="">':'<div class="art">'+it.a+'</div>')+
+      '<div class="txt" style="font-size:clamp(17px,4.4vw,21px)">'+it.f+'<br><span style="color:#7a5a6e">ו</span>'+it.th.replace(/^חשבתי/,"חשבתי").replace(/^דמיינתי/,"דמיינתי")+'</div></div>'+
+      '<h3 class="center" style="margin-top:14px;font-size:20px">🎥 מה המצלמה הייתה רואה או שומעת?</h3>'+
+      '<div class="ideas">'+opts.map(function(o){return '<button class="idea cam" data-f="'+o.f+'">'+o.s+'</button>';}).join("")+'</div><div id="fb"></div></div>');
+    if(i===0)startVid();
+    app.querySelectorAll("[data-f]").forEach(function(b){b.onclick=function(){pick(b);};});
+  }
+  function pick(b){
+    var it=items[i],fb=document.getElementById("fb");
+    if(b.dataset.f==="1"){
+      if(!tried){right++;setCombo(combo+1);addPop(10,b);if(combo>=3){FUN.sfx("combo",combo);FUN.bigBanner("🔥 רצף "+combo+"!");}else FUN.sfx("good");}else FUN.sfx("good");
+      FUN.confettiAt(b,18);app.querySelectorAll("[data-f]").forEach(function(x){x.disabled=true;x.classList.add(x.dataset.f==="1"?"yes":"head");});
+      fb.innerHTML='<div class="fb ok">✅ <b>נכון!</b> 🎥 '+(it.cam||('המצלמה הייתה קולטת: '+it.f))+'.<br>🎬 ומה שהראש הוסיף, "'+it.th.replace(/^(חשבתי|דמיינתי):?\s*(ש)?/,"")+'", זה <b>סרט בראש</b> ('+T[it.k].ic+' '+T[it.k].name+'). מצלמה לא יכולה לצלם מחשבות.</div><div class="row" style="margin-top:12px"><button class="btn" id="n">'+(i+1<items.length?"הבא ⬅️":"⭐ סיום")+'</button></div>';
+      document.getElementById("n").onclick=function(){i++;if(i<items.length)render();else finish(2,FUN.starsFor(right,items.length),right,items.length);};
+      document.getElementById("n").scrollIntoView({behavior:"smooth",block:"center"});
+    }else{
+      tried=true;setCombo(0);FUN.sfx("soft");FUN.shake(b);b.disabled=true;
+      fb.innerHTML='<div class="fb no">🤔 מצלמה קולטת רק מה שרואים ושומעים. היא לא יכולה לצלם מה שעובר לנו בראש. נסו שוב!</div>';
+    }
+  }
+  render();
+}
+
+/* ===================== תחנה 4: הסרט שלי ===================== */
+function st4(){
+  var made=0,NEED=2;
+  function choose(){
+    wear(false);
+    go('<div class="fade-in">'+hall('<div class="art">🎥</div><div class="say">עכשיו אתם הבמאים!</div>',true)+
+      '<div class="prog"><span>🍿 '+made+'/'+NEED+'</span><div class="bar"><i style="width:'+(made/NEED*100)+'%"></i></div></div>'+
+      guide('איזה סוג סרט <b>אתם</b> בוחרים להקרין עכשיו?')+
+      '<div class="types">'+ORDER.map(function(k){var t=T[k];return '<button class="tbtn" style="--c:'+t.c+'" data-k="'+k+'"><span class="ic">'+t.ic+'</span><span><b>'+t.short+'</b><small>'+t.desc+'</small></span></button>';}).join("")+'</div></div>');
+    app.querySelectorAll("[data-k]").forEach(function(b){b.onclick=function(){FUN.sfx("pop");write(b.dataset.k);};});
+  }
+  function write(k){
+    var t=T[k],ideas=DIRECTOR[k];
+    go('<div class="fade-in">'+guide('בחרו מחשבה '+t.ic+' <b>'+t.short+'</b>, או כתבו מחשבה משלכם:')+
+      '<div class="ideas">'+ideas.map(function(x,j){return '<button class="idea" data-j="'+j+'">'+x[1]+' '+x[0]+'</button>';}).join("")+
+      '<form class="own" id="ownF"><input id="ownT" maxlength="70" placeholder="✏️ המחשבה שלי..." autocomplete="off"><button class="btn" type="submit">הקרנה</button></form></div>'+
+      '<div class="row" style="margin-top:12px"><button class="btn ghost" id="back">⬅️ סוג אחר</button></div></div>');
+    app.querySelectorAll(".idea").forEach(function(b){b.onclick=function(){var x=ideas[+b.dataset.j];show(k,x[0],x[1],x[2]);};});
+    document.getElementById("ownF").onsubmit=function(e){e.preventDefault();var v=document.getElementById("ownT").value.trim();if(!v){FUN.shake(this);return;}show(k,v,t.ic);};
+    document.getElementById("back").onclick=choose;
+  }
+  function show(k,txt,art,vid){
+    go('<div class="fade-in">'+hall('',true)+'<div id="step"></div></div>');
+    var tx=txt.replace(/[<>]/g,""),tg='<span class="tag" style="background:'+T[k].c+'">'+T[k].ic+' '+T[k].short+'</span>';
+    project(vid?vidHTML(vid,'"'+tx+'"'+tg,art):'<div class="art'+(k==="weird"?" fly":"")+'">'+art+'</div><div class="say">"'+tx+'"</div><div class="tag" style="background:'+T[k].c+'">'+T[k].ic+' '+T[k].name+'</div>');
+    var step=document.getElementById("step");
+    step.innerHTML='<div class="glasses-say fade-in"><p style="font-size:18px">🕶️ מרכיבים משקפי צופה, מסתכלים על המסך, ואומרים בקול או בלב:</p><div class="quote">"יש לי מחשבה שעוברת בראש"</div>'+
+      '<div class="row" style="margin-top:14px"><button class="btn" id="said">🎤 אמרתי בקול</button><button class="btn" id="said2">💭 אמרתי בלב</button></div></div>';
+    wear(true);
+    function said(){
+      addPop(15,this);FUN.sfx("good");
+      var s=document.getElementById("scr");s.className="screen off";s.innerHTML='<video src="video/off.mp4" data-once="1" playsinline autoplay muted preload="auto" disablepictureinpicture disableremoteplayback></video><div class="end-cap">סוף</div>';startVid();
+      document.getElementById("hall").classList.remove("on");FUN.sfx("soft");
+      setTimeout(function(){wear(false);made++;
+        step.innerHTML=guide('הסרט נגמר והמסך כבה. 🎞️<br><b>ובמציאות?</b> אתם כאן, בדיוק איפה שהייתם. המחשבה <b>עברה על המסך</b>, והיא לא שינתה את מה שקורה באמת.')+
+          '<div class="row"><button class="btn" id="n">'+(made<NEED?"🍿 לסרט הבא ("+made+"/"+NEED+")":"⭐ סיום")+'</button></div>';
+        document.getElementById("n").onclick=function(){made<NEED?choose():finish(3,3);};
+        document.getElementById("n").scrollIntoView({behavior:"smooth",block:"center"});
+      },3000);
+    }
+    document.getElementById("said").onclick=said;document.getElementById("said2").onclick=said;
+  }
+  choose();
+}
+
+/* ===================== תעודה ===================== */
+function cert(){
+  mapBtn.hidden=false;var tot=ST.stars.reduce(function(a,b){return a+(b||0);},0),name="";
+  try{name=localStorage.getItem("fun-name")||"";}catch(e){}
+  go('<div class="cert" id="c"><div class="ribbon">🎬 תעודת צופה מקצועי 🎬</div>'+
+    '<div style="display:flex;justify-content:center;gap:8px;margin-top:10px"><img src="'+GUIDE+'" alt="" style="width:80px;height:80px">'+(ST.glasses?'<span style="width:120px;align-self:center">'+glassesSVG(GLASSES[ST.glasses])+'</span>':'')+'</div>'+
+    '<h2>צופים מקצועיים בקולנוע המחשבות</h2>'+
+    '<input id="nm" maxlength="20" placeholder="כתבו כאן את השם" value="'+name.replace(/"/g,"")+'">'+
+    '<div class="skill">אני יודע/ת ש<b>מחשבה היא כמו סרט</b> שמוקרן על מסך בתוך הראש.<br>יש סרטים רגילים, מוזרים, מטרידים וסרטי משאלות.<br>וזה שסרט מוקרן בראש, <b>לא הופך אותו למציאות.</b></div>'+
+    '<div style="font-size:22px;font-weight:800;margin-top:12px">⭐ '+tot+' / 12 · 🍿 '+ST.pop+'</div>'+
+    '<div class="credit">חגית כהן CBT | חברתי</div></div>'+
+    guide('מעולה! 🎉 בפעם הבאה שסרט מוקרן לכם בראש, אפשר להרכיב משקפי צופה ולהגיד: <b>"יש לי מחשבה שעוברת בראש"</b>.',"wow")+
+    '<div class="row"><button class="btn ghost" id="m">🎟️ חזרה ללובי</button><button class="btn ghost" id="again">🔄 משחקים מההתחלה</button></div>');
+  document.getElementById("nm").oninput=function(){try{localStorage.setItem("fun-name",this.value);}catch(e){}};
+  document.getElementById("m").onclick=function(){showMap();};
+  document.getElementById("again").onclick=function(){ST={stars:[0,0,0,0],unlocked:1,pop:0,glasses:ST.glasses,intro:false};save();paintPop();intro1();};
+  FUN.sfx("fanfare");FUN.confettiSides(60);
+}
+
+/* ===================== התחלה ===================== */
+if(ST.intro)showMap();else intro1();
+})();
+</script>
+
+
+</body>
+</html>
